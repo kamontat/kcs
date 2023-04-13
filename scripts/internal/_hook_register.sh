@@ -40,6 +40,8 @@ _kcs_register_hooks() {
     post_validate __kcs_post_validate
 
   __kcs_register __kcs_optional_hook \
+    pre_main __kcs_debug_pre_main
+  __kcs_register __kcs_optional_hook \
     pre_main __kcs_pre_main
   __kcs_register __kcs_required_hook \
     main __kcs_main

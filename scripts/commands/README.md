@@ -204,9 +204,22 @@ __kcs_main_register "$@"
 
 </details>
 
-## Useful functions
+## Useful functions and variables
 
-The useful built-in functions.
+The useful built-in functions and variables.
+
+### Generic variables
+
+| Variables name  | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `KCS_COMMANDS`  | Array of arguments after `--` options          |
+| `KCS_HOOK_NAME` | Running hook name, exist only on hook callback |
+
+### Generic functions
+
+| Function name              | Description                            |
+| -------------------------- | -------------------------------------- |
+| `kcs_exec <cmd> <args...>` | Run **command** with dry-run supported |
 
 ### Temporary functions
 

@@ -64,7 +64,9 @@ _kcs_run_hook() {
     "${#commands[@]}" \
     "${#disables[@]}"
 
+  export KCS_HOOK_NAME="$name"
   disabled="${disables[*]}"
+
   for raw in "${commands[@]}"; do
     command="${raw%%:*}"
     callback="${raw#*:}"
@@ -80,6 +82,8 @@ _kcs_run_hook() {
       kcs_must_exec "$command" "$callback" "${args[@]}"
     fi
   done
+
+  unset KCS_HOOK_NAME
 }
 
 _kcs_run_hooks() {

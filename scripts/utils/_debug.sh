@@ -7,12 +7,19 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 __kcs_debug_pre_init() {
-  local ns="pre_init info"
+  local ns="$KCS_HOOK_NAME info"
 
   kcs_debug "$ns" "%s: '%s'" \
     "$KCS_NAME" "$KCS_VERSION"
-  kcs_debug "$ns" "Mode: '%s'" \
+  kcs_debug "$ns" "mode: '%s'" \
     "$KCS_MODE"
-  kcs_debug "$ns" "Entry mode: '%s'" \
+  kcs_debug "$ns" "entry mode: '%s'" \
     "$_KCS_ENTRY"
+}
+
+__kcs_debug_pre_main() {
+  local ns="$KCS_HOOK_NAME info"
+
+  kcs_debug "$ns" "log levels: '%s'" \
+    "$_KCS_LOG_LEVELS"
 }

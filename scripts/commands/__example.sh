@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-## Example: v0.1.0
-## Example file for create new command
+##example:v1.0.0-beta.1
+## Above is metadata, please do not remove
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

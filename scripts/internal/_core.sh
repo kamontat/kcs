@@ -29,6 +29,19 @@ kcs_must_exec() {
   __kcs_exec_cmd "kcs_throw" "kcs_throw" "$@"
 }
 
+## execute input command;
+## This is only *_exec function that respect DRY_RUN mode.
+kcs_exec() {
+  ## If on dry run mode
+  if test -n "$DRY_RUN"; then
+    kcs_logf "execute" "%s '%s'" \
+      "$cmd" "${args[*]}"
+    return 0
+  fi
+
+  __kcs_exec_cmd "" "" "$@"
+}
+
 ## execute command with error handler
 ## @param $1 - callback if command not found
 ##        $2 - callback if command failed
@@ -41,13 +54,6 @@ __kcs_exec_cmd() {
   local cmd="$3" args=()
   shift 3
   args=("$@")
-
-  ## If on dry run mode
-  if test -n "$DRY_RUN"; then
-    kcs_logf "execute" "%s '%s'" \
-      "$cmd" "${args[*]}"
-    return 0
-  fi
 
   ## If command not found
   if ! command -v "$cmd" >/dev/null &&
