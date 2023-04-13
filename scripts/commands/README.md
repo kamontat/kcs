@@ -8,7 +8,7 @@ defined in scripts. With 2 special commands:
 and `_default.sh` is a default command if no matches command
 when run with `main.sh`.
 
-## Hook functions
+## Callback functions
 
 The command file are using hooks design pattern.
 Normally, you only need to create function with correct name
@@ -34,6 +34,101 @@ __kcs_main() {
 ## caller    : hooks
 ## arguments : raw user arguments
 __kcs_main "$@"
+```
+
+</details>
+
+### Information function
+
+<details><summary>Script name</summary>
+
+```sh
+## desc      : printf script name
+## return    : single line name
+## tags      : @optional, @hook:pre_init
+__kcs_main_name() {
+  printf "default"
+}
+
+## desc      : static script name
+## tags      : @optional
+export KCS_NAME="default"
+
+## caller    : hooks
+## arguments : no argument
+__kcs_main_name
+```
+
+</details>
+
+<details><summary>Script version</summary>
+
+```sh
+## desc      : printf script version
+## return    : single line version
+## tags      : @optional, @hook:pre_init
+__kcs_main_version() {
+  printf "v1.0.0"
+}
+
+## desc      : static script version
+## tags      : @optional
+export KCS_VERSION="v1.0.0"
+
+## caller    : hooks
+## arguments : no argument
+__kcs_main_version
+```
+
+</details>
+
+<details><summary>Script description</summary>
+
+```sh
+## desc      : printf script description
+## return    : single line description
+## tags      : @optional, @hook:pre_init
+__kcs_main_description() {
+  printf "default command"
+}
+
+## desc      : static script description
+## tags      : @optional
+export KCS_DESCRIPTION="default command"
+
+## caller    : hooks
+## arguments : no argument
+__kcs_main_description
+```
+
+</details>
+
+<details><summary>Script help</summary>
+
+```sh
+## desc      : printf script help
+## return    : multiple line help message
+##             must prefix,suffix with newline
+## tags      : @optional, @hook:pre_init
+__kcs_main_help() {
+  printf "
+Options:
+  [--test,-t]
+    - [required] run test
+"
+}
+
+## desc      : static script help
+## tags      : @optional
+export KCS_HELP="
+Options:
+  [--test,-t]
+    - [required] run test
+"
+
+## caller    : hooks
+## arguments : no argument
+__kcs_main_help
 ```
 
 </details>
@@ -76,7 +171,7 @@ __kcs_main_option() {
     YES=true
     ;;
   *)
-    return 10
+    return 1
     ;;
   esac
 }
@@ -88,12 +183,46 @@ __kcs_main_option "name" "kcs"
 
 </details>
 
+### Hooks function
+
+<details><summary>Register new hooks</summary>
+
+```sh
+## desc      : you can register new hooks on this function
+## tags      : @optional, @hook:post_init
+__kcs_main_register() {
+  ## add new hook on validate stage
+  kcs_add_hook "validate" "__kcs_main_validate"
+  ## disable main entry
+  kcs_disable_hook "main:__kcs_main"
+}
+
+## caller    : hooks
+## arguments : raw user arguments
+__kcs_main_register "$@"
+```
+
+</details>
+
 ## Useful functions
 
 The useful built-in functions.
 
 ### Temporary functions
 
-| Function name      | Description               | Syntax           |
-| ------------------ | ------------------------- | ---------------- |
-| **kcs_clean_temp** | Clean temporary directory | `kcs_clean_temp` |
+| Function name    | Description               |
+| ---------------- | ------------------------- |
+| `kcs_clean_temp` | Clean temporary directory |
+
+### Information functions
+
+| Function name  | Description              |
+| -------------- | ------------------------ |
+| `kcs_get_help` | Print help message       |
+| `kcs_get_info` | Print script information |
+
+### Hook functions
+
+| Function name           | Description                           |
+| ----------------------- | ------------------------------------- |
+| `kcs_add_hook <n> <cb>` | Add new **callback** on hook **name** |

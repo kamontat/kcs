@@ -38,3 +38,16 @@ export _KCS_DIR_LOG="$_KCS_DIR_TEMP/logs"
 
 ## Scripts should always resolve relative path from root directory
 cd "$_KCS_DIR_ROOT" || exit 1
+
+__kcs_location_post_clean() {
+  cd "$_KCS_DIR_ORIG" || exit 1
+
+  unset _KCS_DIR_ORIG \
+    _KCS_DIR_INTERNAL \
+    _KCS_DIR_UTILS \
+    _KCS_DIR_COMMANDS \
+    _KCS_DIR_TEMP \
+    _KCS_DIR_LOG \
+    _KCS_DIR_ROOT \
+    _KCS_DIR_SCRIPT
+}

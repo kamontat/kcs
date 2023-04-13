@@ -10,7 +10,8 @@ __kcs_parse_options() {
   while getopts "$__KCS_GLOBAL_OPTS$KCS_OPTIONS" flag; do
     case "${flag}" in
     h) kcs_get_help ;;
-    v) kcs_get_version ;;
+    v) kcs_get_info ;;
+    z) kcs_get_errcode_help ;;
     Q) __kcs_set_silent_mode ;;
     D) __kcs_set_debug_mode ;;
     R) __kcs_set_dry_run ;;
@@ -27,7 +28,11 @@ __kcs_parse_options() {
         ;;
       version)
         kcs_no_argument "$LONG_OPTARG"
-        kcs_get_version
+        kcs_get_info
+        ;;
+      error)
+        kcs_no_argument "$LONG_OPTARG"
+        kcs_get_errcode_help
         ;;
       dry-run)
         kcs_no_argument "$LONG_OPTARG"
@@ -64,10 +69,12 @@ __kcs_parse_options() {
   done
 
   shift $((OPTIND - 1))
-  export KCS_COMMANDS=("$@")
+  KCS_COMMANDS=("$@")
+  export KCS_COMMANDS
 }
 
 __kcs_parse_addition_options() {
+  local ns="extra option"
   local flag="$1" value="$2" cmd="__kcs_main_option"
   if command -v "$cmd" >/dev/null; then
     if "$cmd" "$flag" "$value"; then
@@ -78,32 +85,33 @@ __kcs_parse_addition_options() {
   # because optspec is assigned by 'getopts' command
   # shellcheck disable=SC2154
   if [ "$OPTERR" == 1 ] && [ "${optspec:0:1}" != ":" ]; then
-    printf "Unexpected option '%s', run --help for more information" "$flag" >&2
-    exit 10
+    kcs_throw "$KCS_ERRCODE_OPTION_NOT_FOUND" \
+      "$ns" "Unexpected option '%s', run --help for more information" \
+      "$flag"
   fi
 }
 
-__KCS_GLOBAL_OPTS="hvQDRL:K:?-:"
+__KCS_GLOBAL_OPTS="hvzQDRL:K:?-:"
 __KCS_GLOBAL_HELP="
 Global options:
-  [--mode,-M]
-      - set mode (default=default)
   [--help,-h]
       - show this message for help
   [--version,-v]
       - show script version
-  [--silent,-q]
-      - set log level to silent
-  [--debug,-d]
-      - set log level to debug
-  [--log-level,-l] <0-4>
-      - set log level (0=silent, 5=debug)
-      - this handle on init hook
-  [--dry-run]
+  [--error,-z]
+      - show error code description
+  [--dry-run,-R]
       - dry run mode will print only hook action
       - this for debugging only
-  [--disable-hook,-k] <name>
-      - disable hook name (support post_options or later)
+  [--silent,-Q]
+      - set log level to silent
+  [--debug,-D]
+      - set log level to debug
+  [--log-level,-L] <0-5>
+      - set log level (0=silent, 5=debug)
+      - this handle on init hook
+  [--disable-hook,-K] <name:callback>
+      - disable input hook name (<name>:<callback>)
         - post_options:temp - temp setup before used
         - pre_clean:temp - temp cleanup after used
   [--] <args>

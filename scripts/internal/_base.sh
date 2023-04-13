@@ -12,6 +12,7 @@ source "$_KCS_DIR_SCRIPT/internal/_location.sh" || return $?
 source "$_KCS_DIR_INTERNAL/_core.sh" || return $?
 
 ## Load global internal and utilities
+kcs_load_internal "_error.sh"
 kcs_load_internal "_logger.sh"
 kcs_load_internal "_temp.sh"
 

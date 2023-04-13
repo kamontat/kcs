@@ -19,36 +19,16 @@ __kcs_main_version() {
   printf "v0.1.0"
 }
 
-__kcs_main_option_keys() {
-  printf "abcd"
-}
-__kcs_main_option() {
-  local flag="$1" value="$2"
-  echo "$flag" "$value"
-}
-
-__kcs_main_description() {
-  printf "description"
-}
-
 __kcs_main_help() {
   echo "Commands:"
   echo "  [example] <options...>"
   echo "    - get example command"
-  echo "Options:"
-  echo "  [--help,-h]"
-  echo "    - show help message;"
-  echo "    - add after command to get specific command help"
-  echo "  [--version,-v]"
-  echo "    - show script version;"
-  echo "    - add after command to get specific command version"
 }
 
 ## Main entry of command
 ## visit README.md for more information
 __kcs_main() {
   echo "arguments: $*"
-  kcs_clean_temp
 }
 
 ####################################################

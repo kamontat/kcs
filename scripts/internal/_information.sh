@@ -6,9 +6,6 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export __KCS_GLOBAL_HELP="
-"
-
 __kcs_set_name() {
   local cb="$1"
   export KCS_NAME
@@ -49,8 +46,11 @@ __kcs_set_help() {
 kcs_get_help() {
   local name="${KCS_NAME:-unknown}"
   local version="${KCS_VERSION:-dev}"
-  local desc=${KCS_DESCRIPTION:-<no-description>}
-  local help="${KCS_HELP:-<no-help>}"
+  local desc="$KCS_DESCRIPTION"
+  local help="$KCS_HELP"
+
+  test -n "$desc" && desc="$desc"$'\n'
+  test -n "$help" && help=$'\n'"$help"
 
   printf "# %s (%s)
 %s%s%s" "$name" "$version" "$desc" \

@@ -11,7 +11,8 @@ kcs_require_argument() {
   local name="$1"
   if [ ${#name} -gt 1 ]; then
     if test -z "$LONG_OPTVAL"; then
-      _throw 9 "options" "%s require argument" "$LONG_OPTARG"
+      kcs_throw "$KCS_ERRCODE_INVALID_OPTION" \
+        "options" "%s require argument" "$LONG_OPTARG"
     fi
   fi
 }
@@ -20,9 +21,11 @@ kcs_require_argument() {
 kcs_no_argument() {
   local name="$1"
   if [ ${#name} -gt 1 ]; then
-    if test -z "$LONG_OPTVAL"; then
-      _throw 9 "options" "%s require argument" "$LONG_OPTARG"
-    fi
+    test -n "$LONG_OPTVAL" &&
+      ! [[ "$LONG_OPTVAL" =~ "-" ]] &&
+      kcs_throw "$KCS_ERRCODE_INVALID_OPTION" \
+        "options" "%s don't needs argument"
+    ((OPTIND--))
   fi
 }
 
@@ -34,6 +37,6 @@ __kcs_parse_long_option() {
   else
     LONG_OPTARG="$OPTARG"
     LONG_OPTVAL="$1"
-    OPTIND=$((OPTIND + 1))
+    OPTIND=$((OPTIND++))
   fi
 }

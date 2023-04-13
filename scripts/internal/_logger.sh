@@ -33,16 +33,6 @@ kcs_info() {
 kcs_debug() {
   __kcs_log "$KCS_DEBUG_LVL" "$@"
 }
-kcs_throw() {
-  local code="${1:-1}"
-  shift 1
-
-  if [ $# -gt 0 ]; then
-    kcs_error "$@"
-  fi
-
-  exit "$code"
-}
 
 ## echo "test" | kcs_to_file "<file_name>" "<prefix>"
 kcs_to_file() {
@@ -178,4 +168,13 @@ __kcs_logger_pre_init() {
   if test -n "$LOG_LEVEL"; then
     __kcs_set_log_level "$LOG_LEVEL"
   fi
+}
+__kcs_logger_clean() {
+  unset KCS_LOG_LVL \
+    KCS_ERROR_LVL \
+    KCS_WARN_LVL \
+    KCS_INFO_LVL \
+    KCS_DEBUG_LVL
+
+  unset _KCS_LOG_LEVELS
 }
