@@ -6,7 +6,7 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_debug_pre_init() {
+__kcs_debug_pre_main() {
   local ns="$KCS_HOOK_NAME info"
 
   kcs_debug "$ns" "%s: '%s'" \
@@ -17,11 +17,6 @@ __kcs_debug_pre_init() {
     "$_KCS_ENTRY"
   kcs_debug "$ns" "arguments: '%s' (size=%d)" \
     "$*" "$#"
-}
-
-__kcs_debug_pre_main() {
-  local ns="$KCS_HOOK_NAME info"
-
   kcs_debug "$ns" "log levels: '%s'" \
     "$_KCS_LOG_LEVELS"
 }

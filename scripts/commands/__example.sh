@@ -14,10 +14,9 @@
 ## Main entry of command
 ## visit README.md for more information
 __kcs_main() {
-  kcs_logf "main" "raw arguments: '%s'" "$*"
-  kcs_logf "main" "commands: '%s'" "${KCS_COMMANDS[*]}"
+  local ns="main"
 
-  return 0
+  kcs_logf "$ns" "commands: '%s'" "${KCS_COMMANDS[*]}"
 }
 
 ####################################################

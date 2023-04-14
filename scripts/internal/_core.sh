@@ -49,6 +49,12 @@ kcs_exec() {
 ##        $@ - command arguments
 __kcs_exec_cmd() {
   local ns="cmd executor"
+  local whitelist=(
+    "kcs_debug" "kcs_info"
+    "kcs_warn" "kcs_error"
+    "kcs_logf" "kcs_printf"
+  )
+
   local not_found_cmd="$1"
   local error_cmd="$2"
   local cmd="$3" args=()
@@ -58,16 +64,17 @@ __kcs_exec_cmd() {
   ## Needs manual check command because it function
   ## are defined on very beginning
   ## And do not print debug for logging command
-  command -v "kcs_debug" >/dev/null &&
-    [[ "$cmd" != "kcs_debug" ]] &&
-    [[ "$cmd" != "kcs_info" ]] &&
-    [[ "$cmd" != "kcs_warn" ]] &&
-    [[ "$cmd" != "kcs_error" ]] &&
-    [[ "$cmd" != "kcs_logf" ]] &&
-    [[ "$cmd" != "kcs_printf" ]] &&
-    kcs_debug "$ns" \
-      "starting '%s' with %d argument ('%s')" \
-      "$cmd" "${#args[@]}" "${args[*]}"
+  if command -v kcs_debug >/dev/null; then
+    if ! [[ "${whitelist[*]}" =~ $cmd ]]; then
+      local arg_msg="with no argument"
+      [ "${#args[@]}" -gt 0 ] &&
+        arg_msg="with ${#args[@]} argument ('${args[*]}')"
+
+      kcs_debug "$ns" \
+        "starting '%s' %s" \
+        "$cmd" "$arg_msg"
+    fi
+  fi
 
   ## If command not found
   if ! command -v "$cmd" >/dev/null &&
@@ -104,6 +111,13 @@ kcs_load_utils() {
   __kcs_load_file \
     "__kcs_warn_cmd" "__kcs_error_cmd" \
     "$_KCS_DIR_UTILS" "$@"
+}
+__kcs_load_utils() {
+  local cb="$1"
+
+  for util in $(kcs_ignore_exec "$cb"); do
+    kcs_load_utils "$util"
+  done
 }
 
 ## load input file with throw if something wrong

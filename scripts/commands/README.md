@@ -8,6 +8,19 @@ defined in scripts. With 2 special commands:
 and `_default.sh` is a default command if no matches command
 when run with `main.sh`.
 
+- [Callback functions](#callback-functions)
+  - [Main function](#main-function)
+  - [Information function](#information-function)
+  - [Option function](#option-function)
+  - [Hooks function](#hooks-function)
+  - [Utilities function](#utilities-function)
+- [Useful functions and variables](#useful-functions-and-variables)
+  - [Generic variables](#generic-variables)
+  - [Generic functions](#generic-functions)
+  - [Temporary functions](#temporary-functions)
+  - [Information functions](#information-functions)
+  - [Hook functions](#hook-functions)
+
 ## Callback functions
 
 The command file are using hooks design pattern.
@@ -32,8 +45,8 @@ __kcs_main() {
 }
 
 ## caller    : hooks
-## arguments : raw user arguments
-__kcs_main "$@"
+## arguments : <none>
+__kcs_main
 ```
 
 </details>
@@ -55,7 +68,7 @@ __kcs_main_name() {
 export KCS_NAME="default"
 
 ## caller    : hooks
-## arguments : no argument
+## arguments : <none>
 __kcs_main_name
 ```
 
@@ -76,7 +89,7 @@ __kcs_main_version() {
 export KCS_VERSION="v1.0.0"
 
 ## caller    : hooks
-## arguments : no argument
+## arguments : <none>
 __kcs_main_version
 ```
 
@@ -97,7 +110,7 @@ __kcs_main_description() {
 export KCS_DESCRIPTION="default command"
 
 ## caller    : hooks
-## arguments : no argument
+## arguments : <none>
 __kcs_main_description
 ```
 
@@ -127,7 +140,7 @@ Options:
 "
 
 ## caller    : hooks
-## arguments : no argument
+## arguments : <none>
 __kcs_main_help
 ```
 
@@ -147,8 +160,8 @@ __kcs_main_option_keys() {
 }
 
 ## caller    : hooks
-## arguments : raw user arguments
-__kcs_main_option_keys "$@"
+## arguments : <none>
+__kcs_main_option_keys
 ```
 
 </details>
@@ -190,7 +203,7 @@ __kcs_main_option "name" "kcs"
 ```sh
 ## desc      : you can register new hooks on this function
 ## tags      : @optional, @hook:post_init
-__kcs_main_register() {
+__kcs_main_hook() {
   ## add new hook on validate stage
   kcs_add_hook "validate" "__kcs_main_validate"
   ## disable main entry
@@ -198,8 +211,30 @@ __kcs_main_register() {
 }
 
 ## caller    : hooks
-## arguments : raw user arguments
-__kcs_main_register "$@"
+## arguments : <none>
+__kcs_main_hook
+```
+
+</details>
+
+### Utilities function
+
+<details><summary>Register new utilities</summary>
+
+```sh
+## desc      : register new utilities function
+## tags      : @optional, @hook:post_init
+__kcs_main_utils() {
+  local utils=(
+    "_validator.sh"
+  )
+
+  printf "%s" "${utils[*]}"
+}
+
+## caller    : hooks
+## arguments : <none>
+__kcs_main_utils
 ```
 
 </details>

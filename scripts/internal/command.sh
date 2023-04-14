@@ -20,8 +20,6 @@ kcs_prepare() {
   kcs_load_internal "_information.sh"
   kcs_load_internal "_options.sh"
   kcs_load_internal "_options_internal.sh"
-
-  kcs_load_utils "_debug.sh"
 }
 
 kcs_start() {

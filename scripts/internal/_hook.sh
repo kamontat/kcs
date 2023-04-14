@@ -47,8 +47,11 @@ kcs_add_hook() {
       tags="$tags$tag_key"
     done
 
-    kcs_debug "$ns" "adding '%s' with tags '%s' to hook name '%s'" \
-      "$command" "$tags" "$name"
+    local tag_msg=""
+    test -n "$tags" && tag_msg="with '$tags' "
+
+    kcs_debug "$ns" "adding '%s' %sto hook name '%s'" \
+      "$command" "$tag_msg" "$name"
 
     eval "${_KCS_HOOK_VARIABLE_PREFIX}_${name}+=(\"$raw\")"
   else
