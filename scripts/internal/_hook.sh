@@ -26,6 +26,12 @@ _KCS_HOOK_TAGS=(
   "$KCS_HOOK_TAG_RAW"
 )
 
+## Add new callback $2 on hook name $1
+## callback syntax:
+##   - <callback>:<tags>,<tags>,...
+##     tag syntax:
+##       - <tag_name>=<tag_value>
+##       - tag_name must prefix with '@'
 kcs_add_hook() {
   local ns="hooks"
   local name="$1" raw="$2"
