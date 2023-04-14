@@ -26,7 +26,7 @@ _kcs_find_command() {
     _fargs=("${args[@]:0:$((index - 1))}")
     _targs=("${args[@]:$index}")
 
-    kcs_debug "$ns" "index %d | testing file %s with '%s'" \
+    kcs_debug "$ns" "index %d | checking file %s with '%s'" \
       "$index" "$file_name" "${_targs[*]}"
 
     if test -f "$file_path"; then
@@ -41,7 +41,7 @@ _kcs_find_command() {
     ((index--))
   done
 
-  kcs_debug "$ns" "loading default command with '%s'" \
+  kcs_debug "$ns" "running default command with '%s'" \
     "${args[*]}"
 
   kcs_must_load \

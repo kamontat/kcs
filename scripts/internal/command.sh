@@ -27,4 +27,5 @@ kcs_prepare() {
 kcs_start() {
   _kcs_register_hooks
   _kcs_run_hooks "$@"
+  _kcs_clean_hooks
 }

@@ -55,6 +55,20 @@ __kcs_exec_cmd() {
   shift 3
   args=("$@")
 
+  ## Needs manual check command because it function
+  ## are defined on very beginning
+  ## And do not print debug for logging command
+  command -v "kcs_debug" >/dev/null &&
+    [[ "$cmd" != "kcs_debug" ]] &&
+    [[ "$cmd" != "kcs_info" ]] &&
+    [[ "$cmd" != "kcs_warn" ]] &&
+    [[ "$cmd" != "kcs_error" ]] &&
+    [[ "$cmd" != "kcs_logf" ]] &&
+    [[ "$cmd" != "kcs_printf" ]] &&
+    kcs_debug "$ns" \
+      "starting '%s' with %d argument ('%s')" \
+      "$cmd" "${#args[@]}" "${args[*]}"
+
   ## If command not found
   if ! command -v "$cmd" >/dev/null &&
     [[ "$not_found_cmd" != "" ]]; then
@@ -64,8 +78,9 @@ __kcs_exec_cmd() {
     return $?
   fi
 
-  ## If command failed
   "$cmd" "${args[@]}"
+
+  ## If command failed
   local status=$?
   if [ $status -gt 0 ] && [[ "$error_cmd" != "" ]]; then
     ## Same syntax as kcs_throw

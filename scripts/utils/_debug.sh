@@ -15,6 +15,8 @@ __kcs_debug_pre_init() {
     "$KCS_MODE"
   kcs_debug "$ns" "entry mode: '%s'" \
     "$_KCS_ENTRY"
+  kcs_debug "$ns" "arguments: '%s' (size=%d)" \
+    "$*" "$#"
 }
 
 __kcs_debug_pre_main() {
