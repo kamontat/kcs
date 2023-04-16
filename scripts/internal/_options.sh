@@ -20,7 +20,6 @@ __kcs_parse_options() {
     -)
       NEXT="${!OPTIND}"
       __kcs_parse_long_option "$NEXT"
-
       case "${OPTARG}" in
       help)
         kcs_no_argument "$LONG_OPTARG"

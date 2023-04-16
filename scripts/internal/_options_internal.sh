@@ -37,6 +37,6 @@ __kcs_parse_long_option() {
   else
     LONG_OPTARG="$OPTARG"
     LONG_OPTVAL="$1"
-    OPTIND=$((OPTIND++))
+    ((OPTIND++))
   fi
 }
