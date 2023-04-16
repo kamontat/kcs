@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Hooks:
+
+## Hook Registry:
+##   all hooks should be registered on this file
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -59,6 +61,10 @@ _kcs_register_hooks() {
 
   kcs_add_hook clean \
     __kcs_error_clean
+  kcs_add_hook clean \
+    __kcs_options_clean
+  kcs_add_hook clean \
+    __kcs_mode_clean
   kcs_add_hook clean \
     __kcs_clean:@optional
 

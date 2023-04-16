@@ -26,6 +26,15 @@ kcs_no_main_entry() {
   fi
 }
 
+kcs_is_cmd_mode() {
+  local actual="$KCS_MODE" expected="$_KCS_MODE_COMMAND"
+  if [[ "$actual" == "$expected" ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
 __kcs_mode_clean() {
   unset _KCS_MODE_LIBRARY \
     _KCS_MODE_COMMAND

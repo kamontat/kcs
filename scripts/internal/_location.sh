@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
-## Hooks
+
+## Location constants:
+##   export location constants used for most of internal utilities
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
-
-## All possible mode for $KCS_MODE variable
-export _KCS_MODE_COMMAND="command"
-export _KCS_MODE_LIBRARY="library"
 
 ## current working directory for $KCS_ROOT variable
 export _KCS_ROOT_CWD="cwd"
@@ -58,9 +56,7 @@ cd "$_KCS_DIR_ROOT" || exit 1
 __kcs_location_post_clean() {
   cd "$_KCS_DIR_ORIG" || exit 1
 
-  unset _KCS_MODE_COMMAND \
-    _KCS_MODE_LIBRARY \
-    _KCS_ROOT_CWD
+  unset _KCS_ROOT_CWD
 
   unset _KCS_DIR_ORIG \
     _KCS_DIR_INTERNAL \

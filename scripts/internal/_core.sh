@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-## Core is set of function required to
-## run most of utilities, including internal
+
+## Core functions:
+##   a set of functions required to run most utilities and internal
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

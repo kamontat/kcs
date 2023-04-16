@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Logger
+
+## Logger:
+##   a logging function for getting script information or debugging
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

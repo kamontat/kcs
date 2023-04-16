@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## errors constants and throw function
+
+## Error functions:
+##   an error constants including some helpful functions
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -13,6 +15,7 @@ export KCS_ERRCODE_FILE_NOT_FOUND=7
 export KCS_ERRCODE_OPTION_NOT_FOUND=12
 export KCS_ERRCODE_INVALID_OPTION=13
 export KCS_ERRCODE_VERIFY_FAILED=20
+export KCS_ERRCODE_INVALID_MODE=30
 
 __KCS_CODE_WHITELIST=(
   "$KCS_ERRCODE_UNKNOWN"
@@ -22,6 +25,7 @@ __KCS_CODE_WHITELIST=(
   "$KCS_ERRCODE_OPTION_NOT_FOUND"
   "$KCS_ERRCODE_INVALID_OPTION"
   "$KCS_ERRCODE_VERIFY_FAILED"
+  "$KCS_ERRCODE_INVALID_MODE"
 )
 
 kcs_throw() {
@@ -65,6 +69,8 @@ kcs_get_errcode_help() {
     "$KCS_ERRCODE_INVALID_OPTION" "invalid options"
   __kcs_format_errcode_list \
     "$KCS_ERRCODE_VERIFY_FAILED" "validation failed"
+  __kcs_format_errcode_list \
+    "$KCS_ERRCODE_INVALID_MODE" "invalid \$KCS_MODE"
 
   exit 0
 }
@@ -76,7 +82,8 @@ __kcs_error_clean() {
     KCS_ERRCODE_FILE_NOT_FOUND \
     KCS_ERRCODE_OPTION_NOT_FOUND \
     KCS_ERRCODE_INVALID_OPTION \
-    KCS_ERRCODE_VERIFY_FAILED
+    KCS_ERRCODE_VERIFY_FAILED \
+    KCS_ERRCODE_INVALID_MODE
 
   unset __KCS_CODE_WHITELIST
 }

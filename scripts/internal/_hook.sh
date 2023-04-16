@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Hooks:
+
+## Hook manager:
+##   a collection of hook functions and constants
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

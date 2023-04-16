@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Options
+
+## Options parser:
+##   parsing options with some default configuration
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -125,3 +127,8 @@ Environments:
   \$DRY_RUN
       - set to non-empty string will enabled dry-run mode
 "
+
+__kcs_options_clean() {
+  unset __KCS_GLOBAL_OPTS \
+    __KCS_GLOBAL_HELP
+}

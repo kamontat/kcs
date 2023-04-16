@@ -15,7 +15,7 @@ export KCS_ROOT="1"
 ## Possible values: command or library
 ## command: Scripts will create all functions and run (default)
 ## library: Scripts will create all functions, but not execute them
-export KCS_MODE="command"
+export KCS_MODE="library"
 
 ####################################################
 ## Internal function calls

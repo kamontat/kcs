@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Options
+
+## Internal options:
+##   an internal function for option parser
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

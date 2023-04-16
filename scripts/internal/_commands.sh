@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Commands utilities for main entry
+
+## Command functions:
+##   a collection for manage commands
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
