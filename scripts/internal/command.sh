@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## Main utilities for command entrypoint
+
+## Command utilities:
+##   main utilities for command entry-point
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -23,7 +25,9 @@ kcs_prepare() {
 }
 
 kcs_start() {
-  _kcs_register_hooks
-  _kcs_run_hooks "$@"
-  _kcs_clean_hooks
+  if kcs_is_cmd_mode; then
+    _kcs_register_hooks
+    _kcs_run_hooks "$@"
+    _kcs_clean_hooks
+  fi
 }

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-## base scripts for all commands, including main.sh
+
+## Base functions:
+##   base required commands for all entry
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -14,7 +16,7 @@ source "$_KCS_DIR_INTERNAL/_core.sh" || return $?
 ## Load global internal and utilities
 kcs_load_internal "_error.sh"
 kcs_load_internal "_logger.sh"
-kcs_load_internal "_temp.sh"
+kcs_load_internal "_mode.sh"
 
 kcs_ignore_exec kcs_debug "base" \
   "loaded _base.sh in internal file"
