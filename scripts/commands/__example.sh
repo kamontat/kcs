@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-##example:v1.0.0-beta.1
-## Above is metadata, please do not remove
+##command-example:v1.0.0-beta.1
+
+## <title>:
+##   <description>
+##
+## > learn more at README.md
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -11,8 +15,6 @@
 ## User defined function
 ####################################################
 
-## Main entry of command
-## visit README.md for more information
 __kcs_main() {
   local ns="main"
 
