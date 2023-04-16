@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-## hooking debug information on each stage
+##utils-example:v1.0.0-beta.1
+
+## Debug:
+##   add debugging hook to the script
+## Public functions:
+##   <none>
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
-##example:v1.0.0-beta.1
-## Above is metadata, please do not remove
+##utils-example:v1.0.0-beta.1
+
+## Validator:
+##   all validator function will throw error if check failed
+##   to checking only, please check _checker.sh
+## Public functions:
+##   `kcs_verify_exist <input>` - validate if input exist
+##   `kcs_verify_os <os>` - validate if os equal to input
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-## throw error if input string is empty
-## `kcs_verify_exist "input" "$input"`
 kcs_verify_exist() {
   local ns="exist validation"
   local name="$1" input="$2"
@@ -18,7 +22,6 @@ kcs_verify_exist() {
   fi
 }
 
-## `kcs_verify_os "darwin"`
 kcs_verify_os() {
   local ns="os validation"
   local expected="$1" actual

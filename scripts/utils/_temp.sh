@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-## Temporary functions
+##utils-example:v1.0.0-beta.1
+
+## Temp directory:
+##   manage temp directory
+## Public functions:
+##   `kcs_clean_temp` - clean temp directory to initiate state
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
