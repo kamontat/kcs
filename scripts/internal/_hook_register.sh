@@ -20,8 +20,6 @@ _kcs_register_hooks() {
   kcs_add_hook pre_init \
     __kcs_logger_pre_init
   kcs_add_hook pre_init \
-    __kcs_debug_pre_init:@optional,@raw
-  kcs_add_hook pre_init \
     __kcs_pre_init:@optional
 
   kcs_add_hook init \
