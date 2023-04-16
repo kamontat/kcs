@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Load information from function
+## Temporary functions
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
