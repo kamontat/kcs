@@ -7,10 +7,15 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-## Possible values: internal, external
-## Internal: Scripts should have theirs directory inside root project
-## External: Scripts should mixed with other code language
-export KCS_MODE="internal"
+## Possible values: cwd, or <number>
+## cwd      : Current directory is a root directory (default)
+## <number> : Go up <number> times
+export KCS_ROOT="1"
+
+## Possible values: command or library
+## command: Scripts will create all functions and run (default)
+## library: Scripts will create all functions, but not execute them
+export KCS_MODE="command"
 
 ####################################################
 ## Internal function calls

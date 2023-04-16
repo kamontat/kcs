@@ -6,6 +6,13 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## All possible mode for $KCS_MODE variable
+export _KCS_MODE_COMMAND="command"
+export _KCS_MODE_LIBRARY="library"
+
+## current working directory for $KCS_ROOT variable
+export _KCS_ROOT_CWD="cwd"
+
 ## original current directory
 ## usually, created from execute files
 export _KCS_DIR_ORIG="${_KCS_DIR_ORIG:-$PWD}"
@@ -15,10 +22,19 @@ export _KCS_DIR_ORIG="${_KCS_DIR_ORIG:-$PWD}"
 export _KCS_DIR_SCRIPT="${_KCS_DIR_SCRIPT:-$PWD}"
 
 ## root directory
-## if KCS_MODE=internal, move root up 1 level
+## if KCS_MODE=internal, move root up <n> level
 export _KCS_DIR_ROOT="${_KCS_DIR_SCRIPT:-$PWD}"
-if [[ $KCS_MODE == "internal" ]]; then
-  _KCS_DIR_ROOT="$(cd "$_KCS_DIR_ROOT/.." && pwd)"
+if [[ $KCS_ROOT != "$_KCS_ROOT_CWD" ]]; then
+  ## move to script directory
+  cd "$_KCS_DIR_SCRIPT" || exit 1
+
+  ## Go up <n> times
+  for ((i = 0; i < KCS_ROOT; i++)); do
+    cd ".."
+  done
+
+  ## Change root to directory up <n> times
+  _KCS_DIR_ROOT="$PWD"
 fi
 
 ## script internal utilities
@@ -41,6 +57,10 @@ cd "$_KCS_DIR_ROOT" || exit 1
 
 __kcs_location_post_clean() {
   cd "$_KCS_DIR_ORIG" || exit 1
+
+  unset _KCS_MODE_COMMAND \
+    _KCS_MODE_LIBRARY \
+    _KCS_ROOT_CWD
 
   unset _KCS_DIR_ORIG \
     _KCS_DIR_INTERNAL \
