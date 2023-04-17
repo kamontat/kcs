@@ -25,28 +25,28 @@ _kcs_register_hooks() {
     __kcs_pre_init:@optional
 
   kcs_add_hook init \
+    __kcs_utils_init:@optional,@cb=__kcs_main_utils
+  kcs_add_hook init \
     __kcs_init:@optional
 
   kcs_add_hook post_init \
     __kcs_parse_options:@optional,@raw
   kcs_add_hook post_init \
-    __kcs_load_utils:@optional,@cb=__kcs_main_utils
-  kcs_add_hook post_init \
     __kcs_main_hook:@optional
   kcs_add_hook post_init \
     __kcs_post_init:@optional
 
-  kcs_add_hook pre_validate \
-    __kcs_pre_validate:@optional
+  kcs_add_hook pre_check \
+    __kcs_pre_check:@optional
 
-  kcs_add_hook validate \
-    __kcs_validate:@optional
+  kcs_add_hook check \
+    __kcs_check:@optional
 
-  kcs_add_hook post_validate \
-    __kcs_post_validate:@optional
+  kcs_add_hook post_check \
+    __kcs_post_check:@optional
 
   kcs_add_hook pre_main \
-    __kcs_debug_pre_main:@optional
+    __kcs_main_config:@optional
   kcs_add_hook pre_main \
     __kcs_pre_main:@optional
 
@@ -70,6 +70,8 @@ _kcs_register_hooks() {
 
   kcs_add_hook post_clean \
     __kcs_logger_clean
+  kcs_add_hook post_clean \
+    __kcs_utils_clean
   kcs_add_hook post_clean \
     __kcs_post_clean:@optional
 }
