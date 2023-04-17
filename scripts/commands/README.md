@@ -14,6 +14,7 @@ when run with `main.sh`.
   - [Option function](#option-function)
   - [Hooks function](#hooks-function)
   - [Utilities function](#utilities-function)
+  - [Configurations function](#configurations-function)
 - [Useful functions and variables](#useful-functions-and-variables)
   - [Generic variables](#generic-variables)
   - [Generic functions](#generic-functions)
@@ -204,8 +205,8 @@ __kcs_main_option "name" "kcs"
 ## desc      : you can register new hooks on this function
 ## tags      : @optional, @hook:post_init
 __kcs_main_hook() {
-  ## add new hook on validate stage
-  kcs_add_hook "validate" "__kcs_main_validate"
+  ## add new hook on check stage
+  kcs_add_hook "check" "__kcs_main_check"
   ## disable main entry
   kcs_disable_hook "main:__kcs_main"
 }
@@ -223,7 +224,7 @@ __kcs_main_hook
 
 ```sh
 ## desc      : register new utilities function
-## tags      : @optional, @hook:post_init
+## tags      : @optional, @hook:init
 __kcs_main_utils() {
   local utils=(
     "_validator.sh"
@@ -235,6 +236,29 @@ __kcs_main_utils() {
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_utils
+```
+
+</details>
+
+### Configurations function
+
+<details><summary>Config command</summary>
+
+```sh
+## desc      : configure utilities setting
+## tags      : @optional, @hook:pre_main
+__kcs_main_config() {
+  ## Create new ssh profile
+  kcs_conf_ssh \
+    "server1" "192.168.1.100" \
+    "admin" "~/.ssh/id_rsa"
+
+  # kcs_conf_*
+}
+
+## caller    : hooks
+## arguments : <none>
+__kcs_main_config
 ```
 
 </details>
