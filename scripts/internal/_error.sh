@@ -10,6 +10,7 @@
 
 export KCS_ERRCODE_UNKNOWN=1
 export KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT=2
+export KCS_ERRCODE_MISSING_REQUIRED_UTILS=3
 export KCS_ERRCODE_CMD_NOT_FOUND=6
 export KCS_ERRCODE_FILE_NOT_FOUND=7
 export KCS_ERRCODE_OPTION_NOT_FOUND=12
@@ -20,6 +21,7 @@ export KCS_ERRCODE_INVALID_MODE=30
 __KCS_CODE_WHITELIST=(
   "$KCS_ERRCODE_UNKNOWN"
   "$KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT"
+  "$KCS_ERRCODE_MISSING_REQUIRED_UTILS"
   "$KCS_ERRCODE_CMD_NOT_FOUND"
   "$KCS_ERRCODE_FILE_NOT_FOUND"
   "$KCS_ERRCODE_OPTION_NOT_FOUND"
@@ -60,6 +62,8 @@ kcs_get_errcode_help() {
   __kcs_format_errcode_list \
     "$KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT" "required argument missing"
   __kcs_format_errcode_list \
+    "$KCS_ERRCODE_MISSING_REQUIRED_UTILS" "required utils are missing"
+  __kcs_format_errcode_list \
     "$KCS_ERRCODE_CMD_NOT_FOUND" "command not found"
   __kcs_format_errcode_list \
     "$KCS_ERRCODE_FILE_NOT_FOUND" "file not found"
@@ -78,6 +82,7 @@ kcs_get_errcode_help() {
 __kcs_error_clean() {
   unset KCS_ERRCODE_UNKNOWN \
     KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT \
+    KCS_ERRCODE_MISSING_REQUIRED_UTILS \
     KCS_ERRCODE_CMD_NOT_FOUND \
     KCS_ERRCODE_FILE_NOT_FOUND \
     KCS_ERRCODE_OPTION_NOT_FOUND \
