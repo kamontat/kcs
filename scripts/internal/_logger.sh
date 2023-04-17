@@ -15,7 +15,7 @@ export KCS_WARN_LVL="WRN"
 export KCS_ERROR_LVL="ERR"
 
 ## default logger levels
-export _KCS_LOG_LEVELS="$KCS_LOG_LVL $KCS_ERROR_LVL $KCS_WARN_LVL"
+export _KCS_LOG_LEVELS="$KCS_LOG_LVL $KCS_ERROR_LVL $KCS_WARN_LVL $KCS_INFO_LVL"
 
 kcs_printf() {
   __kcs_log "" "$@"
@@ -76,7 +76,7 @@ __kcs_log() {
 
   ## only print if user enabled an input level
   if [[ "$_KCS_LOG_LEVELS" =~ $level ]]; then
-    local __format="%s [%s] | %18s | $format\n"
+    local __format="%s [%s] | %15s | $format\n"
     local __datetime __args=()
 
     __datetime="$(date +"%Y/%m/%d %H:%M:%S")"
