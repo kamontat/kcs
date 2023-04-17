@@ -5,7 +5,7 @@
 ##   all validator function will throw error if check failed
 ##   to checking only, please check _checker.sh
 ## Public functions:
-##   `kcs_verify_exist <input>` - validate if input exist
+##   `kcs_verify_present <input>` - validate if input exist
 ##   `kcs_verify_os <os>` - validate if os equal to input
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
@@ -13,8 +13,8 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-kcs_verify_exist() {
-  local ns="exist validation"
+kcs_verify_present() {
+  local ns="present validation"
   local name="$1" input="$2"
   if test -z "$input"; then
     kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
