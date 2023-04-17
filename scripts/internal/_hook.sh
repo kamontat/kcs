@@ -13,7 +13,7 @@ _KCS_HOOK_DISABLE_VARIABLE_PREFIX="__kcs_hooks_disabled"
 
 _KCS_HOOK_NAMES=(
   pre_init init post_init
-  pre_validate validate post_validate
+  pre_check check post_check
   pre_main main post_main
   pre_clean clean post_clean
 )
