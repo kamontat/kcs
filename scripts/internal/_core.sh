@@ -40,7 +40,10 @@ kcs_exec() {
     return 0
   fi
 
-  __kcs_exec_cmd "" "" "$@"
+  __kcs_exec_cmd \
+    "__kcs_error_cmd" \
+    "__kcs_error_cmd" \
+    "$@"
 }
 
 ## execute command with error handler
@@ -50,11 +53,6 @@ kcs_exec() {
 ##        $@ - command arguments
 __kcs_exec_cmd() {
   local ns="cmd executor"
-  local whitelist=(
-    "kcs_debug" "kcs_info"
-    "kcs_warn" "kcs_error"
-    "kcs_logf" "kcs_printf"
-  )
 
   local not_found_cmd="$1"
   local error_cmd="$2"
@@ -62,27 +60,21 @@ __kcs_exec_cmd() {
   shift 3
   args=("$@")
 
-  ## Needs manual check command because it function
-  ## are defined on very beginning
-  ## And do not print debug for logging command
-  if command -v kcs_debug >/dev/null; then
-    if ! [[ "${whitelist[*]}" =~ $cmd ]]; then
-      local arg_msg="with no argument"
-      [ "${#args[@]}" -gt 0 ] &&
-        arg_msg="with ${#args[@]} argument ('${args[*]}')"
-
-      kcs_debug "$ns" \
-        "starting '%s' %s" \
-        "$cmd" "$arg_msg"
-    fi
+  local arg_msg="without argument"
+  if [ "${#args[@]}" -gt 0 ]; then
+    arg_msg="with ${#args[@]} argument (${args[*]})"
   fi
+  __kcs_print_debug "$cmd" \
+    "starting '%s' %s" "$cmd" "$arg_msg"
 
   ## If command not found
   if ! command -v "$cmd" >/dev/null &&
     [[ "$not_found_cmd" != "" ]]; then
+    local resp=("command '%s' not found" "$cmd")
+    __kcs_print_debug "$cmd" "${resp[@]}"
     ## Same syntax as kcs_throw
-    "$not_found_cmd" "$KCS_ERRCODE_CMD_NOT_FOUND" \
-      "$ns" "command '%s' not found" "$cmd"
+    "$not_found_cmd" "$KCS_ERRCODE_CMD_NOT_FOUND" "$ns" \
+      "${resp[@]}"
     return $?
   fi
 
@@ -91,9 +83,11 @@ __kcs_exec_cmd() {
   ## If command failed
   local status=$?
   if [ $status -gt 0 ] && [[ "$error_cmd" != "" ]]; then
+    local resp=("command '%s' return %d exit code" "$cmd" "$status")
+    __kcs_print_debug "$cmd" "${resp[@]}"
     ## Same syntax as kcs_throw
-    "$error_cmd" $status "$ns" \
-      "command '%s' return %d exit code" "$cmd" "$status"
+    "$error_cmd" "$status" "$ns" \
+      "${resp[@]}"
     return $?
   fi
 
@@ -117,7 +111,9 @@ __kcs_load_utils() {
   local cb="$1"
 
   for util in $(kcs_ignore_exec "$cb"); do
-    kcs_load_utils "$util"
+    util="${util//\.sh/}"
+    util="${util/_/}"
+    kcs_load_utils "_$util.sh"
   done
 }
 
@@ -190,4 +186,27 @@ __kcs_error_cmd() {
   shift 1
   kcs_error "$@"
   return "$code"
+}
+
+## kcs_debug wrapper for core function
+__kcs_print_debug() {
+  local ns="core executor"
+  local whitelist=(
+    "kcs_debug" "kcs_info"
+    "kcs_warn" "kcs_error"
+    "kcs_logf" "kcs_printf"
+  )
+
+  local cmd="$1" args=()
+  shift 1
+  args=("$@")
+
+  ## Needs manual check command because it function
+  ## are defined on very beginning
+  ## And do not print debug for logging command
+  if command -v kcs_debug >/dev/null; then
+    if ! [[ "${whitelist[*]}" =~ $cmd ]]; then
+      kcs_debug "$ns" "${args[@]}"
+    fi
+  fi
 }
