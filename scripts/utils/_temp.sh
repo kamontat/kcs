@@ -3,6 +3,8 @@
 
 ## Temp directory:
 ##   manage temp directory
+## Requirement:
+##   <none>
 ## Public functions:
 ##   `kcs_clean_temp` - clean temp directory to initiate state
 

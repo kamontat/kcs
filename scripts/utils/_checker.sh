@@ -4,6 +4,8 @@
 ## Checker:
 ##   all checker function will return error code if something wrong
 ##   to exit script if validation fail, please check _validator.sh
+## Requirement:
+##   <none>
 ## Public functions:
 ##   `kcs_check_present <input>` - check input must not be empty string
 ##   `kcs_check_os <os>` - check current os must equal to input expected

@@ -4,6 +4,8 @@
 ## Validator:
 ##   all validator function will throw error if check failed
 ##   to checking only, please check _checker.sh
+## Requirement:
+##   <none>
 ## Public functions:
 ##   `kcs_verify_present <input>` - validate if input exist
 ##   `kcs_verify_os <os>` - validate if os equal to input

@@ -3,6 +3,8 @@
 
 ## Debug:
 ##   add debugging hook to the script
+## Requirement:
+##   <none>
 ## Public functions:
 ##   <none>
 
@@ -19,6 +21,9 @@ __kcs_debug_key_value_format() {
     "$key" "$value"
 }
 
+## debugging hook
+kcs_add_hook \
+  pre_main __kcs_debug_pre_main
 __kcs_debug_pre_main() {
   __kcs_debug_key_value_format \
     "$KCS_NAME" "$KCS_VERSION"

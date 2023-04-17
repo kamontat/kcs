@@ -3,6 +3,8 @@
 
 ## <title>:
 ##   <description>
+## Requirement:
+##   - temp: create temporary directory
 ## Public functions:
 ##   <none>
 
