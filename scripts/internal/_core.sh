@@ -101,22 +101,6 @@ kcs_load_internal() {
     "$_KCS_DIR_INTERNAL" "$@"
 }
 
-## Load utils file
-kcs_load_utils() {
-  __kcs_load_file \
-    "__kcs_warn_cmd" "__kcs_error_cmd" \
-    "$_KCS_DIR_UTILS" "$@"
-}
-__kcs_load_utils() {
-  local cb="$1"
-
-  for util in $(kcs_ignore_exec "$cb"); do
-    util="${util//\.sh/}"
-    util="${util/_/}"
-    kcs_load_utils "_$util.sh"
-  done
-}
-
 ## load input file with throw if something wrong
 kcs_must_load() {
   __kcs_load_file \
