@@ -18,6 +18,7 @@ kcs_load_internal "_utils.sh"
 kcs_load_internal "_error.sh"
 kcs_load_internal "_logger.sh"
 kcs_load_internal "_mode.sh"
+kcs_load_internal "_commands.sh"
 
 ## shared namespace with load_internal
 kcs_ignore_exec kcs_debug "file-loader" \

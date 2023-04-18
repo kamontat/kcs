@@ -11,10 +11,17 @@
 export __KCS_COMMAND_SEPARATOR="__"
 export __KCS_COMMAND_DEFAULT_NAME="_default.sh"
 
+_kcs_load_command() {
+  _kcs_find_command "kcs_must_load" \
+    "$@"
+}
+
 _kcs_find_command() {
   local ns="command-finder"
-  local index="$#" args=("$@") _fargs=() _targs=()
+  local callback="$1"
+  shift
 
+  local index="$#" args=("$@") _fargs=() _targs=()
   local base_path="$_KCS_DIR_COMMANDS"
   local file_name="${args[*]}"
   file_name="${file_name// /$__KCS_COMMAND_SEPARATOR}.sh"
@@ -32,7 +39,7 @@ _kcs_find_command() {
       "$index" "$file_name" "${_targs[*]}"
 
     if test -f "$file_path"; then
-      kcs_must_load "$base_path" "$file_name" "${_targs[@]}"
+      "$callback" "$base_path" "$file_name" "${_targs[@]}"
       return $?
     fi
 
@@ -45,7 +52,6 @@ _kcs_find_command() {
 
   kcs_debug "$ns" "running default command with '%s'" \
     "${args[*]}"
-
-  kcs_must_load \
+  "$callback" \
     "$base_path" "$__KCS_COMMAND_DEFAULT_NAME" "${args[@]}"
 }
