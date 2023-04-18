@@ -42,12 +42,14 @@ kcs_utils_is_load() {
 __kcs_utils_init() {
   local cb="$1"
 
-  for util in $(kcs_ignore_exec "$cb"); do
-    __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $util"
+  local raw key value
+  for raw in $(kcs_ignore_exec "$cb"); do
+    __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
 
-    util="${util//\.sh/}"
-    util="${util/_/}"
-    kcs_load_utils "_$util.sh"
+    key="${raw%%/*}"
+
+    value="${raw#*/}"
+    kcs_load_utils "$key/_$value.sh"
   done
 }
 

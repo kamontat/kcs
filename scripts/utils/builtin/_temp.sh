@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ##utils-example:v1.0.0-beta.1
 
-## Temp directory:
+## builtin/temp:
 ##   manage temp directory
 ## Requirement:
 ##   <none>

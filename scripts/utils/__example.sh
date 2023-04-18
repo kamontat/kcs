@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-##utils-example:v1.0.0-beta.1
+##utils-example:v1.0.0-beta.2
 
-## <title>:
+## <module_name>:
 ##   <description>
 ## Requirement:
 ##   - temp: create temporary directory
 ## Public functions:
 ##   <none>
+
+## NOTE: All utility files must formatted as `_<name>.sh`.
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.

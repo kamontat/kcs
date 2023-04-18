@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ##utils-example:v1.0.0-beta.1
 
-## Prompt:
+## builtin/prompt:
 ##   create prompt to user
 ## Requirement:
 ##   <none>

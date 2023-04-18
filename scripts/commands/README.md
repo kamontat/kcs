@@ -227,7 +227,10 @@ __kcs_main_hook
 ## tags      : @optional, @hook:init
 __kcs_main_utils() {
   local utils=(
-    "_validator.sh"
+    ## Builtin utilities
+    "builtin/validator"
+    ## Custom utilities
+    "example"
   )
 
   printf "%s" "${utils[*]}"

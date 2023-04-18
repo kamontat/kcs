@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ##utils-example:v1.0.0-beta.1
 
-## Debug:
+## builtin/debug:
 ##   add debugging hook to the script
 ## Requirement:
 ##   <none>

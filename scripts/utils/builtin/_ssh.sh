@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ##utils-example:v1.0.0-beta.1
 
-## SSH wrapper:
+## builtin/ssh:
 ##   work same with ssh, use mode to decide which config to resolve
 ## Requirement:
 ##   - temp: create temporary directory
@@ -280,8 +280,8 @@ __kcs_ssh_has_profile() {
 kcs_add_hook \
   check __kcs_ssh_check
 __kcs_ssh_check() {
-  kcs_utils_required "ssh" \
-    "temp"
+  kcs_utils_required "builtin/ssh" \
+    "builtin/temp"
 }
 
 ## ssh setup hook

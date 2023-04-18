@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ##utils-example:v1.0.0-beta.1
 
-## Checker:
+## builtin/checker:
 ##   all checker function will return error code if something wrong
 ##   to exit script if validation fail, please check _validator.sh
 ## Requirement:
