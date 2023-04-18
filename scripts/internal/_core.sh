@@ -81,17 +81,17 @@ __kcs_exec_cmd() {
   "$cmd" "${args[@]}"
 
   ## If command failed
-  local status=$?
-  if [ $status -gt 0 ] && [[ "$error_cmd" != "" ]]; then
-    local resp=("command '%s' return %d exit code" "$cmd" "$status")
+  local exit_code=$?
+  if [ $exit_code -gt 0 ] && [[ "$error_cmd" != "" ]]; then
+    local resp=("command '%s' return %d exit code" "$cmd" "$exit_code")
     __kcs_print_debug "$cmd" "${resp[@]}"
     ## Same syntax as kcs_throw
-    "$error_cmd" "$status" "$ns" \
+    "$error_cmd" "$exit_code" "$ns" \
       "${resp[@]}"
     return $?
   fi
 
-  return $status
+  return $exit_code
 }
 
 ## Load internal file
@@ -138,15 +138,15 @@ __kcs_load_file() {
   ## If sourcing failed
   # shellcheck disable=SC1090
   source "$file_path"
-  local status=$?
-  if [ $status -gt 0 ] && [[ "$error_cmd" != "" ]]; then
+  local exit_code=$?
+  if [ $exit_code -gt 0 ] && [[ "$error_cmd" != "" ]]; then
     ## Same syntax as kcs_throw
-    "$error_cmd" $status "$ns" \
-      "sourced file '%s' return %d exit code" "$cmd" "$status"
+    "$error_cmd" $exit_code "$ns" \
+      "sourced file '%s' return %d exit code" "$cmd" "$exit_code"
     return $?
   fi
 
-  return $status
+  return $exit_code
 }
 
 ## This are use for not_found_cmd or error_cmd
