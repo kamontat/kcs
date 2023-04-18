@@ -9,21 +9,27 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 __kcs_set_name() {
-  local cb="$1"
+  local cb="$1" raw
+  raw="$(kcs_ignore_exec "$cb")"
+  test -n "$raw" &&
+    KCS_NAME="$raw"
   export KCS_NAME
-  KCS_NAME="$(kcs_ignore_exec "$cb")"
 }
 
 __kcs_set_version() {
-  local cb="$1"
+  local cb="$1" raw
+  raw="$(kcs_ignore_exec "$cb")"
+  test -n "$raw" &&
+    KCS_VERSION="$raw"
   export KCS_VERSION
-  KCS_VERSION="$(kcs_ignore_exec "$cb")"
 }
 
 __kcs_set_options() {
-  local cb="$1"
+  local cb="$1" raw
+  raw="$(kcs_ignore_exec "$cb")"
+  test -n "$raw" &&
+    KCS_OPTIONS="$raw"
   export KCS_OPTIONS
-  KCS_OPTIONS="$(kcs_ignore_exec "$cb")"
 }
 
 kcs_get_info() {
@@ -34,15 +40,19 @@ kcs_get_info() {
 }
 
 __kcs_set_description() {
-  local cb="$1"
+  local cb="$1" raw
+  raw="$(kcs_ignore_exec "$cb")"
+  test -n "$raw" &&
+    KCS_DESCRIPTION="$raw"
   export KCS_DESCRIPTION
-  KCS_DESCRIPTION="$(kcs_ignore_exec "$cb")"
 }
 
 __kcs_set_help() {
-  local cb="$1"
+  local cb="$1" raw
+  raw="$(kcs_ignore_exec "$cb")"
+  test -n "$raw" &&
+    KCS_HELP="$raw"
   export KCS_HELP
-  KCS_HELP="$(kcs_ignore_exec "$cb")"
 }
 
 kcs_get_help() {
