@@ -26,8 +26,8 @@ kcs_no_main_entry() {
   fi
 }
 
-kcs_is_cmd_mode() {
-  local actual="$KCS_MODE" expected="$_KCS_MODE_COMMAND"
+kcs_is_lib_mode() {
+  local actual="$KCS_MODE" expected="$_KCS_MODE_LIBRARY"
   if [[ "$actual" == "$expected" ]]; then
     return 0
   fi

@@ -11,14 +11,11 @@
 kcs_prepare() {
   # shellcheck disable=SC1091
   source "$PWD/internal/_base.sh"
-
-  ## Load main specific internal and utilities
-  kcs_load_internal "_commands.sh"
 }
 
 kcs_start() {
   ## Validate mode
   kcs_no_main_entry
   ## Find correct command
-  _kcs_find_command "$@"
+  _kcs_load_command "$@"
 }
