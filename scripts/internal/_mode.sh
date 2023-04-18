@@ -14,7 +14,7 @@ export _KCS_MODE_LIBRARY="library"
 ## Check current entry is not main
 ## otherwise, throw error to use command entry instead.
 kcs_no_main_entry() {
-  local ns="validate mode"
+  local ns="mode-validator"
   local actual="$KCS_MODE" expected="$_KCS_MODE_LIBRARY"
   local entry="$_KCS_ENTRY"
 

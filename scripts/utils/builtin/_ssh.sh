@@ -61,26 +61,30 @@ kcs_conf_ssh_proxy() {
     "User=${3:-admin}" "IdentityFile=${4:-$HOME/.ssh/id_rsa}"
 }
 
-## auto select ssh config
+## auto select ssh config (default mode)
 kcs_conf_ssh_auto_mode() {
+  kcs_debug "mode ssh" "using auto mode"
   __KCS_SSH_MODE="$KCS_SSH_MODE_AUTO"
   __KCS_SSH_TYPE=""
 }
 
 ## use default ssh config
 kcs_conf_ssh_default_mode() {
+  kcs_debug "mode ssh" "using default mode"
   __KCS_SSH_MODE="$KCS_SSH_MODE_DEFAULT"
   __KCS_SSH_TYPE="$KCS_SSH_TYPE_DEFAULT"
 }
 
 ## use custom local ssh config
 kcs_conf_ssh_local_mode() {
+  kcs_debug "mode ssh" "using local mode"
   __KCS_SSH_MODE="$KCS_SSH_MODE_LOCAL"
   __KCS_SSH_TYPE="$KCS_SSH_TYPE_LOCAL"
 }
 
 ## use custom proxy ssh config
 kcs_conf_ssh_proxy_mode() {
+  kcs_debug "mode ssh" "using proxy mode"
   __KCS_SSH_MODE="$KCS_SSH_MODE_PROXY"
   __KCS_SSH_TYPE="$KCS_SSH_TYPE_PROXY"
 }
@@ -145,6 +149,27 @@ kcs_ssh() {
     "${args[@]}"
 }
 
+## copy file/folder from profile to local machine
+## @param $1 - [required] profile name
+##        $n - [required] file path (syntax=`<src>:<dest>`)
+##             must use fullpath
+## @return   - same as scp command
+## @exit     - same as scp command
+kcs_ssh_copy_from() {
+  local ns="ssh-copier"
+  local cmd="scp" name="$1"
+  shift
+
+  local raw src dest
+  for raw in "$@"; do
+    src="${raw%%:*}"
+    dest="${raw#*:}"
+
+    kcs_debug "$ns" "coping %s to %s on '%s' profile" \
+      "$src" "$dest" "$name"
+  done
+}
+
 ## get config type based on ssh mode
 ## @param $1 - [required] profile name
 ## @return   - ssh type
@@ -181,7 +206,7 @@ __kcs_ssh_get_type() {
 ##        $2 - [required] config type
 ##        $n - [required] '<key>=<value>' config key-value
 __kcs_ssh_new_profile() {
-  local ns="profile ssh"
+  local ns="ssh-profiler"
   local name="${1:?}" ctype="$2" config
   config="$(__kcs_ssh_get_config "$name" "$ctype")"
   shift 2

@@ -88,7 +88,7 @@ __kcs_optional_hook() {
 }
 
 __kcs_register() {
-  local ns="register hook"
+  local ns="hook-registry"
   local callback="$1" name="$2" raw="$3"
   local cb="${raw%%:*}"
 

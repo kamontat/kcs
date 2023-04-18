@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## SHellTemplate: v0.1.0
+##template:v1.0.0-beta.1
 ## Main.sh is a entry file for all cmd in /commands
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.

@@ -19,5 +19,6 @@ kcs_load_internal "_error.sh"
 kcs_load_internal "_logger.sh"
 kcs_load_internal "_mode.sh"
 
-kcs_ignore_exec kcs_debug "base" \
+## shared namespace with load_internal
+kcs_ignore_exec kcs_debug "file-loader" \
   "loaded _base.sh in internal file"

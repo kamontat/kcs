@@ -20,7 +20,7 @@ kcs_load_utils() {
 ## kcs_utils_required <name> <requires>
 ## <name> util required <requires> utils
 kcs_utils_required() {
-  local ns="required utils"
+  local ns="utils-validator"
   local name="$1"
   shift
 

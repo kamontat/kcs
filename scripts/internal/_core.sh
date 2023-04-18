@@ -52,7 +52,7 @@ kcs_exec() {
 ##        $3 - command name
 ##        $@ - command arguments
 __kcs_exec_cmd() {
-  local ns="cmd executor"
+  local ns="executor"
 
   local not_found_cmd="$1"
   local error_cmd="$2"
@@ -115,7 +115,7 @@ kcs_must_load() {
 ##        $4 - execute file name
 ##        $@ - command arguments
 __kcs_load_file() {
-  local ns="file loader"
+  local ns="file-loader"
   local not_found_cmd="$1"
   local error_cmd="$2"
   local base_path="$3" file_name="$4"
@@ -174,7 +174,7 @@ __kcs_error_cmd() {
 
 ## kcs_debug wrapper for core function
 __kcs_print_debug() {
-  local ns="core executor"
+  local ns="core-wrapper"
   local whitelist=(
     "kcs_debug" "kcs_info"
     "kcs_warn" "kcs_error"

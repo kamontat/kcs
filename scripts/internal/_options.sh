@@ -75,7 +75,7 @@ __kcs_parse_options() {
 }
 
 __kcs_parse_addition_options() {
-  local ns="extra option"
+  local ns="option-parser"
   local flag="$1" value="$2" cmd="__kcs_main_option"
   if command -v "$cmd" >/dev/null; then
     if "$cmd" "$flag" "$value"; then
@@ -121,6 +121,11 @@ Environments:
   \$DEBUG
       - set to non-empty string will enabled debug mode
       - debug mode will print more detail than debug log.
+  \$DEBUG_DISABLED
+      - string separated by comma (,) 
+      - to disable namespaced debug logging
+      - below are verbosed namespaces:
+        - hook-adder,core-wrapper,hook-runner,file-loader
   \$LOG_LEVEL
       - set to 0 - 5 same as --log-level option.
       - this handle on pre_init hook

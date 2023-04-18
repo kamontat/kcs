@@ -12,7 +12,7 @@ export __KCS_COMMAND_SEPARATOR="__"
 export __KCS_COMMAND_DEFAULT_NAME="_default.sh"
 
 _kcs_find_command() {
-  local ns="command finder"
+  local ns="command-finder"
   local index="$#" args=("$@") _fargs=() _targs=()
 
   local base_path="$_KCS_DIR_COMMANDS"

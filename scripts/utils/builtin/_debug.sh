@@ -14,7 +14,7 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 __kcs_debug_key_value_format() {
-  local ns="$KCS_HOOK_NAME info"
+  local ns="debugger-info"
   local key="$1" value="$2"
 
   kcs_debug "$ns" "%-15s: '%s'" \

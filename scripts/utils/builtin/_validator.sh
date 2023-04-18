@@ -16,7 +16,7 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 kcs_verify_present() {
-  local ns="present validation"
+  local ns="str-validator"
   local name="$1" input="$2"
   if test -z "$input"; then
     kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
@@ -25,7 +25,7 @@ kcs_verify_present() {
 }
 
 kcs_verify_os() {
-  local ns="os validation"
+  local ns="os-validator"
   local expected="$1" actual
   actual="$(uname -s | awk '{ print tolower($0) }')"
   if [[ "$actual" != "$expected" ]]; then

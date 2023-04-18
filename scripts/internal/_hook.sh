@@ -35,7 +35,7 @@ _KCS_HOOK_TAGS=(
 ##       - <tag_name>=<tag_value>
 ##       - tag_name must prefix with '@'
 kcs_add_hook() {
-  local ns="hooks"
+  local ns="hook-adder"
   local name="$1" raw="$2"
 
   local command="${raw%%:*}"
@@ -63,7 +63,7 @@ kcs_add_hook() {
 }
 
 kcs_disable_hook() {
-  local ns="hooks"
+  local ns="hook-remover"
   local raw="$1" name cb
   name="${raw%%:*}"
   cb="__kcs_${raw#*:}"
@@ -84,15 +84,16 @@ _kcs_run_hook() {
   shift
   raw_args=("$@")
 
-  local ns="$name hook"
+  local ns="hook-runner"
   local commands=() disables=() disabled=""
 
   ## Load commands from hooks variable
   eval "commands=(\"\${${_KCS_HOOK_VARIABLE_PREFIX}_${name}[@]}\")"
   eval "disables=(\"\${${_KCS_HOOK_DISABLE_VARIABLE_PREFIX}_${name}[@]}\")"
 
-  kcs_debug "$ns" "running %d commands (disabled=%d)" \
+  kcs_debug "$ns" "running %d %11s hook (disabled=%d)" \
     "${#commands[@]}" \
+    "$name" \
     "${#disables[@]}"
 
   export KCS_HOOK_NAME="$name"
@@ -102,7 +103,8 @@ _kcs_run_hook() {
     local args=()
     local command="${raw%%:*}"
     if [[ "$disabled" =~ $command ]]; then
-      kcs_debug "$ns" "disabled command '%s'" "$command"
+      kcs_debug "$ns" "disabled command '%s' on %s hook" \
+        "$command" "$name"
       continue
     fi
 

@@ -14,7 +14,7 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 kcs_clean_temp() {
-  local ns="temp"
+  local ns="temp-cleaner"
 
   if test -d "$_KCS_DIR_TEMP"; then
     rm -r "$_KCS_DIR_TEMP"
