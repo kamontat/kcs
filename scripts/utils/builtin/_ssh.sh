@@ -141,6 +141,7 @@ __kcs_ssh_cmd() {
         "$pu_value" "$lfile"
       continue
     fi
+
     ## create scoped directory if exist
     test -n "$pu_scope" &&
       mkdir -p "$pbase/utils/$pu_scope"
@@ -157,6 +158,9 @@ __kcs_ssh_cmd() {
     "$pbase:$sbase"
 
   ## execute command
+  kcs_info "$ns" \
+    "running command '%s' at %s" \
+    "$lfile" "$name"
   cmd="$sbase/commands/$lfile"
   kcs_ssh "$name" -- "$cmd" "${args[@]}"
 }
