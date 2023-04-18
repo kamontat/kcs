@@ -39,17 +39,44 @@ kcs_utils_is_load() {
   [[ "$__KCS_LOADED_UTILS" =~ $module ]]
 }
 
+## get utils value to resolve filepath
+kcs_utils_get_value() {
+  local raw="$1" scope file
+
+  scope="$(kcs_utils_get_scope "$raw")"
+  file="$(kcs_utils_get_file "$raw")"
+
+  local out
+  test -n "$scope" && out="$scope/"
+  out="$out$file"
+
+  printf "%s" "$out"
+}
+
+## get utils scope
+kcs_utils_get_scope() {
+  local raw="$1" key
+
+  key="${raw%/*}"
+  if [[ "$key" != "$raw" ]]; then
+    printf "%s" "$key"
+  fi
+}
+
+kcs_utils_get_file() {
+  local raw="$1" value
+
+  value="${raw##*/}"
+  printf "%s" "_$value.sh"
+}
+
 __kcs_utils_init() {
   local cb="$1"
 
   local raw key value
   for raw in $(kcs_ignore_exec "$cb"); do
     __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
-
-    key="${raw%%/*}"
-
-    value="${raw#*/}"
-    kcs_load_utils "$key/_$value.sh"
+    kcs_load_utils "$(kcs_utils_get_value "$raw")"
   done
 }
 
