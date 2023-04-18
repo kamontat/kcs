@@ -15,22 +15,13 @@
 ## User defined function
 ####################################################
 
-__kcs_main_name() {
-  printf "default"
-}
+export KCS_NAME="default"
+export KCS_VERSION="v0.1.0"
+export KCS_HELP="Commands:
+  [example] <opts...>
+    - get example command
+"
 
-__kcs_main_version() {
-  printf "v0.1.0"
-}
-
-__kcs_main_help() {
-  echo "Commands:"
-  echo "  [example] <options...>"
-  echo "    - get example command"
-}
-
-## Main entry of command
-## visit README.md for more information
 __kcs_main() {
   echo "arguments: $*"
 }
