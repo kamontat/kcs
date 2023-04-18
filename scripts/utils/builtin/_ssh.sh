@@ -12,10 +12,11 @@
 ##   `kcs_conf_ssh_default_mode` - use default ssh config
 ##   `kcs_conf_ssh_local_mode` - use custom local ssh config
 ##   `kcs_conf_ssh_proxy_mode` - use custom proxy ssh config
-##   `kcs_ssh <p> <opts...> -- <args...>` - works same as ssh on profile [[TODO]]
-##   `kcs_ssh_cmd <p> <cmd>` - execute command on profile [[TODO]]
-##   `kcs_ssh_copy_from <p> <args...>` - copy file/folder from profile [[TODO]]
-##   `kcs_ssh_copy_to <p> <args...>` - copy file/folder to profile [[TODO]]
+##   `kcs_ssh <p> <opts...> -- <args...>` - works same as ssh on profile
+##   `kcs_ssh_cmd <p> <cmd>` - execute command on profile
+##   `kcs_ssh_copy_from <p> <args...>` - copy file/folder from profile
+##   `kcs_ssh_copy_to <p> <args...>` - copy file/folder to profile
+##   `kcs_scp <p> <args...>` - works same as scp on profile
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -89,6 +90,77 @@ kcs_conf_ssh_proxy_mode() {
   __KCS_SSH_TYPE="$KCS_SSH_TYPE_PROXY"
 }
 
+## copy commands from /commands, and run on target profile
+## @param $1 - [required] profile name
+##        $n - [required] commands to run
+kcs_ssh_cmd() {
+  local name="$1"
+  local cmd="$2"
+  shift 2
+
+  local args=("$@")
+  _kcs_find_command "__kcs_ssh_cmd" "$cmd" "$name" "${args[@]}"
+}
+__kcs_ssh_cmd() {
+  local ns="cmd ssh"
+  local lbase="$1" lfile="$2" name="$3"
+  local cmd="$lbase/$lfile"
+  shift 3
+
+  local args=("$@")
+  kcs_debug "$ns" "running command '%s' with %d arguments" \
+    "$lfile" "${#args[@]}"
+
+  ## searching for required utils
+  local ucmd="__kcs_main_utils" ucache
+  ucache="$_KCS_SSH_CONFIG_DIR/.utils.txt"
+  _KCS_ENTRY=command KCS_MODE=$_KCS_MODE_LIBRARY \
+    bash -c "source '$cmd'; $ucmd 2>/dev/null >$ucache"
+
+  ## packed scripts for send with single request
+  ## package config
+  local pbase
+  pbase="$_KCS_SSH_CONFIG_DIR/pkg"
+  local pu_raw pu_scope pu_value pu_path
+  ## copy command
+  mkdir -p "$pbase/commands"
+  cp "$cmd" "$pbase/commands/$lfile"
+  ## copy internal
+  mkdir -p "$pbase/internal"
+  cp -r "$_KCS_DIR_INTERNAL" "$pbase"
+  ## copy utils
+  mkdir -p "$pbase/utils"
+  # shellcheck disable=SC2013
+  for pu_raw in $(cat "$ucache"); do
+    pu_scope="$(kcs_utils_get_scope "$pu_raw")"
+    pu_value="$(kcs_utils_get_value "$pu_raw")"
+    pu_path="$_KCS_DIR_UTILS/$pu_value"
+    ## skip not found utils
+    if ! test -f "$pu_path"; then
+      kcs_warn "$ns" "utils '%s' not found on command '%s'" \
+        "$pu_value" "$lfile"
+      continue
+    fi
+    ## create scoped directory if exist
+    test -n "$pu_scope" &&
+      mkdir -p "$pbase/utils/$pu_scope"
+    ## copy utils to packed output
+    cp -r "$pu_path" "$pbase/utils/$pu_value"
+  done
+
+  ## server configuration
+  local sbase="/tmp/${KCS_NAME:-kcs}"
+
+  ## remove tmp if exist
+  kcs_ssh "$name" -- rm -r "$sbase" 2>/dev/null
+  kcs_ssh_copy_to "$name" \
+    "$pbase:$sbase"
+
+  ## execute command
+  cmd="$sbase/commands/$lfile"
+  kcs_ssh "$name" -- "$cmd" "${args[@]}"
+}
+
 ## works same as ssh on profile
 ## @param $1 - [required] profile name
 ##        $n - [optional] ssh options
@@ -103,8 +175,7 @@ kcs_ssh() {
   config="$(__kcs_ssh_get_config "$name" "$ctype")"
   shift
 
-  kcs_info "$ns" "running on '%s' config type" \
-    "$ctype"
+  kcs_info "$ns" "running on '%s' config type" "$ctype"
 
   ## -C => Requests compression of all data
   ## -T => Disable pseudo-terminal allocation
@@ -157,7 +228,7 @@ kcs_ssh() {
 ## @exit     - same as scp command
 kcs_ssh_copy_from() {
   local ns="ssh-copier"
-  local cmd="scp" name="$1"
+  local cmd="kcs_scp" name="$1"
   shift
 
   local raw src dest
@@ -165,9 +236,63 @@ kcs_ssh_copy_from() {
     src="${raw%%:*}"
     dest="${raw#*:}"
 
-    kcs_debug "$ns" "coping %s to %s on '%s' profile" \
-      "$src" "$dest" "$name"
+    kcs_debug "$ns" "copying '%s' (%s) to '%s' (%s)" \
+      "$src" "$name" "$dest" "local"
+    "$cmd" "$name" "$name:$src" "$dest"
   done
+}
+
+## copy file/folder from local to profile server
+## @param $1 - [required] profile name
+##        $n - [required] file path (syntax=`<src>:<dest>`)
+##             must use fullpath
+## @return   - same as scp command
+## @exit     - same as scp command
+kcs_ssh_copy_to() {
+  local ns="ssh-copier"
+  local cmd="kcs_scp" name="$1"
+  shift
+
+  local raw src dest
+  for raw in "$@"; do
+    src="${raw%%:*}"
+    dest="${raw#*:}"
+
+    if test -f "$src" || test -d "$src"; then
+      kcs_debug "$ns" "copying '%s' (%s) to '%s' (%s)" \
+        "$src" "local" "$dest" "$name"
+      "$cmd" "$name" "$src" "$name:$dest"
+    else
+      kcs_error "$ns" "file/folder not found at '%s'" \
+        "$src"
+    fi
+  done
+}
+
+## works same as scp on profile
+## @param $1 - [required] profile name
+##        $n - [optional] scp arguments
+## @return   - same as scp command
+## @exit     - same as scp command
+## @example  - kcs_scp "$server" "$server:/tmp/test" "$PWD/test"
+##           - kcs_scp "$server" "$PWD/test" "$server:/tmp/test"
+kcs_scp() {
+  local ns="scp"
+  local name="$1" ctype config
+  ctype="$(__kcs_ssh_get_type "$name")"
+  config="$(__kcs_ssh_get_config "$name" "$ctype")"
+  shift
+
+  ## -C => Requests compression of all data
+  ## -T => Disable pseudo-terminal allocation
+  local opts=("-CT" "-rq") args=("$@")
+  if test -n "$config"; then
+    opts+=("-F" "$config")
+  fi
+
+  kcs_debug "$ns" "options: %s" "${opts[*]}"
+  kcs_debug "$ns" "arguments: %s" "${args[*]}"
+  kcs_exec scp "${opts[@]}" "${args[@]}"
 }
 
 ## get config type based on ssh mode
