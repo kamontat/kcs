@@ -13,6 +13,19 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## create temp directory
+## @param $1 - [optional] name (default random by date)
+## @return   - single line fullpath string
+kcs_temp_create() {
+  local name="$1"
+  test -z "$name" && name="_TMP$(date +"%Y%m%d%H%M%S")"
+
+  local fullpath="$_KCS_DIR_TEMP/$name"
+  ## create temporary directory
+  mkdir -p "$fullpath"
+  printf "%s" "$fullpath"
+}
+
 kcs_clean_temp() {
   local ns="temp-cleaner"
 
