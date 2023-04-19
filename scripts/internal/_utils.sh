@@ -35,7 +35,7 @@ kcs_utils_required() {
 
   for module in "$@"; do
     if ! kcs_utils_is_load "$module"; then
-      kcs_throw "$KCS_ERRCODE_MISSING_REQUIRED_UTILS" \
+      kcs_throw "$KCS_EC_UTIL_NOT_FOUND" \
         "$ns" "'%s' utility requires '%s' to work correctly" \
         "$name" "$module"
     fi

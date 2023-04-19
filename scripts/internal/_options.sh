@@ -86,7 +86,7 @@ __kcs_parse_addition_options() {
   # because optspec is assigned by 'getopts' command
   # shellcheck disable=SC2154
   if [ "$OPTERR" == 1 ] && [ "${optspec:0:1}" != ":" ]; then
-    kcs_throw "$KCS_ERRCODE_OPTION_NOT_FOUND" \
+    kcs_throw "$KCS_EC_OPT_NOT_FOUND" \
       "$ns" "Unexpected option '%s', run --help for more information" \
       "$flag"
   fi

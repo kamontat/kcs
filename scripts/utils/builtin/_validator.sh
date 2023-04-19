@@ -29,7 +29,7 @@ kcs_verify_present() {
   local ns="str-verifier"
   local name="$1" input="$2"
   if test -z "$input"; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "'%s' is required" "$name"
   fi
 }
@@ -41,7 +41,7 @@ kcs_verify_cmd() {
   local ns="cmd-verifier"
   local input="$1"
   if ! command -v "$input" >/dev/null; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "missing command '%s'" "$input"
   fi
 }
@@ -54,7 +54,7 @@ kcs_verify_hostname() {
   local expected="$1" actual
   actual="$(hostname)"
   if [[ "$actual" != "$expected" ]]; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "expected hostname '%s' (current '%s')" \
       "$expected" "$actual"
   fi
@@ -69,7 +69,7 @@ kcs_verify_os() {
   local expected="$1" actual
   actual="$(uname -s | awk '{ print tolower($0) }')"
   if [[ "$actual" != "$expected" ]]; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "expected os '%s' (current '%s')" "$expected" "$actual"
   fi
 }
@@ -81,7 +81,7 @@ kcs_verify_dir() {
   local ns="dir-verifier"
   local input="$1"
   if ! test -d "$input"; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "directory (%s) not found" "$input"
   fi
 }
@@ -93,7 +93,7 @@ kcs_verify_file() {
   local ns="file-verifier"
   local input="$1"
   if ! test -f "$input"; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "file (%s) not found" "$input"
   fi
 }
@@ -106,7 +106,7 @@ kcs_verify_url() {
   local url="$1"
   if ! curl --silent --location --insecure --output /dev/null \
     "$url"; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "couldn't connect to %s" "$url"
   fi
 }
@@ -143,7 +143,7 @@ kcs_verify_server() {
     stdout="/dev/null"
     ;;
   *)
-    return "$KCS_ERRCODE_INVALID_ARGS"
+    return "$KCS_EC_INVALID_ARGS"
     ;;
   esac
 
@@ -151,7 +151,7 @@ kcs_verify_server() {
     "$cmd" "${#args[@]}"
 
   if ! "$cmd" "${args[@]}" >$stdout 2>$stderr; then
-    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "server %s:%s couldn't connect" \
       "$ip" "$port"
   fi

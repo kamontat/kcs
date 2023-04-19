@@ -27,7 +27,7 @@
 kcs_check_present() {
   local input="$2"
   if test -z "$input"; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -38,7 +38,7 @@ kcs_check_present() {
 kcs_check_cmd() {
   local input="$1"
   if ! command -v "$input" >/dev/null; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -50,7 +50,7 @@ kcs_check_hostname() {
   local expected="$1" actual
   actual="$(hostname)"
   if [[ "$actual" != "$expected" ]]; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -62,7 +62,7 @@ kcs_check_os() {
   local expected="$1" actual
   actual="$(uname -s | awk '{ print tolower($0) }')"
   if [[ "$actual" != "$expected" ]]; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -73,7 +73,7 @@ kcs_check_os() {
 kcs_check_dir() {
   local input="$1"
   if ! test -d "$input"; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -84,7 +84,7 @@ kcs_check_dir() {
 kcs_check_file() {
   local input="$1"
   if ! test -f "$input"; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -96,7 +96,7 @@ kcs_check_url() {
   local url="$1"
   if ! curl --silent --location --insecure --output /dev/null \
     "$url"; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }
@@ -132,7 +132,7 @@ kcs_check_server() {
     stdout="/dev/null"
     ;;
   *)
-    return "$KCS_ERRCODE_INVALID_ARGS"
+    return "$KCS_EC_INVALID_ARGS"
     ;;
   esac
 
@@ -140,7 +140,7 @@ kcs_check_server() {
     "$cmd" "${#args[@]}"
 
   if ! "$cmd" "${args[@]}" >$stdout 2>$stderr; then
-    return "$KCS_ERRCODE_VERIFY_FAILED"
+    return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
 }

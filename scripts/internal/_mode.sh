@@ -20,7 +20,7 @@ kcs_no_main_entry() {
 
   if [[ $entry == "main" ]] &&
     [[ "$actual" == "$expected" ]]; then
-    kcs_throw "$KCS_ERRCODE_INVALID_MODE" \
+    kcs_throw "$KCS_EC_INVALID_MODE" \
       "$ns" "You cannot run '%s' mode in '%s' entry, please use '%s' instead" \
       "$expected" "$entry" "/commands"
   fi

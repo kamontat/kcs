@@ -96,7 +96,7 @@ __kcs_register() {
 
   if test -z "$raw"; then
     ## same syntax with kcs_throw
-    "$callback" "$KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT" \
+    "$callback" "$KCS_EC_ARG_NOT_FOUND" \
       "$ns" "cannot register %s hook because missing callback" \
       "$name"
     return $?
@@ -104,7 +104,7 @@ __kcs_register() {
 
   if ! command -v "$cb" >/dev/null; then
     ## same syntax with kcs_throw
-    "$callback" "$KCS_ERRCODE_CMD_NOT_FOUND" \
+    "$callback" "$KCS_EC_CMD_NOT_FOUND" \
       "$ns" "%s hook failed, callback '%s' missing" \
       "$name" "$cb"
     return $?

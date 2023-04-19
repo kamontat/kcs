@@ -81,7 +81,7 @@ __kcs_exec_cmd() {
     local resp=("command '%s' not found" "$cmd")
     __kcs_print_debug "$cmd" "${resp[@]}"
     ## Same syntax as kcs_throw
-    "$not_found_cmd" "$KCS_ERRCODE_CMD_NOT_FOUND" "$ns" \
+    "$not_found_cmd" "$KCS_EC_CMD_NOT_FOUND" "$ns" \
       "${resp[@]}"
     return $?
   fi
@@ -137,7 +137,7 @@ __kcs_load_file() {
   if ! test -f "$file_path" &&
     [[ "$not_found_cmd" != "" ]]; then
     ## Same syntax as kcs_throw
-    "$not_found_cmd" "$KCS_ERRCODE_FILE_NOT_FOUND" \
+    "$not_found_cmd" "$KCS_EC_FILE_NOT_FOUND" \
       "$ns" "file '%s' is missing from '%s'" \
       "$file_name" "$base_path"
     return $?

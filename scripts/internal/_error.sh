@@ -8,92 +8,79 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_ERRCODE_UNKNOWN=1
-export KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT=2
-export KCS_ERRCODE_MISSING_REQUIRED_UTILS=3
-export KCS_ERRCODE_INVALID_ARGS=4
-export KCS_ERRCODE_CMD_NOT_FOUND=6
-export KCS_ERRCODE_FILE_NOT_FOUND=7
-export KCS_ERRCODE_OPTION_NOT_FOUND=12
-export KCS_ERRCODE_INVALID_OPTION=13
-export KCS_ERRCODE_VERIFY_FAILED=20
-export KCS_ERRCODE_INVALID_MODE=30
+export __KCS_EC_VARIABLES=()
+export __KCS_EC_WHITELIST=()
+export __KCS_EC_HELP="# Error codes"
 
-__KCS_CODE_WHITELIST=(
-  "$KCS_ERRCODE_UNKNOWN"
-  "$KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT"
-  "$KCS_ERRCODE_MISSING_REQUIRED_UTILS"
-  "$KCS_ERRCODE_INVALID_ARGS"
-  "$KCS_ERRCODE_CMD_NOT_FOUND"
-  "$KCS_ERRCODE_FILE_NOT_FOUND"
-  "$KCS_ERRCODE_OPTION_NOT_FOUND"
-  "$KCS_ERRCODE_INVALID_OPTION"
-  "$KCS_ERRCODE_VERIFY_FAILED"
-  "$KCS_ERRCODE_INVALID_MODE"
-)
+## register new errcode
+## code must be between 0 - 255
+__kcs_register_error() {
+  local name="$1" code="$2" desc="$3"
+
+  ## create errcode variable
+  eval "export $name=$code"
+  ## add errcode to code whitelist
+  __KCS_EC_VARIABLES+=("$name")
+  __KCS_EC_WHITELIST+=("$code")
+  __KCS_EC_HELP="$__KCS_EC_HELP
+  - $(printf "[%03d]: %s" "$code" "$desc")"
+}
+
+__kcs_register_error \
+  "KCS_EC_UNKNOWN" 1 "unknown error"
+
+__kcs_register_error \
+  "KCS_EC_INVALID_ARGS" 11 "invalid argument"
+__kcs_register_error \
+  "KCS_EC_INVALID_OPTS" 12 "invalid option"
+__kcs_register_error \
+  "KCS_EC_INVALID_MODE" 13 "invalid kcs mode (\$KCS_MODE)"
+
+__kcs_register_error \
+  "KCS_EC_CHECK_FAIL" 30 "validation failed"
+
+__kcs_register_error \
+  "KCS_EC_CMD_NOT_FOUND" 127 "command not found"
+__kcs_register_error \
+  "KCS_EC_ARG_NOT_FOUND" 128 "missing required argument"
+__kcs_register_error \
+  "KCS_EC_OPT_NOT_FOUND" 129 "missing required option"
+__kcs_register_error \
+  "KCS_EC_FILE_NOT_FOUND" 130 "file not found"
+__kcs_register_error \
+  "KCS_EC_UTIL_NOT_FOUND" 131 "missing required utility file"
+
+unset __kcs_register_error
 
 kcs_throw() {
   local code="${1:?}"
-  shift 1
+  shift
 
-  if [ $# -gt 0 ]; then
-    kcs_error "$@"
-  fi
+  [ $# -gt 0 ] && kcs_error "$@"
 
-  for whitelist in "${__KCS_CODE_WHITELIST[@]}"; do
+  for whitelist in "${__KCS_EC_WHITELIST[@]}"; do
     if [ "$whitelist" -eq "$code" ]; then
       exit "$code"
     fi
   done
 
   ## $1 - namespace
-  kcs_error "$1" "unknown error code %d, fallback to 1" \
+  kcs_warn "$1" "unknown error code %d, fallback to 1" \
     "$code"
   exit 1
 }
 
-__kcs_format_errcode_list() {
-  local code="$1" desc="$2"
-  printf '  [%03d] - %s\n' \
-    "$code" "$desc"
-}
 kcs_get_errcode_help() {
-  echo "# Error code"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_UNKNOWN" "unhandle error code"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT" "required argument missing"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_MISSING_REQUIRED_UTILS" "required utils are missing"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_INVALID_ARGS" "invalid argument"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_CMD_NOT_FOUND" "command not found"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_FILE_NOT_FOUND" "file not found"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_OPTION_NOT_FOUND" "options not found"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_INVALID_OPTION" "invalid options"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_VERIFY_FAILED" "validation failed"
-  __kcs_format_errcode_list \
-    "$KCS_ERRCODE_INVALID_MODE" "invalid \$KCS_MODE"
-
+  printf "%s\n" "$__KCS_EC_HELP"
   exit 0
 }
 
 __kcs_error_clean() {
-  unset KCS_ERRCODE_UNKNOWN \
-    KCS_ERRCODE_MISSING_REQUIRED_ARGUMENT \
-    KCS_ERRCODE_MISSING_REQUIRED_UTILS \
-    KCS_ERRCODE_INVALID_ARGS \
-    KCS_ERRCODE_CMD_NOT_FOUND \
-    KCS_ERRCODE_FILE_NOT_FOUND \
-    KCS_ERRCODE_OPTION_NOT_FOUND \
-    KCS_ERRCODE_INVALID_OPTION \
-    KCS_ERRCODE_VERIFY_FAILED \
-    KCS_ERRCODE_INVALID_MODE
+  for var in "${__KCS_EC_VARIABLES[@]}"; do
+    unset "$var"
+  done
 
-  unset __KCS_CODE_WHITELIST
+  unset __KCS_EC_VARIABLES \
+    __KCS_EC_WHITELIST \
+    __KCS_EC_HELP
 }
