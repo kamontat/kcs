@@ -6,9 +6,15 @@ This is a scripts collection for highly customizable shell scripts.
 
 1. `KCS_*` - Publicly, external variable
 2. `_KCS_*` - Internal variable
+3. `__KCS_*` - private variable
 
 ## Function convension
 
 1. `kcs_*` - Publicly, external function
 2. `_kcs_*` - Internal only function
 3. `__kcs_*` - File scoped, private function
+
+## Release flow
+
+1. Create git tag `git tag v1.0.0 --message ""`
+2. Generate changelog `git-chglog --output CHANGELOG.md`
