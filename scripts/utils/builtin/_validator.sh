@@ -7,29 +7,153 @@
 ## Requirement:
 ##   <none>
 ## Public functions:
-##   `kcs_verify_present <input>` - validate if input exist
-##   `kcs_verify_os <os>` - validate if os equal to input
+##   `kcs_verify_present <input> <name>` - validate input must be exist
+##   `kcs_verify_cmd <cmd>` - validate input must be executable command
+##   `kcs_verify_hostname <n>` - validate current host must be expected input
+##   `kcs_verify_os <os>` - validate current OS must be expected input
+##   `kcs_verify_dir <p>` - validate input directory must be exist
+##   `kcs_verify_file <p>` - validate input file must be exist
+##   `kcs_verify_url <url>` - validate input url must be callable
+##   `kcs_verify_server <ip> [p] [cmd]` - validate input must be connectable
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## validate input must be exist
+## @param $1 - [required] input value
+##        $2 - [required] variable name
+## @exit     - error if input is empty string
 kcs_verify_present() {
-  local ns="str-validator"
+  local ns="str-verifier"
   local name="$1" input="$2"
   if test -z "$input"; then
     kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
-      "$ns" "%s string is required" "$name"
+      "$ns" "'%s' is required" "$name"
   fi
 }
 
+## validate input must be executable command
+## @param $1 - [required] input command name
+## @exit     - error if input invalid command
+kcs_verify_cmd() {
+  local ns="cmd-verifier"
+  local input="$1"
+  if ! command -v "$input" >/dev/null; then
+    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+      "$ns" "missing command '%s'" "$input"
+  fi
+}
+
+## validate current host must be expected input name
+## @param $1 - [required] expected host name string
+## @exit     - error if hostname is not expected
+kcs_verify_hostname() {
+  local ns="host-verifier"
+  local expected="$1" actual
+  actual="$(hostname)"
+  if [[ "$actual" != "$expected" ]]; then
+    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+      "$ns" "expected hostname '%s' (current '%s')" \
+      "$expected" "$actual"
+  fi
+  return 0
+}
+
+## validate current OS must be expected input
+## @param $1 - [required] expected os name (result from `uname`)
+## @exit     - error if os is not expected
 kcs_verify_os() {
-  local ns="os-validator"
+  local ns="os-verifier"
   local expected="$1" actual
   actual="$(uname -s | awk '{ print tolower($0) }')"
   if [[ "$actual" != "$expected" ]]; then
     kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
-      "$ns" "expected %s but got '%s'" "$expected" "$actual"
+      "$ns" "expected os '%s' (current '%s')" "$expected" "$actual"
   fi
+}
+
+## validate directory file must be exist
+## @param $1 - [required] input directory fullpath
+## @exit     - error if input directory not found
+kcs_verify_dir() {
+  local ns="dir-verifier"
+  local input="$1"
+  if ! test -d "$input"; then
+    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+      "$ns" "directory (%s) not found" "$input"
+  fi
+}
+
+## validate input file must be exist
+## @param $1 - [required] input file fullpath
+## @exit     - error if input file not found
+kcs_verify_file() {
+  local ns="file-verifier"
+  local input="$1"
+  if ! test -f "$input"; then
+    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+      "$ns" "file (%s) not found" "$input"
+  fi
+}
+
+## validate input url must be callable
+## @param $1 - [required] full link
+## @exit     - error if input url cannot be called
+kcs_verify_url() {
+  local ns="url-verifier"
+  local url="$1"
+  if ! curl --silent --location --insecure --output /dev/null \
+    "$url"; then
+    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+      "$ns" "couldn't connect to %s" "$url"
+  fi
+}
+
+## validate input must be connectable
+## @param $1 - [required] hostname or ip
+##        $2 - [optional] port number (default=80)
+##           - when using ping, ignore port number
+##        $3 - [optional] force command to use (e.g. nc)
+## @exit     - error if input server cannot be connected
+kcs_verify_server() {
+  local ns="server-verifier"
+  local ip="$1" port="${2:-80}"
+  local cmd="$3" args=()
+  local stdout="/dev/stdout"
+  local stderr="/dev/stderr"
+
+  if test -z "$cmd" &&
+    command -v nc >/dev/null; then
+    cmd="nc"
+  elif test -z "$cmd"; then
+    cmd="ping"
+  fi
+
+  case "$cmd" in
+  nc)
+    args+=("-w" 1 "-H" 1 "-J" 1 "-G" 1 "-z")
+    args+=("$ip" "$port")
+    stderr="/dev/null"
+    ;;
+  ping)
+    args+=(-c1 -qt1)
+    args+=("$ip")
+    stdout="/dev/null"
+    ;;
+  *)
+    return "$KCS_ERRCODE_INVALID_ARGS"
+    ;;
+  esac
+
+  kcs_debug "$ns" "using '%s' command with %d arguments" \
+    "$cmd" "${#args[@]}"
+
+  if ! "$cmd" "${args[@]}" >$stdout 2>$stderr; then
+    kcs_throw "$KCS_ERRCODE_VERIFY_FAILED" \
+      "$ns" "server %s:%s couldn't connect" \
+      "$ip" "$port"
+  fi
+  return 0
 }
