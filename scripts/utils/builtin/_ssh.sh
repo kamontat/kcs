@@ -431,12 +431,12 @@ __kcs_ssh_has_profile() {
 # --------------------------------------------------------
 
 ## ssh check hook
-kcs_add_hook \
-  check __kcs_ssh_check
-__kcs_ssh_check() {
-  kcs_utils_required "builtin/ssh" \
-    "builtin/temp"
-}
+# kcs_add_hook \
+#   check __kcs_ssh_check
+# __kcs_ssh_check() {
+#   kcs_utils_required "builtin/ssh" \
+#     "builtin/temp"
+# }
 
 ## ssh setup hook
 kcs_add_hook \
