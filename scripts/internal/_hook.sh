@@ -18,13 +18,19 @@ _KCS_HOOK_NAMES=(
   pre_clean clean post_clean
 )
 
+## optional mean can be missing but cannot fail
 export KCS_HOOK_TAG_OPTIONAL="@optional"
+## silent mean can be missing or fail
+export KCS_HOOK_TAG_SILENT="@silent"
+## raw will send raw user argument to hook
 export KCS_HOOK_TAG_RAW="@raw"
+## cb will send callback as first parameter
 export KCS_HOOK_TAG_CALLBACK="@cb"
 
 _KCS_HOOK_TAGS=(
   "$KCS_HOOK_TAG_CALLBACK"
   "$KCS_HOOK_TAG_OPTIONAL"
+  "$KCS_HOOK_TAG_SILENT"
   "$KCS_HOOK_TAG_RAW"
 )
 
@@ -118,6 +124,9 @@ _kcs_run_hook() {
         args+=("$tag_value")
         ;;
       "$KCS_HOOK_TAG_OPTIONAL")
+        callback="kcs_optional_exec"
+        ;;
+      "$KCS_HOOK_TAG_SILENT")
         callback="kcs_ignore_exec"
         ;;
       "$KCS_HOOK_TAG_RAW")
@@ -167,6 +176,7 @@ _kcs_clean_hooks() {
     _KCS_HOOK_NAMES
 
   unset KCS_HOOK_TAG_OPTIONAL \
+    KCS_HOOK_TAG_SILENT \
     KCS_HOOK_TAG_CALLBACK \
     KCS_HOOK_TAG_RAW \
     _KCS_HOOK_TAGS

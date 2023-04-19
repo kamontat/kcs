@@ -16,6 +16,14 @@ kcs_ignore_exec() {
     "$@"
 }
 
+## execute input command with ignore if not exist
+## or throw error if command failed
+kcs_optional_exec() {
+  __kcs_exec_cmd \
+    "__kcs_ignore_cmd" "kcs_throw" \
+    "$@"
+}
+
 ## execute input command;
 ## if command not found, warn and return success
 kcs_should_exec() {
