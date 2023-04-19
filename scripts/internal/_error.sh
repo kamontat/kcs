@@ -8,9 +8,9 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export __KCS_EC_VARIABLES=()
-export __KCS_EC_WHITELIST=()
-export __KCS_EC_HELP="# Error codes"
+__KCS_EC_VARIABLES=()
+__KCS_EC_WHITELIST=()
+__KCS_EC_HELP="# Error codes"
 
 ## register new errcode
 ## code must be between 0 - 255
