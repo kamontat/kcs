@@ -15,6 +15,7 @@ when run with `main.sh`.
   - [Hooks function](#hooks-function)
   - [Utilities function](#utilities-function)
   - [Configurations function](#configurations-function)
+  - [Validates function](#validates-function)
 - [Useful functions and variables](#useful-functions-and-variables)
   - [Generic variables](#generic-variables)
   - [Generic functions](#generic-functions)
@@ -261,6 +262,32 @@ __kcs_main_config() {
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_config
+```
+
+</details>
+
+### Validates function
+
+<details><summary>Check command</summary>
+
+```sh
+## desc      : validate configuration;
+##           : requires 'builtin/validator' utils
+## tags      : @optional, @hook:check
+__kcs_main_validate() {
+  kcs_verify_present \
+    "$__USERNAME" "username"
+  # kcs_verify_*
+}
+## desc      : all kcs_verify_* are 
+##           : from builtin/validator utils
+__kcs_main_utils() {
+  printf "builtin/validator"
+}
+
+## caller    : hooks
+## arguments : <none>
+__kcs_main_validate
 ```
 
 </details>
