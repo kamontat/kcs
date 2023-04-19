@@ -62,12 +62,10 @@ kcs_get_help() {
   local help="$KCS_HELP"
 
   test -n "$desc" && desc="$desc"$'\n'
-  test -n "$help" && help=$'\n'"$help"
 
   printf "# %s (%s)
 %s%s%s" "$name" "$version" "$desc" \
-    "$__KCS_GLOBAL_HELP" \
-    "$help"
+    "$help" "$__KCS_GLOBAL_HELP"
   exit 0
 }
 

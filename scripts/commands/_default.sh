@@ -17,7 +17,8 @@
 
 export KCS_NAME="default"
 export KCS_VERSION="v0.1.0"
-export KCS_HELP="Commands:
+export KCS_HELP="
+Commands:
   [example] <opts...>
     - get example command
 "
