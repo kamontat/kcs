@@ -174,7 +174,6 @@ __kcs_main_option_keys
 ## tags      : @optional
 __kcs_main_option() {
   local flag="$1" value="$2"
-
   case "$flag" in
   N | name)
     kcs_require_argument "$flag"
