@@ -11,10 +11,19 @@
 export __KCS_LOADED_UTILS=""
 
 ## Load utils file
+## @param $1 - utils name
+##        $2 - utils path
 kcs_load_utils() {
-  __kcs_load_file \
-    "__kcs_warn_cmd" "__kcs_error_cmd" \
-    "$_KCS_DIR_UTILS" "$@"
+  local ns="utils-loader"
+  local name="$1" path="$2"
+  if ! kcs_utils_is_load "$name"; then
+    __kcs_load_file \
+      "__kcs_warn_cmd" "__kcs_error_cmd" \
+      "$_KCS_DIR_UTILS" "$path"
+  else
+    kcs_debug "$ns" "utils name '%s' has been loaded, skipped" \
+      "$name"
+  fi
 }
 
 ## kcs_utils_required <name> <requires>
@@ -42,7 +51,6 @@ kcs_utils_is_load() {
 ## get utils value to resolve filepath
 kcs_utils_get_value() {
   local raw="$1" scope file
-
   scope="$(kcs_utils_get_scope "$raw")"
   file="$(kcs_utils_get_file "$raw")"
 
@@ -56,7 +64,6 @@ kcs_utils_get_value() {
 ## get utils scope
 kcs_utils_get_scope() {
   local raw="$1" key
-
   key="${raw%/*}"
   if [[ "$key" != "$raw" ]]; then
     printf "%s" "$key"
@@ -65,18 +72,16 @@ kcs_utils_get_scope() {
 
 kcs_utils_get_file() {
   local raw="$1" value
-
   value="${raw##*/}"
   printf "%s" "_$value.sh"
 }
 
 __kcs_utils_init() {
   local cb="$1"
-
   local raw key value
   for raw in $(kcs_ignore_exec "$cb"); do
+    kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"
     __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
-    kcs_load_utils "$(kcs_utils_get_value "$raw")"
   done
 }
 
