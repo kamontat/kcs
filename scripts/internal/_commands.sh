@@ -11,15 +11,16 @@
 export __KCS_COMMAND_SEPARATOR="__"
 export __KCS_COMMAND_DEFAULT_NAME="_default.sh"
 
+## call command if not found, use default
 _kcs_load_command() {
-  _kcs_find_command "kcs_must_load" \
-    "$@"
+  _kcs_find_command \
+    "kcs_must_load" "__kcs_command_load_default" "$@"
 }
 
 _kcs_find_command() {
   local ns="command-finder"
-  local callback="$1"
-  shift
+  local load_cb="$1" not_found_cb="$2"
+  shift 2
 
   local index="$#" args=("$@") _fargs=() _targs=()
   local base_path="$_KCS_DIR_COMMANDS"
@@ -39,7 +40,7 @@ _kcs_find_command() {
       "$index" "$file_name" "${_targs[*]}"
 
     if test -f "$file_path"; then
-      "$callback" "$base_path" "$file_name" "${_targs[@]}"
+      "$load_cb" "$base_path" "$file_name" "${_targs[@]}"
       return $?
     fi
 
@@ -50,8 +51,12 @@ _kcs_find_command() {
     ((index--))
   done
 
-  kcs_debug "$ns" "running default command with '%s'" \
-    "${args[*]}"
-  "$callback" \
-    "$base_path" "$__KCS_COMMAND_DEFAULT_NAME" "${args[@]}"
+  "$not_found_cb" "${args[@]}"
+}
+
+__kcs_command_load_default() {
+  local args=("$@")
+  local base_path="$_KCS_DIR_COMMANDS"
+  local default="$__KCS_COMMAND_DEFAULT_NAME"
+  kcs_must_load "$base_path" "$default" "${args[@]}"
 }
