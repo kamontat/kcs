@@ -28,7 +28,7 @@
 ## @exit     - error if input is empty string
 kcs_verify_present() {
   local ns="str-verifier"
-  local name="$1" input="$2"
+  local input="$1" name="$2"
   if test -z "$input"; then
     kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "'%s' is required" "$name"
