@@ -15,6 +15,7 @@
 ##   `kcs_verify_file <p>` - validate input file must be exist
 ##   `kcs_verify_url <url>` - validate input url must be callable
 ##   `kcs_verify_server <ip> [p] [cmd]` - validate input must be connectable
+##   `kcs_verify_args <size>` - validate arguments must be same size
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -156,4 +157,19 @@ kcs_verify_server() {
       "$ip" "$port"
   fi
   return 0
+}
+
+## validate arguments must be same size
+## @param $1 - [required] expected argument size
+##        $n - [optional] argument array to check (default=$KCS_COMMANDS)
+## @exit     - error if size is not matched
+## @example  - `kcs_verify_args 3`
+##           - `kcs_verify_args 7 "$@"`
+kcs_verify_args() {
+  local expected="$1" actual="${#KCS_COMMANDS[@]}"
+  if [ "$expected" -ne "$actual" ]; then
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
+      "$ns" "expected '%s' arguments, but got '%s'" \
+      "$expected" "$actual"
+  fi
 }

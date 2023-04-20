@@ -15,6 +15,7 @@
 ##   `kcs_check_file <p>` - check input file should be exist
 ##   `kcs_check_url <u>` - check input url should be callable
 ##   `kcs_check_server <ip> [p] [cmd]` - check input should be connectable
+##   `kcs_check_args <size>` - check arguments should be same size
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -140,6 +141,19 @@ kcs_check_server() {
     "$cmd" "${#args[@]}"
 
   if ! "$cmd" "${args[@]}" >$stdout 2>$stderr; then
+    return "$KCS_EC_CHECK_FAIL"
+  fi
+  return 0
+}
+
+## check arguments should be same size
+## @param $1 - [required] expected argument size
+##        $n - [optional] argument array to check (default=$KCS_COMMANDS)
+## @return   - either zero or non-zero
+## @example  - `kcs_check_args 3`
+kcs_check_args() {
+  local expected="$1" actual="${#KCS_COMMANDS[@]}"
+  if [ "$expected" -ne "$actual" ]; then
     return "$KCS_EC_CHECK_FAIL"
   fi
   return 0
