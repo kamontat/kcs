@@ -11,6 +11,7 @@ when run with `main.sh`.
 - [Callback functions](#callback-functions)
   - [Main function](#main-function)
   - [Information function](#information-function)
+  - [Initiate function](#initiate-function)
   - [Option function](#option-function)
   - [Hooks function](#hooks-function)
   - [Utilities function](#utilities-function)
@@ -145,6 +146,24 @@ Options:
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_help
+```
+
+</details>
+
+### Initiate function
+
+<details><summary>Init main</summary>
+
+```sh
+## desc      : run init after parse all options
+## tags      : @optional, @hook:post_init
+__kcs_main_init() {
+  return 0
+}
+
+## caller    : hooks
+## arguments : raw arguments
+__kcs_main_init
 ```
 
 </details>

@@ -32,6 +32,8 @@ _kcs_register_hooks() {
   kcs_add_hook post_init \
     __kcs_parse_options:@optional,@raw
   kcs_add_hook post_init \
+    __kcs_main_init:@optional,@raw
+  kcs_add_hook post_init \
     __kcs_main_hook:@optional
   kcs_add_hook post_init \
     __kcs_post_init:@silent
