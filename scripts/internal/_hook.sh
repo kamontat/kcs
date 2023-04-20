@@ -48,6 +48,15 @@ kcs_add_hook() {
   local tags="" raw_tag tag_key
 
   if [[ "${_KCS_HOOK_NAMES[*]}" =~ $name ]]; then
+    local prev=()
+    eval "prev=(\"\${${_KCS_HOOK_VARIABLE_PREFIX}_${name}[@]}\")"
+
+    if [[ "${prev[*]}" =~ $command ]]; then
+      kcs_debug "$ns" "duplicated command '%s' at '%s' hook, skipped" \
+        "$command" "$name"
+      return 0
+    fi
+
     for raw_tag in $(__kcs_parse_tags "${raw#*:}"); do
       tag_key="${raw_tag%%=*}"
 
