@@ -68,6 +68,8 @@ _kcs_register_hooks() {
   kcs_add_hook clean \
     __kcs_mode_clean
   kcs_add_hook clean \
+    __kcs_main_clean:@optional
+  kcs_add_hook clean \
     __kcs_clean:@silent
 
   kcs_add_hook post_clean \

@@ -16,6 +16,7 @@ when run with `main.sh`.
   - [Utilities function](#utilities-function)
   - [Configurations function](#configurations-function)
   - [Validates function](#validates-function)
+  - [Clean function](#clean-function)
 - [Useful functions and variables](#useful-functions-and-variables)
   - [Generic variables](#generic-variables)
   - [Generic functions](#generic-functions)
@@ -288,6 +289,24 @@ __kcs_main_utils() {
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_validate
+```
+
+</details>
+
+### Clean function
+
+<details><summary>Clean command</summary>
+
+```sh
+## desc      : cleanup main variable and function
+## tags      : @optional, @hook:clean
+__kcs_main_clean() {
+  unset __NAME __PASSWORD
+}
+
+## caller    : hooks
+## arguments : <none>
+__kcs_main_clean
 ```
 
 </details>
