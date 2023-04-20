@@ -294,7 +294,7 @@ __kcs_main_validate
 
 ## Useful functions and variables
 
-The useful built-in functions and variables.
+The useful internal functions and variables.
 
 ### Generic variables
 
