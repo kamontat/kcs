@@ -16,7 +16,7 @@
 ####################################################
 
 export KCS_NAME="default"
-export KCS_VERSION="v0.1.0"
+export KCS_VERSION="v0.1.1"
 export KCS_HELP="
 Commands:
   [example] <opts...>
@@ -24,7 +24,13 @@ Commands:
 "
 
 __kcs_main() {
-  echo "arguments: $*"
+  local ns="default"
+  kcs_warn "$ns" \
+    "invalid commands: %s" \
+    "$*"
+
+  echo
+  kcs_get_help
 }
 
 ####################################################

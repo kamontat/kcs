@@ -20,7 +20,6 @@ export KCS_VERSION="v0.0.0"
 
 __kcs_main() {
   local ns="$KCS_NAME"
-
   kcs_logf "$ns" "commands: '%s'" "${KCS_COMMANDS[*]}"
 }
 
