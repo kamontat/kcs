@@ -80,6 +80,8 @@ kcs_utils_get_file() {
 __kcs_utils_init() {
   local cb="$1"
   local raw key value
+  shift
+
   ## Load from input callback
   for raw in $(kcs_ignore_exec "$cb"); do
     if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
@@ -88,7 +90,7 @@ __kcs_utils_init() {
   done
 
   ## Load from variable name
-  for raw in "${KCS_UTILS[@]}"; do
+  for raw in "$@"; do
     if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
       __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
     fi

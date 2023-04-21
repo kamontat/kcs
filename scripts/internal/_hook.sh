@@ -26,12 +26,15 @@ export KCS_HOOK_TAG_SILENT="@silent"
 export KCS_HOOK_TAG_RAW="@raw"
 ## cb will send callback as first parameter
 export KCS_HOOK_TAG_CALLBACK="@cb"
+## add arguments from input variable name
+export KCS_HOOK_TAG_ARGS="@args"
 
 _KCS_HOOK_TAGS=(
   "$KCS_HOOK_TAG_CALLBACK"
   "$KCS_HOOK_TAG_OPTIONAL"
   "$KCS_HOOK_TAG_SILENT"
   "$KCS_HOOK_TAG_RAW"
+  "$KCS_HOOK_TAG_ARGS"
 )
 
 ## Add new callback $2 on hook name $1
@@ -115,7 +118,6 @@ _kcs_run_hook() {
   disabled="${disables[*]}"
 
   for raw in "${commands[@]}"; do
-    local args=()
     local command="${raw%%:*}"
     if [[ "$disabled" =~ $command ]]; then
       kcs_debug "$ns" "disabled command '%s' on %s hook" \
@@ -123,28 +125,40 @@ _kcs_run_hook() {
       continue
     fi
 
-    local callback="kcs_must_exec"
+    local executor="kcs_must_exec"
+    local _callback="" _raw_args=() _args=()
     for raw_tag in $(__kcs_parse_tags "${raw#*:}"); do
       tag_key="${raw_tag%%=*}"
       tag_value="${raw_tag#*=}"
 
       case "$tag_key" in
-      "$KCS_HOOK_TAG_CALLBACK")
-        args+=("$tag_value")
-        ;;
       "$KCS_HOOK_TAG_OPTIONAL")
-        callback="kcs_optional_exec"
+        executor="kcs_optional_exec"
         ;;
       "$KCS_HOOK_TAG_SILENT")
-        callback="kcs_ignore_exec"
+        executor="kcs_ignore_exec"
+        ;;
+      "$KCS_HOOK_TAG_CALLBACK")
+        _callback="$tag_value"
         ;;
       "$KCS_HOOK_TAG_RAW")
-        args+=("${raw_args[@]}")
+        _raw_args+=("${raw_args[@]}")
+        ;;
+      "$KCS_HOOK_TAG_ARGS")
+        eval "_args+=(\"\${${tag_value}[@]}\")"
         ;;
       esac
     done
 
-    "$callback" "$command" "${args[@]}"
+    local args=()
+    test -n "$_callback" &&
+      args+=("$_callback")
+    [ "${#_args[@]}" -gt 0 ] &&
+      args+=("${_args[@]}")
+    [ "${#_raw_args[@]}" -gt 0 ] &&
+      args+=("${_raw_args[@]}")
+
+    "$executor" "$command" "${args[@]}"
   done
 
   unset KCS_HOOK_NAME
@@ -188,5 +202,6 @@ _kcs_clean_hooks() {
     KCS_HOOK_TAG_SILENT \
     KCS_HOOK_TAG_CALLBACK \
     KCS_HOOK_TAG_RAW \
+    KCS_HOOK_TAG_ARGS \
     _KCS_HOOK_TAGS
 }
