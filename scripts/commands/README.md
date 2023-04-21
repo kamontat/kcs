@@ -256,6 +256,11 @@ __kcs_main_utils() {
   printf "%s" "${utils[*]}"
 }
 
+## desc      : list of utilities
+##           : The result from variable and function will be merged
+## tags      : @optional
+export KCS_UTILS=("builtin/validator")
+
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_utils

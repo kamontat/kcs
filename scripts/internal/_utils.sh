@@ -23,6 +23,7 @@ kcs_load_utils() {
   else
     kcs_debug "$ns" "utils name '%s' has been loaded, skipped" \
       "$name"
+    return 1
   fi
 }
 
@@ -79,9 +80,18 @@ kcs_utils_get_file() {
 __kcs_utils_init() {
   local cb="$1"
   local raw key value
+  ## Load from input callback
   for raw in $(kcs_ignore_exec "$cb"); do
-    kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"
-    __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
+    if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
+      __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
+    fi
+  done
+
+  ## Load from variable name
+  for raw in "${KCS_UTILS[@]}"; do
+    if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
+      __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
+    fi
   done
 }
 
