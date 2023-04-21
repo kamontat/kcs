@@ -51,4 +51,7 @@ __kcs_debug_pre_main() {
     "arguments" "$*"
   __kcs_debug_key_value_format \
     "log levels" "$_KCS_LOG_LEVELS"
+
+  __kcs_debug_key_value_format \
+    "utilities" "$__KCS_LOADED_UTILS"
 }
