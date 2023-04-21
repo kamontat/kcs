@@ -6,6 +6,8 @@
 ## Requirement:
 ##   <none>
 ## Public functions:
+##   `kcs_conf_temp_auto_clean` - auto clean temp file or directory
+##   `kcs_conf_temp_no_clean` - never clean temp file or directory
 ##   `kcs_temp_create_dir [n]` - create new temp directory by name
 ##   `kcs_temp_create_file [n]` - create new temp file by name
 ##   `kcs_temp_clean <n>` - clean <n> temp directory
@@ -16,8 +18,27 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+__KCS_TEMP_AUTO_CLEANUP=true
 __KCS_TEMP_CREATED_DIR=()
 __KCS_TEMP_CREATED_FILE=()
+
+## cleanup all files/folders created by
+## kcs_temp_create_* function when on clean hook
+kcs_conf_temp_auto_clean() {
+  local ns="config temp"
+  __KCS_TEMP_AUTO_CLEANUP=true
+  kcs_debug "$ns" \
+    "enabled auto cleanup created file/folder"
+}
+
+## not cleanup any file/folder created by
+## kcs_temp_create_* function
+kcs_conf_temp_no_clean() {
+  local ns="config temp"
+  unset __KCS_TEMP_AUTO_CLEANUP
+  kcs_debug "$ns" \
+    "enabled auto cleanup created file/folder"
+}
 
 ## create temp directory and return fullpath
 ## The directory created by this function
@@ -88,18 +109,20 @@ kcs_temp_clean_all() {
 kcs_add_hook clean \
   "__kcs_temp_clean"
 __kcs_temp_clean() {
-  local ns="clean temp"
-  for temp in "${__KCS_TEMP_CREATED_DIR[@]}"; do
-    kcs_debug "$ns" \
-      "removing '%s' temp directory"
-    rm -r "$temp"
-  done
+  if test -n "$__KCS_TEMP_AUTO_CLEANUP"; then
+    local ns="clean temp"
+    for temp in "${__KCS_TEMP_CREATED_DIR[@]}"; do
+      kcs_debug "$ns" \
+        "removing '%s' temp directory"
+      rm -r "$temp"
+    done
 
-  for temp in "${__KCS_TEMP_CREATED_FILE[@]}"; do
-    kcs_debug "$ns" \
-      "removing '%s' temp file"
-    rm "$temp"
-  done
+    for temp in "${__KCS_TEMP_CREATED_FILE[@]}"; do
+      kcs_debug "$ns" \
+        "removing '%s' temp file"
+      rm "$temp"
+    done
+  fi
 
   unset __KCS_TEMP_CREATED_DIR \
     __KCS_TEMP_CREATED_FILE
