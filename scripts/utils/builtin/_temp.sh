@@ -6,7 +6,8 @@
 ## Requirement:
 ##   <none>
 ## Public functions:
-##   `kcs_temp_create [n]` - create new temp directory by name
+##   `kcs_temp_create_dir [n]` - create new temp directory by name
+##   `kcs_temp_create_file [n]` - create new temp file by name
 ##   `kcs_temp_clean <n>` - clean <n> temp directory
 ##   `kcs_temp_clean_all` - clean temp directory to initiate state
 
@@ -15,16 +16,37 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+__KCS_TEMP_CREATED_DIR=()
+__KCS_TEMP_CREATED_FILE=()
+
 ## create temp directory and return fullpath
+## The directory created by this function
 ## @param $1 - [optional] name (default=random)
 ## @return   - single line fullpath string
-kcs_temp_create() {
+kcs_temp_create_dir() {
   local name="$1"
-  test -z "$name" && name=".t$RANDOM"
+  test -z "$name" && name=".d$RANDOM"
 
   local fullpath="$_KCS_DIR_TEMP/$name"
+  __KCS_TEMP_CREATED_DIR+=("$fullpath")
+
   ## create temporary directory
   mkdir -p "$fullpath"
+  printf "%s" "$fullpath"
+}
+
+## create temp file and return fullpath
+## @param $1 - [optional] name (default=random)
+## @return   - single line fullpath string
+kcs_temp_create_file() {
+  local name="$1"
+  test -z "$name" && name=".f$RANDOM.temp"
+
+  local fullpath="$_KCS_DIR_TEMP/$name"
+  __KCS_TEMP_CREATED_FILE+=("$fullpath")
+
+  ## create temporary directory
+  touch "$fullpath"
   printf "%s" "$fullpath"
 }
 
@@ -59,4 +81,26 @@ kcs_temp_clean_all() {
 
   kcs_debug "$ns" "%s (temp dir) now cleaned" \
     "$_KCS_DIR_TEMP"
+}
+
+## All directory and file created by
+## kcs_temp_create_* function. It will be cleanup automatically
+kcs_add_hook clean \
+  "__kcs_temp_clean"
+__kcs_temp_clean() {
+  local ns="clean temp"
+  for temp in "${__KCS_TEMP_CREATED_DIR[@]}"; do
+    kcs_debug "$ns" \
+      "removing '%s' temp directory"
+    rm -r "$temp"
+  done
+
+  for temp in "${__KCS_TEMP_CREATED_FILE[@]}"; do
+    kcs_debug "$ns" \
+      "removing '%s' temp file"
+    rm "$temp"
+  done
+
+  unset __KCS_TEMP_CREATED_DIR \
+    __KCS_TEMP_CREATED_FILE
 }
