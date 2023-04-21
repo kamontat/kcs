@@ -131,6 +131,8 @@ Environments:
       - this handle on pre_init hook
   \$DRY_RUN
       - set to non-empty string will enabled dry-run mode
+  \$DRY_HOOK
+      - set to non-empty string will never execute any hooks action
 "
 
 __kcs_options_clean() {

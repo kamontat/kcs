@@ -47,7 +47,7 @@ kcs_exec() {
 
   ## If on dry run mode
   if test -n "$DRY_RUN"; then
-    kcs_logf "execute" "%s '%s'" \
+    kcs_logf "dry-exec" "%s '%s'" \
       "$cmd" "${args[*]}"
     return 0
   fi

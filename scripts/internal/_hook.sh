@@ -158,6 +158,17 @@ _kcs_run_hook() {
     [ "${#_raw_args[@]}" -gt 0 ] &&
       args+=("${_raw_args[@]}")
 
+    if test -z "$DRY_HOOK"; then
+      "$executor" "$command" "${args[@]}"
+    fi
+
+    ## If on dry run hook mode
+    if test -n "$DRY_HOOK"; then
+      kcs_logf "dry-exec" "%s: %s '%s'" \
+        "$executor" "$command" "${args[*]}"
+      continue
+    fi
+
     "$executor" "$command" "${args[@]}"
   done
 
