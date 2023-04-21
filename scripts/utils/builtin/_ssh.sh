@@ -4,7 +4,7 @@
 ## builtin/ssh:
 ##   work same with ssh, use mode to decide which config to resolve
 ## Requirement:
-##   - temp: create temporary directory
+##   - <none>
 ## Public functions:
 ##   `kcs_conf_ssh_local <p> <ip> <port> <u> <pem>` - create new ssh profile
 ##   `kcs_conf_ssh_proxy <p> <px> <u> <pem>` - create new ssh proxy profile
