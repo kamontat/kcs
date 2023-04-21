@@ -243,6 +243,19 @@ __kcs_main_hook
 <details><summary>Register new utilities</summary>
 
 ```sh
+## desc      : register new utilities function,
+##           : this run on very beginning of hooks
+## tags      : @optional, @hook:pre_init
+__kcs_main_pre_utils() {
+  local utils=("kube/core")
+  printf "%s" "${utils[*]}"
+}
+
+## desc      : register new utilities
+##           : The result from variable and function will be merged
+## tags      : @optional, @hook:pre_init
+export KCS_PRE_UTILS=("kube/commands")
+
 ## desc      : register new utilities function
 ## tags      : @optional, @hook:init
 __kcs_main_utils() {
@@ -252,17 +265,17 @@ __kcs_main_utils() {
     ## Custom utilities
     "example"
   )
-
   printf "%s" "${utils[*]}"
 }
 
-## desc      : list of utilities
+## desc      : register new utilities
 ##           : The result from variable and function will be merged
-## tags      : @optional
+## tags      : @optional, @hook:init
 export KCS_UTILS=("builtin/validator")
 
 ## caller    : hooks
 ## arguments : <none>
+__kcs_main_pre_utils
 __kcs_main_utils
 ```
 

@@ -10,6 +10,10 @@
 
 _kcs_register_hooks() {
   kcs_add_hook pre_init \
+    __kcs_logger_pre_init
+  kcs_add_hook pre_init \
+    __kcs_utils_init:@optional,@cb=__kcs_main_pre_utils,@args=KCS_PRE_UTILS
+  kcs_add_hook pre_init \
     __kcs_set_name:@optional,@cb=__kcs_main_name
   kcs_add_hook pre_init \
     __kcs_set_version:@optional,@cb=__kcs_main_version
@@ -20,12 +24,10 @@ _kcs_register_hooks() {
   kcs_add_hook pre_init \
     __kcs_set_help:@optional,@cb=__kcs_main_help
   kcs_add_hook pre_init \
-    __kcs_logger_pre_init
-  kcs_add_hook pre_init \
     __kcs_pre_init:@silent
 
   kcs_add_hook init \
-    __kcs_utils_init:@optional,@cb=__kcs_main_utils
+    __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
   kcs_add_hook init \
     __kcs_init:@silent
 
