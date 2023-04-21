@@ -19,8 +19,7 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 __KCS_TEMP_AUTO_CLEANUP=true
-__KCS_TEMP_CREATED_DIR=()
-__KCS_TEMP_CREATED_FILE=()
+__KCS_EXEC_TEMP_CLEANUP=".temp.ekcs"
 
 ## cleanup all files/folders created by
 ## kcs_temp_create_* function when on clean hook
@@ -28,7 +27,7 @@ kcs_conf_temp_auto_clean() {
   local ns="config temp"
   __KCS_TEMP_AUTO_CLEANUP=true
   kcs_debug "$ns" \
-    "enabled auto cleanup created file/folder"
+    "enabled auto cleanup"
 }
 
 ## not cleanup any file/folder created by
@@ -37,7 +36,7 @@ kcs_conf_temp_no_clean() {
   local ns="config temp"
   unset __KCS_TEMP_AUTO_CLEANUP
   kcs_debug "$ns" \
-    "enabled auto cleanup created file/folder"
+    "disabled auto cleanup"
 }
 
 ## create temp directory and return fullpath
@@ -45,11 +44,13 @@ kcs_conf_temp_no_clean() {
 ## @param $1 - [optional] name (default=random)
 ## @return   - single line fullpath string
 kcs_temp_create_dir() {
-  local name="$1"
+  ## name cannot have space
+  local name="${1// /-}"
   test -z "$name" && name=".d$RANDOM"
 
   local fullpath="$_KCS_DIR_TEMP/$name"
-  __KCS_TEMP_CREATED_DIR+=("$fullpath")
+  echo "$fullpath" \
+    >>"$_KCS_DIR_TEMP/$__KCS_EXEC_TEMP_CLEANUP"
 
   ## create temporary directory
   mkdir -p "$fullpath"
@@ -60,11 +61,15 @@ kcs_temp_create_dir() {
 ## @param $1 - [optional] name (default=random)
 ## @return   - single line fullpath string
 kcs_temp_create_file() {
-  local name="$1"
+  ## name cannot have space
+  local name="${1// /-}"
   test -z "$name" && name=".f$RANDOM.temp"
 
   local fullpath="$_KCS_DIR_TEMP/$name"
-  __KCS_TEMP_CREATED_FILE+=("$fullpath")
+  echo "$fullpath" \
+    >>"$_KCS_DIR_TEMP/$__KCS_EXEC_TEMP_CLEANUP"
+
+  echo "$__KCS_TEMP_CREATED_FILE" >&2
 
   ## create temporary directory
   touch "$fullpath"
@@ -107,23 +112,23 @@ kcs_temp_clean_all() {
 ## All directory and file created by
 ## kcs_temp_create_* function. It will be cleanup automatically
 kcs_add_hook clean \
-  "__kcs_temp_clean"
+  __kcs_temp_clean
 __kcs_temp_clean() {
-  if test -n "$__KCS_TEMP_AUTO_CLEANUP"; then
-    local ns="clean temp"
-    for temp in "${__KCS_TEMP_CREATED_DIR[@]}"; do
-      kcs_debug "$ns" \
-        "removing '%s' temp directory"
-      rm -r "$temp"
-    done
+  local fpath
+  local exec_tfile="$_KCS_DIR_TEMP/$__KCS_EXEC_TEMP_CLEANUP"
+  if test -f "$exec_tfile"; then
+    if test -n "$__KCS_TEMP_AUTO_CLEANUP"; then
+      while IFS= read -r fpath; do
+        test -f "$fpath" &&
+          kcs_exec rm "$fpath"
+        test -d "$fpath" &&
+          kcs_exec rm -r "$fpath"
+      done <"$exec_tfile"
+    fi
 
-    for temp in "${__KCS_TEMP_CREATED_FILE[@]}"; do
-      kcs_debug "$ns" \
-        "removing '%s' temp file"
-      rm "$temp"
-    done
+    rm "$exec_tfile"
   fi
 
-  unset __KCS_TEMP_CREATED_DIR \
-    __KCS_TEMP_CREATED_FILE
+  unset __KCS_EXEC_TEMP_CLEANUP \
+    __KCS_TEMP_AUTO_CLEANUP
 }
