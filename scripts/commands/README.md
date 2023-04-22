@@ -227,8 +227,7 @@ __kcs_main_option() {
 }
 
 ## desc      : parsing default option
-##           : on command please use __kcs_main_option
-##           : this is for utils
+## tags      : @optional
 __kcs_default_option() {
   local flag="$1" value="$2"
   case "$flag" in
@@ -330,9 +329,18 @@ __kcs_main_config() {
   # kcs_conf_*
 }
 
+## desc      : configuration pre utilities setting
+## tags      : @optional, @hook:pre_main
+__kcs_default_config() {
+  kcs_conf_ssh \
+    "server1" "192.168.1.100" \
+    "admin" "~/.ssh/id_rsa"
+}
+
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_config
+__kcs_default_config
 ```
 
 </details>
@@ -342,14 +350,23 @@ __kcs_main_config
 <details><summary>Check command</summary>
 
 ```sh
-## desc      : validate configuration;
+## desc      : validate configuration
 ##           : requires 'builtin/validator' utils
-## tags      : @optional, @hook:check
+## tags      : @optional, @hook:post_check
 __kcs_main_validate() {
   kcs_verify_present \
     "$__USERNAME" "username"
   # kcs_verify_*
 }
+
+## desc      : validate default configuration.
+##           : requires 'builtin/validator' utils
+## tags      : @optional, @hook:pre_check
+__kcs_default_validate() {
+  kcs_verify_present \
+    "$__USERNAME" "username"
+}
+
 ## desc      : all kcs_verify_* are 
 ##           : from builtin/validator utils
 __kcs_main_utils() {
@@ -359,6 +376,7 @@ __kcs_main_utils() {
 ## caller    : hooks
 ## arguments : <none>
 __kcs_main_validate
+__kcs_default_validate
 ```
 
 </details>
