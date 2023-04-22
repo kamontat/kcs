@@ -120,6 +120,13 @@ kcs_must_load() {
     "$@"
 }
 
+## load input file with throw if something wrong
+kcs_should_load() {
+  __kcs_load_file \
+    "__kcs_warn_cmd" "__kcs_error_cmd" \
+    "$@"
+}
+
 ## load file using source with error handler
 ## @param $1 - callback if command not found
 ##        $2 - callback if command failed

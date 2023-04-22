@@ -17,8 +17,7 @@ kcs_load_utils() {
   local ns="utils-loader"
   local name="$1" path="$2"
   if ! kcs_utils_is_load "$name"; then
-    __kcs_load_file \
-      "__kcs_warn_cmd" "__kcs_error_cmd" \
+    kcs_should_load \
       "$_KCS_DIR_UTILS" "$path"
   else
     kcs_debug "$ns" "utils name '%s' has been loaded, skipped" \
@@ -83,7 +82,7 @@ __kcs_utils_init() {
   shift
 
   ## Load from input callback
-  for raw in $(kcs_ignore_exec "$cb"); do
+  for raw in $(kcs_optional_exec "$cb"); do
     if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
       __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
     fi
