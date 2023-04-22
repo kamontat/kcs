@@ -15,10 +15,11 @@ export __KCS_LOADED_UTILS=""
 ##        $2 - utils path
 kcs_load_utils() {
   local ns="utils-loader"
-  local name="$1" path="$2"
+  local name="$1"
+
   if ! kcs_utils_is_load "$name"; then
     kcs_should_load \
-      "$_KCS_DIR_UTILS" "$path"
+      "$_KCS_DIR_UTILS" "$(kcs_utils_get_value "$raw")"
   else
     kcs_debug "$ns" "utils name '%s' has been loaded, skipped" \
       "$name"
@@ -83,14 +84,14 @@ __kcs_utils_init() {
 
   ## Load from input callback
   for raw in $(kcs_optional_exec "$cb"); do
-    if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
+    if kcs_load_utils "$raw"; then
       __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
     fi
   done
 
   ## Load from variable name
   for raw in "$@"; do
-    if kcs_load_utils "$raw" "$(kcs_utils_get_value "$raw")"; then
+    if kcs_load_utils "$raw"; then
       __KCS_LOADED_UTILS="$__KCS_LOADED_UTILS $raw"
     fi
   done
