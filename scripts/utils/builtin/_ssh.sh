@@ -52,8 +52,7 @@ kcs_conf_ssh_local() {
 
 ## create new proxy ssh profile config
 ## @param $1 - [required] profile name
-##        $2 - [required] hostname
-##        $3 - [optional] port number
+##        $2 - [required] command name
 ##        $4 - [optional] username
 ##        $5 - [optional] private key for authentication
 kcs_conf_ssh_proxy() {
@@ -92,17 +91,20 @@ kcs_conf_ssh_proxy_mode() {
 
 ## copy commands from /commands, and run on target profile
 ## @param $1 - [required] profile name
-##        $n - [required] commands to run
+##        $2 - [required] commands to run
+##        $n - [required] command arguments
 kcs_ssh_cmd() {
   local name="$1"
   local cmd="$2"
   shift 2
 
   local args=("$@")
-  _kcs_find_command "__kcs_ssh_cmd" "$cmd" "$name" "${args[@]}"
+  _kcs_find_command \
+    "__kcs_ssh_cmd" "__kcs_command_load_default" \
+    "$cmd" "${args[@]}" "<>" "$name"
 }
 __kcs_ssh_cmd() {
-  local ns="cmd ssh"
+  local ns="ssh-commander"
   local lbase="$1" lfile="$2" name="$3"
   local cmd="$lbase/$lfile"
   shift 3
@@ -112,7 +114,7 @@ __kcs_ssh_cmd() {
     "$lfile" "${#args[@]}"
 
   ## searching for required utils
-  local ucmd="__kcs_main_utils" ucache
+  local ucmd="echo $__KCS_LOADED_UTILS" ucache
   ucache="$_KCS_SSH_CONFIG_DIR/.utils.txt"
   _KCS_ENTRY=command KCS_MODE=$_KCS_MODE_LIBRARY \
     bash -c "source '$cmd'; $ucmd 2>/dev/null >$ucache"
