@@ -60,14 +60,14 @@ __kcs_main
 <details><summary>Script name</summary>
 
 ```sh
-## desc      : printf script name
+## desc      : script name for help command
 ## return    : single line name
 ## tags      : @optional, @hook:pre_init
 __kcs_main_name() {
   printf "default"
 }
 
-## desc      : static script name
+## desc      : function has priority over variable
 ## tags      : @optional
 export KCS_NAME="default"
 
@@ -88,7 +88,7 @@ __kcs_main_version() {
   printf "v1.0.0"
 }
 
-## desc      : static script version
+## desc      : function has priority over variable
 ## tags      : @optional
 export KCS_VERSION="v1.0.0"
 
@@ -109,7 +109,7 @@ __kcs_main_description() {
   printf "default command"
 }
 
-## desc      : static script description
+## desc      : function has priority over variable
 ## tags      : @optional
 export KCS_DESCRIPTION="default command"
 
@@ -135,7 +135,7 @@ Options:
 "
 }
 
-## desc      : static script help
+## desc      : function has priority over variable
 ## tags      : @optional
 export KCS_HELP="
 Options:
@@ -180,6 +180,10 @@ __kcs_main_init
 __kcs_main_option_keys() {
   printf "abc"
 }
+
+## desc      : the result will merge together
+## tags      : @optional
+export KCS_OPTIONS=""
 
 ## caller    : hooks
 ## arguments : <none>

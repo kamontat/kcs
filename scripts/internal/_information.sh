@@ -28,7 +28,7 @@ __kcs_set_options() {
   local cb="$1" raw
   raw="$(kcs_ignore_exec "$cb")"
   test -n "$raw" &&
-    KCS_OPTIONS="$raw"
+    KCS_OPTIONS="$KCS_OPTIONS$raw"
   export KCS_OPTIONS
 }
 
