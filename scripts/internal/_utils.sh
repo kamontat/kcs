@@ -18,7 +18,7 @@ kcs_load_utils() {
   local name="$1"
 
   if ! kcs_utils_is_load "$name"; then
-    kcs_should_load \
+    kcs_must_load \
       "$_KCS_DIR_UTILS" "$(kcs_utils_get_value "$raw")"
   else
     kcs_debug "$ns" "utils name '%s' has been loaded, skipped" \
