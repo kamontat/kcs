@@ -44,6 +44,8 @@ _kcs_register_hooks() {
     __kcs_pre_check:@silent
 
   kcs_add_hook check \
+    __kcs_default_validate:@optional
+  kcs_add_hook check \
     __kcs_main_validate:@optional
   kcs_add_hook check \
     __kcs_check:@silent
