@@ -76,9 +76,19 @@ __kcs_parse_options() {
 
 __kcs_parse_addition_options() {
   local ns="option-parser"
-  local flag="$1" value="$2" cmd="__kcs_main_option"
-  if command -v "$cmd" >/dev/null; then
-    if "$cmd" "$flag" "$value"; then
+  local flag="$1" value="$2"
+
+  local default_cb="__kcs_default_option"
+  local main_cb="__kcs_main_option"
+
+  if command -v "$default_cb" >/dev/null; then
+    if "$default_cb" "$flag" "$value"; then
+      return 0
+    fi
+  fi
+
+  if command -v "$main_cb" >/dev/null; then
+    if "$main_cb" "$flag" "$value"; then
       return 0
     fi
   fi

@@ -214,9 +214,26 @@ __kcs_main_option() {
   esac
 }
 
+## desc      : parsing default option
+##           : on command please use __kcs_main_option
+##           : this is for utils
+__kcs_default_option() {
+  local flag="$1" value="$2"
+  case "$flag" in
+  N | name)
+    kcs_require_argument "$flag"
+    NAME="$value"
+    ;;
+  *)
+    return 1
+    ;;
+  esac
+}
+
 ## caller    : internal/options.sh
 ## arguments : flag name and value
 __kcs_main_option "name" "kcs"
+__kcs_default_option "name" "kcs"
 ```
 
 </details>
