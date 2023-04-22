@@ -25,9 +25,7 @@ kcs_prepare() {
 }
 
 kcs_start() {
-  if ! kcs_is_lib_mode; then
-    _kcs_register_hooks
-    _kcs_run_hooks "$@"
-    _kcs_clean_hooks
-  fi
+  _kcs_register_hooks
+  _kcs_run_hooks "$@"
+  _kcs_clean_hooks
 }

@@ -26,13 +26,18 @@ kcs_no_main_entry() {
   fi
 }
 
-kcs_is_lib_mode() {
+__kcs_mode_init() {
   local actual="$KCS_MODE" expected="$_KCS_MODE_LIBRARY"
   if [[ "$actual" == "$expected" ]]; then
-    return 0
-  fi
+    local disable_hooks=(
+      pre_main main post_main
+      pre_clean clean post_clean
+    )
 
-  return 1
+    for hook in "${disable_hooks[@]}"; do
+      kcs_disable_hook "$hook"
+    done
+  fi
 }
 
 __kcs_mode_clean() {
