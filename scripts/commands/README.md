@@ -24,6 +24,11 @@ when run with `main.sh`.
   - [Temporary functions](#temporary-functions)
   - [Information functions](#information-functions)
   - [Hook functions](#hook-functions)
+- [Appendix](#appendix)
+  - [Main.sh script](#mainsh-script)
+  - [Command scripts](#command-scripts)
+  - [Utility scripts](#utility-scripts)
+  - [Utility namespaces](#utility-namespaces)
 
 ## Callback functions
 
@@ -31,6 +36,13 @@ The command file are using hooks design pattern.
 Normally, you only need to create function with correct name
 on **User defined function** section in command file
 then you will automatically register your action to global hooks.
+There are several notes you need to keep in mind when develop
+new commands or utilities.
+
+1. On command scripts, function syntax is preferable
+2. Functions on user defined section, should contains only `__kcs_main_*`
+3. On utility namespaces, `_default.sh` might use for load shared setup
+4. On utility scripts, should use variable syntax
 
 There are several functions you can define listed below.
 
@@ -404,3 +416,22 @@ The useful internal functions and variables.
 | Function name           | Description                           |
 | ----------------------- | ------------------------------------- |
 | `kcs_add_hook <n> <cb>` | Add new **callback** on hook **name** |
+
+## Appendix
+
+### Main.sh script
+
+This refer to single file on scripts directory named `main.sh`.
+
+### Command scripts
+
+This refer to file inside **commands** directory.
+
+### Utility scripts
+
+This refer to all files inside **utils** directory (including nested file).
+
+### Utility namespaces
+
+This refer to only files in nested **utils** directory
+(e.g. utils/<ns>/_default.sh)
