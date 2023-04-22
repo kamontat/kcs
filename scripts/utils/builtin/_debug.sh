@@ -31,6 +31,10 @@ __kcs_debug_pre_main() {
     "mode" "$KCS_MODE"
   __kcs_debug_key_value_format \
     "root" "$KCS_ROOT"
+  __kcs_debug_key_value_format \
+    "os" "$(uname -s)"
+  __kcs_debug_key_value_format \
+    "hostname" "$(hostname)"
 
   __kcs_debug_key_value_format \
     "original dir" "$_KCS_DIR_ORIG"
