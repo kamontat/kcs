@@ -8,8 +8,9 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-_KCS_HOOK_VARIABLE_PREFIX="__kcs_hooks"
-_KCS_HOOK_DISABLE_VARIABLE_PREFIX="__kcs_hooks_disabled"
+_KCS_HOOK_VAR_PREFIX="__kcs_hooks"
+_KCS_HOOK_DISABLE_VAR_PREFIX="__kcs_hooks_disabled"
+_KCS_HOOK_DISABLE_ALL_VAR_PREFIX="__kcs_hooks_disabled_all"
 
 _KCS_HOOK_NAMES=(
   pre_init init post_init
@@ -52,7 +53,7 @@ kcs_add_hook() {
 
   if [[ "${_KCS_HOOK_NAMES[*]}" =~ $name ]]; then
     local prev=()
-    eval "prev=(\"\${${_KCS_HOOK_VARIABLE_PREFIX}_${name}[@]}\")"
+    eval "prev=(\"\${${_KCS_HOOK_VAR_PREFIX}_${name}[@]}\")"
 
     if [[ "${prev[*]}" =~ $command ]]; then
       kcs_debug "$ns" "duplicated command '%s' at '%s' hook, skipped" \
@@ -73,24 +74,33 @@ kcs_add_hook() {
     kcs_debug "$ns" "adding '%s' %sto hook name '%s'" \
       "$command" "$tag_msg" "$name"
 
-    eval "${_KCS_HOOK_VARIABLE_PREFIX}_${name}+=(\"$raw\")"
+    eval "${_KCS_HOOK_VAR_PREFIX}_${name}+=(\"$raw\")"
   else
     kcs_warn "$ns" "adding invalid hook name '%s'" \
       "$name"
   fi
 }
 
+## @example kcs_disable_hook "pre_init:example"
+## @example kcs_disable_hook "check"
 kcs_disable_hook() {
   local ns="hook-remover"
+  local prefix="__kcs_"
   local raw="$1" name cb
   name="${raw%%:*}"
-  cb="__kcs_${raw#*:}"
+  cb="${raw#*:}"
 
   if [[ "${_KCS_HOOK_NAMES[*]}" =~ $name ]]; then
-    kcs_debug "$ns" "disabling '%s' to hook name '%s'" \
-      "$cb" "$name"
+    if [[ "$name" == "$cb" ]]; then
+      kcs_debug "$ns" "disabling '<all>' on '%s' hook" \
+        "$name"
+      eval "${_KCS_HOOK_DISABLE_ALL_VAR_PREFIX}_${name}=true"
+    else
+      kcs_debug "$ns" "disabling '%s' on '%s' hook" \
+        "$prefix$cb" "$name"
+      eval "${_KCS_HOOK_DISABLE_VAR_PREFIX}_${name}+=(\"$prefix$cb\")"
+    fi
 
-    eval "${_KCS_HOOK_DISABLE_VARIABLE_PREFIX}_${name}+=(\"$cb\")"
   else
     kcs_warn "$ns" "disabling invalid hook name '%s'" \
       "$name"
@@ -106,10 +116,18 @@ _kcs_run_hook() {
   local commands=() disables=() disabled=""
 
   ## Load commands from hooks variable
-  eval "commands=(\"\${${_KCS_HOOK_VARIABLE_PREFIX}_${name}[@]}\")"
-  eval "disables=(\"\${${_KCS_HOOK_DISABLE_VARIABLE_PREFIX}_${name}[@]}\")"
+  eval "commands=(\"\${${_KCS_HOOK_VAR_PREFIX}_${name}[@]}\")"
+  eval "disables=(\"\${${_KCS_HOOK_DISABLE_VAR_PREFIX}_${name}[@]}\")"
+  eval "disabled=(\"\${${_KCS_HOOK_DISABLE_ALL_VAR_PREFIX}_${name}}\")"
 
-  kcs_debug "$ns" "running %d %11s hook (disabled=%d)" \
+  if test -n "$disabled"; then
+    kcs_debug "$ns" "disabled all %03d %s hook commands" \
+      "${#commands[@]}" \
+      "$name"
+    return 0
+  fi
+
+  kcs_debug "$ns" "running %d %11s hook commands (disabled=%d)" \
     "${#commands[@]}" \
     "$name" \
     "${#disables[@]}"
@@ -201,8 +219,9 @@ __kcs_parse_tags() {
 }
 
 _kcs_clean_hooks() {
-  unset _KCS_HOOK_VARIABLE_PREFIX \
-    _KCS_HOOK_DISABLE_VARIABLE_PREFIX \
+  unset _KCS_HOOK_VAR_PREFIX \
+    _KCS_HOOK_DISABLE_VAR_PREFIX \
+    _KCS_HOOK_DISABLE_ALL_VAR_PREFIX \
     _KCS_HOOK_NAMES
 
   unset KCS_HOOK_TAG_OPTIONAL \
