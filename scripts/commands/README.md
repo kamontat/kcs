@@ -350,21 +350,31 @@ __kcs_default_config
 <details><summary>Check command</summary>
 
 ```sh
-## desc      : validate configuration
-##           : requires 'builtin/validator' utils
-## tags      : @optional, @hook:check
-__kcs_main_validate() {
+## desc      : check initiate result
+##           : should load 'builtin/validator'
+## tags      : @optional, @hook:post_init
+__kcs_init_check() {
   kcs_verify_present \
     "$__USERNAME" "username"
   # kcs_verify_*
 }
 
-## desc      : validate default configuration.
-##           : requires 'builtin/validator' utils
-## tags      : @optional, @hook:pre_check
-__kcs_default_validate() {
+## desc      : check load result
+##           : should load 'builtin/validator'
+## tags      : @optional, @hook:post_load
+__kcs_load_check() {
   kcs_verify_present \
     "$__USERNAME" "username"
+  # kcs_verify_*
+}
+
+## desc      : check before call main
+##           : should load 'builtin/validator'
+## tags      : @optional, @hook:pre_main
+__kcs_main_check() {
+  kcs_verify_present \
+    "$__USERNAME" "username"
+  # kcs_verify_*
 }
 
 ## desc      : all kcs_verify_* are 
@@ -375,8 +385,9 @@ __kcs_main_utils() {
 
 ## caller    : hooks
 ## arguments : <none>
-__kcs_main_validate
-__kcs_default_validate
+__kcs_init_check
+__kcs_load_check
+__kcs_main_check
 ```
 
 </details>
