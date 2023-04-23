@@ -346,7 +346,7 @@ __kcs_ssh_new_profile() {
 
   ## Duplicated profile name, Reuse the configuration
   if test -f "$config"; then
-    kcs_warn "$ns" \
+    kcs_debug "$ns" \
       "profile %s has been created, reuse them" "$name"
     return 0
   fi
