@@ -26,7 +26,7 @@ kcs_no_main_entry() {
   fi
 }
 
-__kcs_mode_init() {
+__kcs_mode_load() {
   local actual="$KCS_MODE" expected="$_KCS_MODE_LIBRARY"
   if [[ "$actual" == "$expected" ]]; then
     local disable_hooks=(

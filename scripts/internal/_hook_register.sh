@@ -12,34 +12,36 @@ _kcs_register_hooks() {
   kcs_add_hook pre_init \
     __kcs_logger_pre_init
   kcs_add_hook pre_init \
-    __kcs_utils_init:@optional,@cb=__kcs_main_pre_utils,@args=KCS_PRE_UTILS
-  kcs_add_hook pre_init \
+    __kcs_main_hook:@optional
+
+  kcs_add_hook init \
+    __kcs_utils_init:@optional,@cb=__kcs_main_init_utils,@args=KCS_INIT_UTILS
+  kcs_add_hook init \
     __kcs_set_name:@optional,@cb=__kcs_main_name
-  kcs_add_hook pre_init \
+  kcs_add_hook init \
     __kcs_set_version:@optional,@cb=__kcs_main_version
-  kcs_add_hook pre_init \
+  kcs_add_hook init \
     __kcs_set_options:@optional,@cb=__kcs_main_option_keys
-  kcs_add_hook pre_init \
+  kcs_add_hook init \
     __kcs_set_description:@optional,@cb=__kcs_main_description
-  kcs_add_hook pre_init \
+  kcs_add_hook init \
     __kcs_set_help:@optional,@cb=__kcs_main_help
 
-  kcs_add_hook init \
-    __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
-  kcs_add_hook init \
-    __kcs_mode_init
-
-  kcs_add_hook post_init \
-    __kcs_parse_options:@optional,@raw
   kcs_add_hook post_init \
     __kcs_main_init:@optional,@raw
-  kcs_add_hook post_init \
-    __kcs_main_hook:@optional
+
+  kcs_add_hook pre_load \
+    __kcs_parse_options:@optional,@raw
+
+  kcs_add_hook load \
+    __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
+  kcs_add_hook load \
+    __kcs_mode_load
 
   kcs_add_hook pre_check \
     __kcs_default_validate:@optional
 
-  kcs_add_hook post_check \
+  kcs_add_hook check \
     __kcs_main_validate:@optional
 
   kcs_add_hook pre_main \

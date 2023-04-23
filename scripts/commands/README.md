@@ -74,7 +74,7 @@ __kcs_main
 ```sh
 ## desc      : script name for help command
 ## return    : single line name
-## tags      : @optional, @hook:pre_init
+## tags      : @optional, @hook:init
 __kcs_main_name() {
   printf "default"
 }
@@ -95,7 +95,7 @@ __kcs_main_name
 ```sh
 ## desc      : printf script version
 ## return    : single line version
-## tags      : @optional, @hook:pre_init
+## tags      : @optional, @hook:init
 __kcs_main_version() {
   printf "v1.0.0"
 }
@@ -116,7 +116,7 @@ __kcs_main_version
 ```sh
 ## desc      : printf script description
 ## return    : single line description
-## tags      : @optional, @hook:pre_init
+## tags      : @optional, @hook:init
 __kcs_main_description() {
   printf "default command"
 }
@@ -138,7 +138,7 @@ __kcs_main_description
 ## desc      : printf script help
 ## return    : multiple line help message
 ##             must prefix,suffix with newline
-## tags      : @optional, @hook:pre_init
+## tags      : @optional, @hook:init
 __kcs_main_help() {
   printf "
 Options:
@@ -188,11 +188,11 @@ __kcs_main_init
 ## desc      : The output of this function will pipe to
 ##             getopts command for parser later.
 ## return    : single line string with only [a-zA-Z:]
-## tags      : @optional, @hook:pre_init
+## tags      : @optional, @hook:init
 __kcs_main_option_keys() {
   printf "abc"
 }
-
+__kcs_main_utils
 ## desc      : the result will merge together
 ## tags      : @optional
 export KCS_OPTIONS=""
@@ -208,7 +208,7 @@ __kcs_main_option_keys
 
 ```sh
 ## desc      : parsing option
-## tags      : @optional
+## tags      : @optional,@hook:pre_load
 __kcs_main_option() {
   local flag="$1" value="$2"
   case "$flag" in
@@ -255,7 +255,7 @@ __kcs_default_option "name" "kcs"
 
 ```sh
 ## desc      : you can register new hooks on this function
-## tags      : @optional, @hook:post_init
+## tags      : @optional, @hook:pre_init
 __kcs_main_hook() {
   ## add new hook on check stage
   kcs_add_hook "check" "__kcs_main_check"
@@ -285,11 +285,11 @@ __kcs_main_pre_utils() {
 
 ## desc      : register new utilities
 ##           : The result from variable and function will be merged
-## tags      : @optional, @hook:pre_init
-export KCS_PRE_UTILS=("kube/commands")
+## tags      : @optional, @hook:init
+export KCS_INIT_UTILS=("kube/commands")
 
 ## desc      : register new utilities function
-## tags      : @optional, @hook:init
+## tags      : @optional, @hook:load
 __kcs_main_utils() {
   local utils=(
     ## Builtin utilities
@@ -302,7 +302,7 @@ __kcs_main_utils() {
 
 ## desc      : register new utilities
 ##           : The result from variable and function will be merged
-## tags      : @optional, @hook:init
+## tags      : @optional, @hook:load
 export KCS_UTILS=("builtin/validator")
 
 ## caller    : hooks
@@ -352,7 +352,7 @@ __kcs_default_config
 ```sh
 ## desc      : validate configuration
 ##           : requires 'builtin/validator' utils
-## tags      : @optional, @hook:post_check
+## tags      : @optional, @hook:check
 __kcs_main_validate() {
   kcs_verify_present \
     "$__USERNAME" "username"
