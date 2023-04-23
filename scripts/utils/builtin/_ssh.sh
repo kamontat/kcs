@@ -114,6 +114,8 @@ __kcs_ssh_cmd() {
     "$lfile" "${#args[@]}"
 
   ## searching for required utils
+  kcs_debug "$ns" "searching required utilities for '%s' command" \
+    "$lfile"
   local ucmd="echo $__KCS_LOADED_UTILS" ucache
   ucache="$_KCS_SSH_CONFIG_DIR/.utils.txt"
   _KCS_ENTRY=command KCS_MODE=$_KCS_MODE_LIBRARY \
