@@ -278,7 +278,7 @@ __kcs_main_hook
 ## desc      : register new utilities function,
 ##           : this run on very beginning of hooks
 ## tags      : @optional, @hook:pre_init
-__kcs_main_pre_utils() {
+__kcs_main_init_utils() {
   local utils=("kube/core")
   printf "%s" "${utils[*]}"
 }
@@ -307,7 +307,7 @@ export KCS_UTILS=("builtin/validator")
 
 ## caller    : hooks
 ## arguments : <none>
-__kcs_main_pre_utils
+__kcs_main_init_utils
 __kcs_main_utils
 ```
 
