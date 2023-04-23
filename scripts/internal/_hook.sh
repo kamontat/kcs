@@ -14,6 +14,7 @@ _KCS_HOOK_DISABLE_ALL_VAR_PREFIX="__kcs_hooks_disabled_all"
 
 _KCS_HOOK_NAMES=(
   pre_init init post_init
+  pre_load load post_load
   pre_check check post_check
   pre_main main post_main
   pre_clean clean post_clean
