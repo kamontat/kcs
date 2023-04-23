@@ -47,7 +47,7 @@ _kcs_register_hooks() {
     __kcs_default_config:@optional
   kcs_add_hook pre_main \
     __kcs_main_config:@optional
-  ksc_add_hook pre_main \
+  kcs_add_hook pre_main \
     __kcs_main_check:@optional
 
   kcs_add_hook main \
