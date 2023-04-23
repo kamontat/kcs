@@ -31,12 +31,12 @@ _kcs_register_hooks() {
     __kcs_main_init:@optional,@raw
 
   kcs_add_hook pre_load \
+    __kcs_mode_load
+  kcs_add_hook pre_load \
     __kcs_parse_options:@optional,@raw
 
   kcs_add_hook load \
     __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
-  kcs_add_hook load \
-    __kcs_mode_load
 
   kcs_add_hook pre_check \
     __kcs_default_validate:@optional
@@ -76,28 +76,4 @@ __kcs_optional_hook() {
   kcs_debug "$@"
 
   return 0
-}
-
-__kcs_register() {
-  local ns="hook-registry"
-  local callback="$1" name="$2" raw="$3"
-  local cb="${raw%%:*}"
-
-  if test -z "$raw"; then
-    ## same syntax with kcs_throw
-    "$callback" "$KCS_EC_ARG_NOT_FOUND" \
-      "$ns" "cannot register %s hook because missing callback" \
-      "$name"
-    return $?
-  fi
-
-  if ! command -v "$cb" >/dev/null; then
-    ## same syntax with kcs_throw
-    "$callback" "$KCS_EC_CMD_NOT_FOUND" \
-      "$ns" "%s hook failed, callback '%s' missing" \
-      "$name" "$cb"
-    return $?
-  fi
-
-  kcs_add_hook "$name" "$raw"
 }
