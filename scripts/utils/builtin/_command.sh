@@ -3,8 +3,6 @@
 
 ## builtin/command:
 ##   call command
-## Requirement:
-##   - <none>
 ## Public functions:
 ##   `kcs_call_command <args...>` - call command by input argument
 
@@ -14,6 +12,8 @@
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
+
+kcs_utils_register "builtin/command"
 
 ## call command by input argument
 ## @param $n - [required] command argument

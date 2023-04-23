@@ -15,6 +15,10 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## Register loaded utilities
+kcs_utils_register "<module_name>" \
+  "[dependencies...]"
+
 ## print input string
 ## @param $1 - [required] input string
 ## @return   - return zero

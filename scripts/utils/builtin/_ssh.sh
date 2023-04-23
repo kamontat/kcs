@@ -3,8 +3,6 @@
 
 ## builtin/ssh:
 ##   work same with ssh, use mode to decide which config to resolve
-## Requirement:
-##   - <none>
 ## Public functions:
 ##   `kcs_conf_ssh_local <p> <ip> <port> <u> <pem>` - create new ssh profile
 ##   `kcs_conf_ssh_proxy <p> <px> <u> <pem>` - create new ssh proxy profile
@@ -22,6 +20,8 @@
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
+
+kcs_utils_register "builtin/ssh"
 
 export _KCS_SSH_CONFIG_DIR="$_KCS_DIR_TEMP/ssh"
 
@@ -433,14 +433,6 @@ __kcs_ssh_has_profile() {
 }
 
 # --------------------------------------------------------
-
-## ssh check hook
-# kcs_add_hook \
-#   check __kcs_ssh_check
-# __kcs_ssh_check() {
-#   kcs_utils_required "builtin/ssh" \
-#     "builtin/temp"
-# }
 
 ## ssh setup hook
 kcs_add_hook \

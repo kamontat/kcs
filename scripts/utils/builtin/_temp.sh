@@ -3,8 +3,6 @@
 
 ## builtin/temp:
 ##   manage temp directory
-## Requirement:
-##   <none>
 ## Public functions:
 ##   `kcs_conf_temp_auto_clean` - auto clean temp file or directory
 ##   `kcs_conf_temp_no_clean` - never clean temp file or directory
@@ -17,6 +15,8 @@
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
+
+kcs_utils_register "builtin/temp"
 
 __KCS_TEMP_AUTO_CLEANUP=true
 __KCS_EXEC_TEMP_CLEANUP=".temp.ekcs"

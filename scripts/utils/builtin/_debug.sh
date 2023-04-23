@@ -3,8 +3,6 @@
 
 ## builtin/debug:
 ##   add debugging hook to the script
-## Requirement:
-##   <none>
 ## Public functions:
 ##   <none>
 
@@ -12,6 +10,8 @@
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
+
+kcs_utils_register "builtin/debug"
 
 __kcs_debug_key_value_format() {
   local ns="debugger-info"

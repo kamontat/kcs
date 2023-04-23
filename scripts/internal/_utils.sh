@@ -9,6 +9,21 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 export __KCS_LOADED_UTILS=""
+export __KCS_UTILS_DEPENDENCIES=()
+
+kcs_utils_register() {
+  local ns="utils-registry"
+  local name="$1" arg args
+  shift
+  args=("$@")
+
+  kcs_debug "$ns" "register new utils: %s" \
+    "$name"
+
+  for arg in "${args[@]}"; do
+    __KCS_UTILS_DEPENDENCIES+=("$name:$arg")
+  done
+}
 
 ## Load utils file
 ## @param $1 - utils name
@@ -97,6 +112,18 @@ __kcs_utils_init() {
   done
 }
 
+__kcs_utils_check() {
+  local util name dep
+  for util in "${__KCS_UTILS_DEPENDENCIES[@]}"; do
+    name="${util%:*}"
+    if kcs_utils_is_load "$name"; then
+      dep="${util##*:}"
+      kcs_utils_required "$name" "$dep"
+    fi
+  done
+}
+
 __kcs_utils_clean() {
-  unset __KCS_LOADED_UTILS
+  unset __KCS_LOADED_UTILS \
+    __KCS_UTILS_DEPENDENCIES
 }

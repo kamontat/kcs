@@ -28,6 +28,8 @@ _kcs_register_hooks() {
     __kcs_set_help:@optional,@cb=__kcs_main_help
 
   kcs_add_hook post_init \
+    __kcs_utils_check:@optional
+  kcs_add_hook post_init \
     __kcs_init_check:@optional
   kcs_add_hook post_init \
     __kcs_main_init:@optional,@raw
@@ -40,6 +42,8 @@ _kcs_register_hooks() {
   kcs_add_hook load \
     __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
 
+  kcs_add_hook post_load \
+    __kcs_utils_check:@optional
   kcs_add_hook post_load \
     __kcs_load_check:@optional
 

@@ -4,8 +4,6 @@
 ## builtin/checker:
 ##   all checker function will return error code if something wrong
 ##   to exit script if validation fail, please check _validator.sh
-## Requirement:
-##   <none>
 ## Public functions:
 ##   `kcs_check_present <input>` - check input should be exist
 ##   `kcs_check_cmd <cmd>` - check input should be executable command
@@ -21,6 +19,8 @@
 # set -v #VERBOSE  - Display shell input lines as they are read.
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
+
+kcs_utils_register "builtin/checker"
 
 ## check input should exist
 ## @param $1 - [required] input string

@@ -14,6 +14,8 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+kcs_utils_register "builtin/prompt"
+
 ## prompt yes-no question
 ## @param $1 - [required] message name
 ##        $2 - [optional] pre-set answer without prompt
