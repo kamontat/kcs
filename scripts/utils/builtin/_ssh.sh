@@ -3,6 +3,7 @@
 
 ## builtin/ssh:
 ##   work same with ssh, use mode to decide which config to resolve
+## Hook: <init_utils>
 ## Public functions:
 ##   `kcs_conf_ssh_local <p> <ip> <port> <u> <pem>` - create new ssh profile
 ##   `kcs_conf_ssh_proxy <p> <px> <u> <pem>` - create new ssh proxy profile
@@ -161,7 +162,7 @@ __kcs_ssh_cmd() {
   ## remove tmp if exist
   kcs_ssh "$name" -- rm -r "$sbase" 2>/dev/null
   kcs_ssh_copy_to "$name" \
-    "$pbase:$sbase"
+    "$pbase:$sbase" || return $?
 
   ## execute command
   kcs_info "$ns" \
