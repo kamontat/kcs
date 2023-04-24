@@ -3,8 +3,7 @@
 
 ## builtin/prompt:
 ##   create prompt to user
-## Requirement:
-##   <none>
+## Hook: <any>
 ## Public functions:
 ##   `kcs_prompt_yn <msg> [yes]` - prompt yes-no question
 ##   `kcs_prompt <msg> <cb> [ans]` - prompt open-question with callback

@@ -3,6 +3,7 @@
 
 ## builtin/debug:
 ##   add debugging hook to the script
+## Hook: init_utils
 ## Public functions:
 ##   <none>
 

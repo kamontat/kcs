@@ -3,6 +3,7 @@
 
 ## builtin/temp:
 ##   manage temp directory
+## Hook: <any>
 ## Public functions:
 ##   `kcs_conf_temp_auto_clean` - auto clean temp file or directory
 ##   `kcs_conf_temp_no_clean` - never clean temp file or directory

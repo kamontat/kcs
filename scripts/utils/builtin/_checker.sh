@@ -4,6 +4,7 @@
 ## builtin/checker:
 ##   all checker function will return error code if something wrong
 ##   to exit script if validation fail, please check _validator.sh
+## Hook: <any>
 ## Public functions:
 ##   `kcs_check_present <input>` - check input should be exist
 ##   `kcs_check_cmd <cmd>` - check input should be executable command

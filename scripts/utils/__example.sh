@@ -3,8 +3,7 @@
 
 ## <module_name>:
 ##   <description>
-## Requirement:
-##   - temp: create temporary directory
+## Hook: [init_utils|utils|<any>]
 ## Public functions:
 ##   <none>
 

@@ -3,6 +3,7 @@
 
 ## builtin/command:
 ##   call command
+## Hook: <any>
 ## Public functions:
 ##   `kcs_call_command <args...>` - call command by input argument
 
