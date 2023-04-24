@@ -212,11 +212,12 @@ kcs_ssh() {
 
   ## Pass some script environment to server as well
   if [ "${#args[@]}" -gt 0 ]; then
-    local d c
+    local d dd ll
     test -n "$DEBUG" && d="DEBUG=$DEBUG "
+    test -n "$DEBUG_DISABLED" && dd="DEBUG_DISABLED=$DEBUG_DISABLED "
     test -n "$LOG_LEVEL" && ll="LOG_LEVEL=$LOG_LEVEL "
 
-    args[0]="$d$c$ll${args[0]}"
+    args[0]="$d$dd$ll${args[0]}"
   fi
 
   kcs_debug "$ns" "options: %s" "${opts[*]}"
