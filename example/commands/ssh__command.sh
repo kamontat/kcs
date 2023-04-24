@@ -18,7 +18,7 @@
 export KCS_NAME="ssh/command"
 export KCS_VERSION="v0.0.0"
 
-export KCS_UTILS=(
+export KCS_INIT_UTILS=(
   "builtin/ssh"
 )
 
