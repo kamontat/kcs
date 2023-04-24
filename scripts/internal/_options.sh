@@ -143,6 +143,14 @@ Environments:
       - set to non-empty string will enabled dry-run mode
   \$DRY_HOOK
       - set to non-empty string will never execute any hooks action
+  \$KCS_DIR_UTILS
+      - override 'utils' directory
+  \$KCS_DIR_COMMANDS
+      - override 'commands' directory
+  \$KCS_DIR_TEMP
+      - override 'temp' directory
+  \$KCS_DIR_LOG
+      - override 'log' directory
 "
 
 __kcs_options_clean() {
