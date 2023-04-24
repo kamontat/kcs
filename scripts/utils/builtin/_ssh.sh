@@ -154,7 +154,9 @@ __kcs_ssh_cmd() {
   done
 
   ## server configuration
-  local sbase="/tmp/${KCS_NAME:-kcs}"
+  local sname="${KCS_NAME:-kcs}"
+  ## `/` must be replace to '-' because path separator
+  local sbase="/tmp/${sname//\//-}"
 
   ## remove tmp if exist
   kcs_ssh "$name" -- rm -r "$sbase" 2>/dev/null
