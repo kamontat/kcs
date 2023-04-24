@@ -12,6 +12,7 @@ __kcs_parse_options() {
   while getopts "$__KCS_GLOBAL_OPTS$KCS_OPTIONS" flag; do
     case "${flag}" in
     h) kcs_get_help ;;
+    H) kcs_get_help_all ;;
     v) kcs_get_info ;;
     z) kcs_get_errcode_help ;;
     Q) __kcs_set_silent_mode ;;
@@ -26,6 +27,10 @@ __kcs_parse_options() {
       help)
         kcs_no_argument "$LONG_OPTARG"
         kcs_get_help
+        ;;
+      help-all)
+        kcs_no_argument "$LONG_OPTARG"
+        kcs_get_help_all
         ;;
       version)
         kcs_no_argument "$LONG_OPTARG"
@@ -102,11 +107,13 @@ __kcs_parse_addition_options() {
   fi
 }
 
-__KCS_GLOBAL_OPTS="hvzQDRL:K:?-:"
+__KCS_GLOBAL_OPTS="hHvzQDRL:K:?-:"
 __KCS_GLOBAL_HELP="
 Global options:
   [--help,-h]
-      - show this message for help
+      - show command specific help message
+  [--help-all,-H]
+      - show full help message
   [--version,-v]
       - show script version
   [--error,-z]

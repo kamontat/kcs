@@ -55,7 +55,23 @@ __kcs_set_help() {
   export KCS_HELP
 }
 
+## get only command help message
 kcs_get_help() {
+  local name="${KCS_NAME:-unknown}"
+  local version="${KCS_VERSION:-dev}"
+  local desc="$KCS_DESCRIPTION"
+  local help="$KCS_HELP"
+
+  test -n "$desc" && desc="$desc"$'\n'
+
+  printf "# %s (%s)
+%s%s" "$name" "$version" "$desc" \
+    "$help"
+  exit 0
+}
+
+## get fully help message
+kcs_get_help_all() {
   local name="${KCS_NAME:-unknown}"
   local version="${KCS_VERSION:-dev}"
   local desc="$KCS_DESCRIPTION"

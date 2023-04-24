@@ -210,6 +210,7 @@ __kcs_main_option_keys
 ## desc      : parsing option
 ## tags      : @optional,@hook:pre_load
 __kcs_main_option() {
+  # shellcheck disable=SC2034
   local flag="$1" value="$2"
   case "$flag" in
   N | name)
@@ -435,10 +436,11 @@ The useful internal functions and variables.
 
 ### Information functions
 
-| Function name  | Description              |
-| -------------- | ------------------------ |
-| `kcs_get_help` | Print help message       |
-| `kcs_get_info` | Print script information |
+| Function name      | Description                |
+| ------------------ | -------------------------- |
+| `kcs_get_help`     | Print command help message |
+| `kcs_get_help_all` | Print fully help message   |
+| `kcs_get_info`     | Print script information   |
 
 ### Hook functions
 
