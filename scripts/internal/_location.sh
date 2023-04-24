@@ -38,17 +38,17 @@ fi
 ## script internal utilities
 export _KCS_DIR_INTERNAL="$_KCS_DIR_SCRIPT/internal"
 
-## script custom utilities
-export _KCS_DIR_UTILS="$_KCS_DIR_SCRIPT/utils"
+## script custom utilities; override by $KCS_DIR_UTILS
+export _KCS_DIR_UTILS="${KCS_DIR_UTILS:-$_KCS_DIR_SCRIPT/utils}"
 
-## script commands
-export _KCS_DIR_COMMANDS="$_KCS_DIR_SCRIPT/commands"
+## script commands; override by $KCS_DIR_COMMANDS
+export _KCS_DIR_COMMANDS="${KCS_DIR_COMMANDS:-$_KCS_DIR_SCRIPT/commands}"
 
-## temporary directory
-export _KCS_DIR_TEMP="$_KCS_DIR_SCRIPT/.tmp"
+## temporary directory; override by $KCS_DIR_TEMP
+export _KCS_DIR_TEMP="${KCS_DIR_TEMP:-$_KCS_DIR_SCRIPT/.tmp}"
 
-## log directory
-export _KCS_DIR_LOG="$_KCS_DIR_TEMP/logs"
+## log directory; override by $KCS_DIR_LOG
+export _KCS_DIR_LOG="${KCS_DIR_LOG:-$_KCS_DIR_TEMP/logs}"
 
 ## Scripts should always resolve relative path from root directory
 cd "$_KCS_DIR_ROOT" || exit 1
