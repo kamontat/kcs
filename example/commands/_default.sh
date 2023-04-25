@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-##command-example:v1.0.0-beta.1
-
-## Default command:
-##   Special command run if finder cannot map input arguments with any commands
-##
+##command-example:v1.0.0-beta.2
 ## > learn more at README.md
+
+## Special command run if finder cannot map input arguments with any commands
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
