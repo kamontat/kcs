@@ -74,8 +74,7 @@ __kcs_copy() {
     ftype="directory"
   fi
 
-  kcs_debug "$ns" \
-    "starting copy '%s'" "$ftype"
+  kcs_debug "$ns" "starting copy '%s'" "$ftype"
 
   local cmd="cp" cp_args=()
   local shasum no_change
