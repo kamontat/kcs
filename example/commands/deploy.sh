@@ -13,6 +13,11 @@
 
 export KCS_NAME="deploy"
 export KCS_VERSION="v0.0.0"
+export KCS_HELP="
+Arguments:
+  <target>
+    - target directory to deploy
+"
 
 export KCS_INIT_UTILS=(
   builtin/temp
@@ -20,10 +25,6 @@ export KCS_INIT_UTILS=(
   builtin/validator
   builtin/copier
 )
-
-__kcs_main_config() {
-  kcs_conf_temp_no_clean
-}
 
 __kcs_main() {
   local ns="$KCS_NAME"
