@@ -6,6 +6,7 @@
 ## Hook: <any>
 ## Public functions:
 ##   `kcs_conf_temp_auto_clean` - auto clean temp file or directory
+##   `kcs_conf_temp_auto_clean_all` - auto clean all temp directory
 ##   `kcs_conf_temp_no_clean` - never clean temp file or directory
 ##   `kcs_temp_create_dir [n]` - create new temp directory by name
 ##   `kcs_temp_create_file [n]` - create new temp file by name
@@ -29,6 +30,15 @@ kcs_conf_temp_auto_clean() {
   __KCS_TEMP_AUTO_CLEANUP=true
   kcs_debug "$ns" \
     "enabled auto cleanup"
+}
+
+## cleanup all files/folders created by
+## kcs_temp_create_* function when on clean hook
+kcs_conf_temp_auto_clean_all() {
+  local ns="config temp"
+  __KCS_TEMP_AUTO_CLEANUP=all
+  kcs_debug "$ns" \
+    "enabled auto cleanup all"
 }
 
 ## not cleanup any file/folder created by
@@ -69,8 +79,6 @@ kcs_temp_create_file() {
   local fullpath="$_KCS_DIR_TEMP/$name"
   echo "$fullpath" \
     >>"$_KCS_DIR_TEMP/$__KCS_EXEC_TEMP_CLEANUP"
-
-  echo "$__KCS_TEMP_CREATED_FILE" >&2
 
   ## create temporary directory
   touch "$fullpath"
@@ -119,12 +127,16 @@ __kcs_temp_clean() {
   local exec_tfile="$_KCS_DIR_TEMP/$__KCS_EXEC_TEMP_CLEANUP"
   if test -f "$exec_tfile"; then
     if test -n "$__KCS_TEMP_AUTO_CLEANUP"; then
-      while IFS= read -r fpath; do
-        test -f "$fpath" &&
-          kcs_exec rm "$fpath"
-        test -d "$fpath" &&
-          kcs_exec rm -r "$fpath"
-      done <"$exec_tfile"
+      if [[ "$__KCS_TEMP_AUTO_CLEANUP" == "all" ]]; then
+        kcs_temp_clean_all
+      else
+        while IFS= read -r fpath; do
+          test -f "$fpath" &&
+            kcs_exec rm "$fpath"
+          test -d "$fpath" &&
+            kcs_exec rm -r "$fpath"
+        done <"$exec_tfile"
+      fi
     fi
 
     rm "$exec_tfile"
