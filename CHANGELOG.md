@@ -1,4 +1,88 @@
 
+<a name="v1.0.0-beta.2"></a>
+## [v1.0.0-beta.2] - 2023-05-01
+
+### Features
+- remove unused hook callback
+- add release command to create new kcs version
+- **command:** new pre-defined command named "__exec" to exec function directly
+- **core:** add new DRY_HOOK environment for debugging hook command
+- **core:** update docs for help and help-all options
+- **example:** new deployment command for deploy kcs to target
+- **example:** add new example command as a example how to write command script
+- **hook:** new load hooks for loading external apis or functions
+- **hook:** add new hook tag [@args](https://github.com/args) for parse array variable as argument
+- **hook:** adjust hook callback based on new load phase
+- **internal:** support override commands utils temp and logs directory
+- **internal:** remove `__kcs_register` as it unused
+- **internal:** add new __kcs_default_option function for setup default option on utilities
+- **logger:** add DEBUG_ONLY for enabled only namespaced debug
+- **logger:** support write logs to file using LOG_FILE or --log-file (prefer env style)
+- **utils:** add copier utils to copy file or directory
+- **utils:** new register utils function for dependencies resolver
+- **utils:** add csv utils
+- **utils:** add checker and validator 2 more utilities
+- **utils:** add new builtin/command for call command from other command
+
+### Performance Improvements
+- remove all check hooks and use post_init or post_load instead, change callback name as well. `__kcs_default_validate` changed to `__kcs_load_check` and `__kcs_main_validate` changed to `__kcs_main_check`
+- minor improve on default command
+- **command:** update example command to use short syntax
+- **core:** separate help command to --help and --help-all
+- **core:** reimplement lib mode but disable main and clean hook instead
+- **example:** ssh must loaded on init-utils
+- **hook:** remove check hook as check will perform on all post steps except main which run pre step
+- **hook:** disable hook now support disable hook by name
+- **hook:** new [@silent](https://github.com/silent) tag for ignore if cmd not exist or fail
+- **hook:** kcs_add_hook will not re-add hook action with the same name
+- **hook:** add new hook for cleanup main command variables/functions
+- **hook:** add new __kcs_main_pre_utils function to load utilities on the beginning of hooks
+- **hooks:** add __kcs_main_init for initiate command script after parsed options
+- **internal:** built utils path only if it's pass creating condition
+- **internal:** if utils load failed, throw error and stop
+- **internal:** add new __kcs_default_validate same as __kcs_main_validate but for utils
+- **internal:** _kcs_find_command now support sent raw argument after <> separator
+- **main:** support load utils using variable instead of function
+- **options:** option keys will be merged with KCS_OPTIONS variables
+- **utils:** improve builtin/temp by kcs_temp_create_* function will automatically cleanup itself
+- **utils:** add function to disable auto cleanup temp file/folder
+- **utils:** new kcs_check_args utils for validate command argument
+
+### Bug Fixes
+- **core:** invalid function name on hook
+- **error:** array variable cannot be exported
+- **hook:** duplicated execution on hook callback
+- **hook:** if hook command failed, it should throw error not only print warning
+- **internal:** if utils not found, logs it
+- **internal:** kcs_exec use invalid arguments
+- **utils:** if ssh command copy failed, stop the script
+- **utils:** ssh command cannot execute if KCS_NAME contains '/'
+- **utils:** ssh proxy environment support debug_disable and fix some invalid variable name
+- **utils:** fix ssh command not work as expected with new design
+- **utils:** temp auto-clean didn't works as expected
+- **utils:** kcs_verify_present signature not same with docs
+
+### Chore
+- add list of utils loaded to debug utils as well
+- add upgrade steps
+- add debug message when searching for required utils
+- initiate release command to release new kcs version
+- change example deploy command to upgrade
+- **docs:** add example deploy cmd help
+- **docs:** update deprecated function name
+- **docs:** add kcs_dir on default help command
+- **docs:** update utils docs
+- **docs:** update command header document
+- **docs:** ssh no longer require builtin/temp utils
+- **docs:** add naming appendix on command README
+- **docs:** update typo
+- **docs:** add release flow on README
+- **docs:** add changelog config and generate changelog
+- **error:** refactor errcode with new EC namespace
+- **log:** use debug on reuse config log instead of warn
+- **utils:** add hostname and os to debug utils
+
+
 <a name="v1.0.0-beta.1"></a>
 ## v1.0.0-beta.1 - 2023-04-19
 
@@ -58,4 +142,5 @@
 - **logger:** add info log when run cmd on ssh server
 
 
-[Unreleased]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.1...HEAD
+[Unreleased]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.2...HEAD
+[v1.0.0-beta.2]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.1...v1.0.0-beta.2
