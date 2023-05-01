@@ -15,6 +15,9 @@
 ##   `kcs_check_url <u>` - check input url should be callable
 ##   `kcs_check_server <ip> [p] [cmd]` - check input should be connectable
 ##   `kcs_check_args <size>` - check arguments should be same size
+##   `kcs_check_git_clean` - check current git should be clean
+##   `kcs_check_raw <cmd> <args>` - check raw commands should not failed
+
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -155,6 +158,28 @@ kcs_check_server() {
 kcs_check_args() {
   local expected="$1" actual="${#KCS_COMMANDS[@]}"
   if [ "$expected" -ne "$actual" ]; then
+    return "$KCS_EC_CHECK_FAIL"
+  fi
+  return 0
+}
+
+## check current git should be clean
+## @return   - either zero or non-zero
+## @example  - `kcs_check_git_clean`
+kcs_check_git_clean() {
+  if ! git diff-files --quiet; then
+    return "$KCS_EC_CHECK_FAIL"
+  fi
+  return 0
+}
+
+## check raw commands should not failed
+## @param $1 - [required] command name
+##        $n - [optional] command arguments
+## @return   - either zero or non-zero
+## @example  - `kcs_verify_raw test -f 'hello.txt'`
+kcs_check_raw() {
+  if ! "$@"; then
     return "$KCS_EC_CHECK_FAIL"
   fi
   return 0

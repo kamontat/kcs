@@ -15,6 +15,8 @@
 ##   `kcs_verify_url <url>` - validate input url must be callable
 ##   `kcs_verify_server <ip> [p] [cmd]` - validate input must be connectable
 ##   `kcs_verify_args <size>` - validate arguments must be same size
+##   `kcs_verify_git_clean` - validate current git must be clean
+##   `kcs_verify_raw <cmd> <args>` - validate raw commands must not failed
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -167,10 +169,41 @@ kcs_verify_server() {
 ## @example  - `kcs_verify_args 3`
 ##           - `kcs_verify_args 7 "$@"`
 kcs_verify_args() {
+  local ns="args-verifier"
   local expected="$1" actual="${#KCS_COMMANDS[@]}"
   if [ "$expected" -ne "$actual" ]; then
     kcs_throw "$KCS_EC_CHECK_FAIL" \
       "$ns" "expected '%s' arguments, but got '%s'" \
       "$expected" "$actual"
+  fi
+}
+
+## validate current git must be clean
+## @exit     - error if current git repo is not clean
+## @example  - `kcs_verify_git_clean`
+kcs_verify_git_clean() {
+  local ns="git-verifier"
+  if ! git diff-files --quiet; then
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
+      "$ns" "current git (%s) is not clean" \
+      "$PWD"
+  fi
+}
+
+## validate raw commands must not failed
+## @param $1 - [required] command name
+##        $n - [optional] command arguments
+## @exit     - error if input command cannot execute
+## @example  - `kcs_verify_raw test -f 'hello.txt'`
+kcs_verify_raw() {
+  local ns="raw-verifier"
+  local cmd="$1" args=()
+  shift
+  args=("$@")
+
+  if ! "$cmd" "${args[@]}"; then
+    kcs_throw "$KCS_EC_CHECK_FAIL" \
+      "$ns" "command '%s' return non-zero exit-code" \
+      "$cmd"
   fi
 }
