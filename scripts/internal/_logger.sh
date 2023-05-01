@@ -98,18 +98,28 @@ __kcs_log() {
   if [[ "$_KCS_LOG_LEVELS" =~ $level ]]; then
     local __format="%s [%s] | %15s | $format\n"
     local __datetime __args=()
+    local __logfile="$LOG_FILE"
 
-    __datetime="$(date +"%Y/%m/%d %H:%M:%S")"
+    if test -n "$__logfile"; then
+      __datetime="$(date +"%Y/%m/%d %H:%M:%S")"
+      __logfile="${_KCS_DIR_LOG:?}/$__logfile"
+    else
+      __datetime="$(date +"%H:%M:%S")"
+    fi
+
     __args+=("$__datetime" "$level" "$namespace")
     if [ "${#args[@]}" -gt 0 ] &&
       echo "$format" | grep -q "%"; then
       __args+=("${args[@]}")
     fi
 
-    if [[ "$level" == "$KCS_LOG_LVL" ]]; then
+    if test -n "$__logfile"; then
       # shellcheck disable=SC2059,SC2154
       printf "$__format" \
-        "${__args[@]}"
+        "${__args[@]}" >>"$__logfile"
+    elif [[ "$level" == "$KCS_LOG_LVL" ]]; then
+      # shellcheck disable=SC2059,SC2154
+      printf "$__format" "${__args[@]}"
     else
       # shellcheck disable=SC2059,SC2154
       printf "$__format" \
@@ -175,6 +185,10 @@ __kcs_set_log_level() {
     __kcs_set_debug_mode
     ;;
   esac
+}
+
+__kcs_set_log_file() {
+  LOG_FILE="$1"
 }
 
 if test -n "$DEBUG" &&

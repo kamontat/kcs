@@ -19,6 +19,7 @@ __kcs_parse_options() {
     D) __kcs_set_debug_mode ;;
     R) __kcs_set_dry_run ;;
     L) __kcs_set_log_level "$OPTARG" ;;
+    F) __kcs_set_log_file "$OPTARG" ;;
     K) kcs_disable_hook "$OPTARG" ;;
     -)
       NEXT="${!OPTIND}"
@@ -55,6 +56,10 @@ __kcs_parse_options() {
       log-level)
         kcs_require_argument "$LONG_OPTARG"
         __kcs_set_log_level "$LONG_OPTVAL"
+        ;;
+      log-file)
+        kcs_require_argument "$LONG_OPTARG"
+        __kcs_set_log_file "$LONG_OPTVAL"
         ;;
       disable-hook)
         kcs_require_argument "$LONG_OPTARG"
@@ -107,7 +112,7 @@ __kcs_parse_addition_options() {
   fi
 }
 
-__KCS_GLOBAL_OPTS="hHvzQDRL:K:?-:"
+__KCS_GLOBAL_OPTS="hHvzQDRL:F:K:?-:"
 ## Short global options for help command
 __KCS_GLOBAL_HELP_SHORT="
 Global options:
@@ -137,6 +142,9 @@ Global options:
   [--log-level,-L] <0-5>
       - set log level (0=silent, 5=debug)
       - this handle on init hook
+  [--log-file,-F] <filename>
+      - log output file name
+      - this handle on init hook
   [--disable-hook,-K] <name:callback>
       - disable input hook name (<name>:<callback>)
         - post_options:temp - temp setup before used
@@ -147,33 +155,36 @@ Global options:
 ## Environment options for help-all command
 __KCS_GLOBAL_HELP_ENV="
 Environments:
-  \$DEBUG
+  \$DEBUG=<any>
       - set to non-empty string will enabled debug mode
       - debug mode will print more detail than debug log.
-  \$DEBUG_ONLY
+  \$DEBUG_ONLY=<namespaces...>
       - string separated by comma (,)
       - to enabled only namespaced debug logging
       - works only if DEBUG is enabled
-  \$DEBUG_DISABLED
+  \$DEBUG_DISABLED=<namespaces...>
       - string separated by comma (,) 
       - to disable namespaced debug logging
       - works only if DEBUG is enabled
       - below are verbosed namespaces:
         - hook-adder,core-wrapper,hook-runner,file-loader
-  \$LOG_LEVEL
+  \$LOG_LEVEL=<0-5>
       - set to 0 - 5 same as --log-level option.
       - this handle on pre_init hook
-  \$DRY_RUN
+  \$LOG_FILE=<name>
+      - filename for logging
+      - file will create at \$KCS_DIR_LOG directory
+  \$DRY_RUN=<any>
       - set to non-empty string will enabled dry-run mode
-  \$DRY_HOOK
+  \$DRY_HOOK=<any>
       - set to non-empty string will never execute any hooks action
-  \$KCS_DIR_UTILS
+  \$KCS_DIR_UTILS=<path>
       - override 'utils' directory
-  \$KCS_DIR_COMMANDS
+  \$KCS_DIR_COMMANDS=<path>
       - override 'commands' directory
-  \$KCS_DIR_TEMP
+  \$KCS_DIR_TEMP=<path>
       - override 'temp' directory
-  \$KCS_DIR_LOG
+  \$KCS_DIR_LOG=<path>
       - override 'log' directory
 "
 
