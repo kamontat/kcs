@@ -25,11 +25,6 @@ export KCS_UTILS=(
   builtin/prompt
 )
 
-__kcs_create_version() {
-  git tag "$1" --message ""
-  git-chglog --output "CHANGELOG.md"
-}
-
 __kcs_main_check() {
   kcs_verify_cmd "git-chglog"
   kcs_verify_git_clean
@@ -38,6 +33,16 @@ __kcs_main_check() {
 __kcs_main() {
   git tag --column
   kcs_prompt "Enter your next version:" __kcs_create_version
+}
+
+__kcs_create_version() {
+  local version="$1"
+
+  git-chglog --output "CHANGELOG.md" --next-tag "$version" &&
+    git commit -am "chore: prepare to release version '$version'" &&
+    git tag "$version" --message "" &&
+    git push &&
+    git push --tags
 }
 
 __kcs_main_clean() {
