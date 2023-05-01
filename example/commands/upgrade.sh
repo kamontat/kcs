@@ -11,12 +11,14 @@
 ## User defined function
 ####################################################
 
-export KCS_NAME="deploy"
-export KCS_VERSION="v0.0.0"
+export KCS_NAME="upgrade"
+export KCS_VERSION="v1.0.0"
+export KCS_DESCRIPTION="upgrade kcs scripts to current version"
 export KCS_HELP="
+Usage: main.sh upgrade <path>
 Arguments:
   <target>
-    - target directory to deploy
+    - target scripts to upgrade
 "
 
 export KCS_INIT_UTILS=(
@@ -37,7 +39,7 @@ __kcs_main() {
   kcs_verify_dir "$basepath"
   kcs_verify_dir "$target"
 
-  kcs_copy "$basepath" "$target" "/internal" || return $?
+  kcs_copy "$basepath" "$target" "internal" || return $?
   kcs_copy "$basepath" "$target" "utils/builtin" || return $?
 
   kcs_lazy_copy "$basepath" "$target" "README.md" || return $?
@@ -49,7 +51,7 @@ __kcs_main() {
   kcs_lazy_copy "$basepath" "$target" "commands/README.md" || return $?
 
   kcs_info "$ns" \
-    "successfully deployed"
+    "upgraded successfully"
 }
 
 ####################################################
