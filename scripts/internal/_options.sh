@@ -138,9 +138,14 @@ Environments:
   \$DEBUG
       - set to non-empty string will enabled debug mode
       - debug mode will print more detail than debug log.
+  \$DEBUG_ONLY
+      - string separated by comma (,)
+      - to enabled only namespaced debug logging
+      - works only if DEBUG is enabled
   \$DEBUG_DISABLED
       - string separated by comma (,) 
       - to disable namespaced debug logging
+      - works only if DEBUG is enabled
       - below are verbosed namespaces:
         - hook-adder,core-wrapper,hook-runner,file-loader
   \$LOG_LEVEL
