@@ -65,8 +65,8 @@ kcs_get_help() {
   test -n "$desc" && desc="$desc"$'\n'
 
   printf "# %s (%s)
-%s%s" "$name" "$version" "$desc" \
-    "$help"
+%s%s%s" "$name" "$version" "$desc" \
+    "$help" "$__KCS_GLOBAL_HELP_SHORT"
   exit 0
 }
 
@@ -80,8 +80,9 @@ kcs_get_help_all() {
   test -n "$desc" && desc="$desc"$'\n'
 
   printf "# %s (%s)
-%s%s%s" "$name" "$version" "$desc" \
-    "$help" "$__KCS_GLOBAL_HELP"
+%s%s%s%s" "$name" "$version" "$desc" \
+    "$help" "$__KCS_GLOBAL_HELP" \
+    "$__KCS_GLOBAL_HELP_ENV"
   exit 0
 }
 

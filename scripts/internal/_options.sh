@@ -108,6 +108,15 @@ __kcs_parse_addition_options() {
 }
 
 __KCS_GLOBAL_OPTS="hHvzQDRL:K:?-:"
+## Short global options for help command
+__KCS_GLOBAL_HELP_SHORT="
+Global options:
+  [--help,-h]
+      - show command specific help message
+  [--help-all,-H]
+      - show full help message
+"
+## Fully global options for help-all command
 __KCS_GLOBAL_HELP="
 Global options:
   [--help,-h]
@@ -134,6 +143,9 @@ Global options:
         - pre_clean:temp - temp cleanup after used
   [--] <args>
       - pass additional arguments to scripts
+"
+## Environment options for help-all command
+__KCS_GLOBAL_HELP_ENV="
 Environments:
   \$DEBUG
       - set to non-empty string will enabled debug mode
@@ -167,5 +179,6 @@ Environments:
 
 __kcs_options_clean() {
   unset __KCS_GLOBAL_OPTS \
-    __KCS_GLOBAL_HELP
+    __KCS_GLOBAL_HELP \
+    __KCS_GLOBAL_HELP_ENV
 }
