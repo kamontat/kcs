@@ -15,6 +15,7 @@ when run with `main.sh`.
   - [Option function](#option-function)
   - [Hooks function](#hooks-function)
   - [Utilities function](#utilities-function)
+  - [Aliases function](#aliases-function)
   - [Configurations function](#configurations-function)
   - [Validates function](#validates-function)
   - [Clean function](#clean-function)
@@ -310,6 +311,29 @@ export KCS_UTILS=("builtin/validator")
 ## arguments : <none>
 __kcs_main_init_utils
 __kcs_main_utils
+```
+
+</details>
+
+### Aliases function
+
+<details><summary>Redirect alias command</summary>
+
+```sh
+## desc      : redirect current command to new command
+##           : when this function define, please ensure
+##           : no other function define or it might
+##           : conflict with new command
+## caveats   : when defined this function only pre_init hook
+##           : of current command will be run
+## tags      : @optional, @hook:pre_init
+__kcs_main_alias() {
+  printf full command
+}
+
+## caller    : __kcs_set_alias
+## arguments : raw arguments
+__kcs_main_alias
 ```
 
 </details>

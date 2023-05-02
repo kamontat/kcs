@@ -12,6 +12,8 @@ _kcs_register_hooks() {
   kcs_add_hook pre_init \
     __kcs_logger_pre_init
   kcs_add_hook pre_init \
+    __kcs_set_alias:@optional,@cb=__kcs_main_alias,@raw
+  kcs_add_hook pre_init \
     __kcs_main_hook:@optional
 
   kcs_add_hook init \

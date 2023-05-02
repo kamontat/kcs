@@ -86,6 +86,26 @@ kcs_get_help_all() {
   exit 0
 }
 
+__kcs_set_alias() {
+  local cb="$1" args=() cmd
+  shift
+  args=("$@")
+
+  # shellcheck disable=SC2207
+  cmd=($(kcs_ignore_exec "$cb"))
+
+  [ "${#cmd[@]}" -le 0 ] &&
+    return 0
+
+  ## Because we call command on current shell
+  ## we have to cleanup current command before
+  ## call alias command
+  unset __kcs_main_alias
+
+  kcs_call_command "${cmd[@]}" "${args[@]}"
+  exit $?
+}
+
 __kcs_set_dry_run() {
   test -z "$DRY_RUN" && DRY_RUN=true
 }
