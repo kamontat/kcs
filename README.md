@@ -19,6 +19,10 @@ This is a scripts collection for highly customizable shell scripts.
 1. Create git tag `git tag v1.0.0 --message ""`
 2. Generate changelog `git-chglog --output CHANGELOG.md`
 
+OR
+
+Using `KCS_DIR_COMMANDS=$PWD/example/commands ./scripts/main.sh release` to release new version
+
 ## Example
 
 You can try example command using below script:
