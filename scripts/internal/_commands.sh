@@ -12,6 +12,16 @@ export __KCS_COMMAND_SEPARATOR="__"
 export __KCS_ARGS_SEPARATOR="<>"
 export __KCS_COMMAND_DEFAULT_NAME="_default.sh"
 
+## call command by input argument
+## @param $n - [required] command argument
+## @exit     - error if command not found or failed
+## @example  - kcs_call_command "test" "hello"
+kcs_call_command() {
+  ## _kcs_find_command is exported from internal _commands.sh
+  _kcs_find_command \
+    "kcs_must_load" "__kcs_command_load_error" "$@"
+}
+
 ## call command if not found, use default
 _kcs_load_command() {
   _kcs_find_command \
@@ -90,4 +100,15 @@ __kcs_command_load_default() {
   local base_path="$_KCS_DIR_COMMANDS"
   local default="$__KCS_COMMAND_DEFAULT_NAME"
   kcs_must_load "$base_path" "$default" "${args[@]}"
+}
+
+## internal callback for _kcs_find_command.
+## this will throw error if command load failed
+## @param $n - [optional] command arguments
+## @exit     - error with command failed message
+__kcs_command_load_error() {
+  local ns="command-finder"
+  kcs_throw "$KCS_EC_CMD_NOT_FOUND" "$ns" \
+    "command '%s' not found" \
+    "$*"
 }
