@@ -94,7 +94,7 @@ kcs_utils_get_file() {
 
 __kcs_utils_init() {
   local cb="$1"
-  local raw key value
+  local raw
   shift
 
   ## Load from input callback

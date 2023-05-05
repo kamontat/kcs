@@ -34,6 +34,8 @@ _kcs_register_hooks() {
   kcs_add_hook post_init \
     __kcs_init_check:@optional
   kcs_add_hook post_init \
+    __kcs_default_init:@optional,@raw
+  kcs_add_hook post_init \
     __kcs_main_init:@optional,@raw
 
   kcs_add_hook pre_load \
@@ -43,6 +45,8 @@ _kcs_register_hooks() {
 
   kcs_add_hook load \
     __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
+  kcs_add_hook load \
+    __kcs_default_setup:@optional
   kcs_add_hook load \
     __kcs_main_setup:@optional
 

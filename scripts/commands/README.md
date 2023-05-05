@@ -166,6 +166,23 @@ __kcs_main_help
 
 ### Initiate function
 
+<details><summary>Init default</summary>
+
+```sh
+## desc      : run init after initiate scripts
+## usage     : use in default utils
+## tags      : @optional, @hook:post_init
+__kcs_default_init() {
+  return 0
+}
+
+## caller    : hooks
+## arguments : raw arguments
+__kcs_default_init
+```
+
+</details>
+
 <details><summary>Init main</summary>
 
 ```sh
@@ -178,6 +195,23 @@ __kcs_main_init() {
 ## caller    : hooks
 ## arguments : raw arguments
 __kcs_main_init
+```
+
+</details>
+
+<details><summary>Setup default</summary>
+
+```sh
+## desc      : run setup after load and validate everything
+## usage     : use in default utils instead of main
+## tags      : @optional, @hook:load
+__kcs_default_setup() {
+  return 0
+}
+
+## caller    : hooks
+## arguments : <none>
+__kcs_default_setup
 ```
 
 </details>
