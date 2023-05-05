@@ -190,11 +190,14 @@ _kcs_run_hook() {
 }
 
 _kcs_run_hooks() {
+  local ns="hooks-runner"
   local args=()
   for name in "${_KCS_HOOK_NAMES[@]}"; do
     if test -n "$__KCS_CUSTOM_ARGS"; then
+      kcs_debug "$ns" "use custom arguments"
       args=("${KCS_ARGS[@]}")
     else
+      kcs_debug "$ns" "use default arguments"
       args=("$@")
     fi
 
