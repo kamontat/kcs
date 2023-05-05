@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-##command-example:v1.0.0-beta.2
+##example-command:v1
 ## > learn more at README.md
 
 ## Special command run if finder cannot map input arguments with any commands

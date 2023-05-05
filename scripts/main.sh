@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-##template:v1.0.0-beta.1
+##template:v1.0.0-beta.3
 ## Main.sh is a entry file for all cmd in /commands
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.

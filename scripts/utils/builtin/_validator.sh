@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-##utils-example:v1.0.0-beta.1
+##example-utils:v1
 
 ## builtin/validator:
 ##   all validator function will throw error if check failed

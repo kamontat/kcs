@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-##utils-example:v1.0.0-beta.2
+##example-utils:v1
 
 ## <module_name>:
 ##   <description>
