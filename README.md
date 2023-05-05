@@ -30,3 +30,9 @@ You can try example command using below script:
 ```bash
 KCS_DIR_COMMANDS=$PWD/commands ./scripts/main.sh test
 ```
+
+## Tests
+
+- To run tests: `./tests/start.sh`
+- To re-save snapshot: `TEST_MODE=snapshot ./tests/start.sh`
+

@@ -107,6 +107,11 @@ __kcs_log() {
       __datetime="$(date +"%H:%M:%S")"
     fi
 
+    ## Override datetime when run on 'test' mode
+    if test -n "$KCS_TEST"; then
+      __datetime="00:00:00"
+    fi
+
     __args+=("$__datetime" "$level" "$namespace")
     if [ "${#args[@]}" -gt 0 ] &&
       echo "$format" | grep -q "%"; then
