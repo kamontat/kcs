@@ -186,13 +186,13 @@ __kcs_main_init
 
 ```sh
 ## desc      : run setup after load and validate everything
-## tags      : @optional, @hook:post_load
+## tags      : @optional, @hook:load
 __kcs_main_setup() {
   return 0
 }
 
 ## caller    : hooks
-## arguments : raw arguments
+## arguments : <none>
 __kcs_main_setup
 ```
 

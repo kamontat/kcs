@@ -43,13 +43,13 @@ _kcs_register_hooks() {
 
   kcs_add_hook load \
     __kcs_utils_init:@optional,@cb=__kcs_main_utils,@args=KCS_UTILS
+  kcs_add_hook load \
+    __kcs_main_setup:@optional
 
   kcs_add_hook post_load \
     __kcs_utils_check:@optional
   kcs_add_hook post_load \
     __kcs_load_check:@optional
-  kcs_add_hook post_load \
-    __kcs_main_setup:@optional
 
   kcs_add_hook pre_main \
     __kcs_default_config:@optional
