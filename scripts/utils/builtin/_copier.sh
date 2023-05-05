@@ -107,6 +107,9 @@ __kcs_copy() {
     "$opath"
   )
 
+  kcs_info "$ns" \
+    "copying '%s' to '%s' (%s)" \
+    "$ipath" "$opath" "${is_lazy:-normal}"
   kcs_exec "$cmd" "${cp_args[@]}"
 }
 
