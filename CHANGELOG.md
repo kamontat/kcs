@@ -1,4 +1,32 @@
 
+<a name="v1.0.0-beta.3"></a>
+## [v1.0.0-beta.3] - 2023-05-05
+
+### Features
+- pump example version to v1
+- **alias:** add alias variable option
+- **core:** support alias command to shorten command
+- **hook:** move main setup to load hook because post_load will be disable on lib mode
+- **hooks:** rename main_init to main_setup and use main_init on pre_init hook
+- **utils:** add kcs_exit $code to grateful exit scripts
+- **utils:** on builtin/copier utils, will log info if successully copied
+- **utils:** add auto_clean_all on temp to clean temp directory to initiate stage
+
+### Performance Improvements
+- **internal:** use grateful exit instead of force exit on all places
+- **utils:** move builtin/command func to internal and remove builtin/command
+
+### Bug Fixes
+- **core:** lib mode should not run check anything
+
+### Chore
+- update default of example command
+- example alias command for release
+- cleanup some code
+- **log:** add debug log when parsing options
+- **log:** normalize log output on copier utils
+
+
 <a name="v1.0.0-beta.2"></a>
 ## [v1.0.0-beta.2] - 2023-05-01
 
@@ -63,21 +91,22 @@
 - **utils:** kcs_verify_present signature not same with docs
 
 ### Chore
-- add list of utils loaded to debug utils as well
-- add upgrade steps
 - add debug message when searching for required utils
 - initiate release command to release new kcs version
 - change example deploy command to upgrade
-- **docs:** add example deploy cmd help
+- add upgrade steps
+- add list of utils loaded to debug utils as well
+- prepare to release version 'v1.0.0-beta.2'
+- **docs:** ssh no longer require builtin/temp utils
 - **docs:** update deprecated function name
 - **docs:** add kcs_dir on default help command
+- **docs:** add naming appendix on command README
 - **docs:** update utils docs
 - **docs:** update command header document
-- **docs:** ssh no longer require builtin/temp utils
-- **docs:** add naming appendix on command README
 - **docs:** update typo
 - **docs:** add release flow on README
 - **docs:** add changelog config and generate changelog
+- **docs:** add example deploy cmd help
 - **error:** refactor errcode with new EC namespace
 - **log:** use debug on reuse config log instead of warn
 - **utils:** add hostname and os to debug utils
@@ -142,5 +171,6 @@
 - **logger:** add info log when run cmd on ssh server
 
 
-[Unreleased]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.2...HEAD
+[Unreleased]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.3...HEAD
+[v1.0.0-beta.3]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [v1.0.0-beta.2]: https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.1...v1.0.0-beta.2
