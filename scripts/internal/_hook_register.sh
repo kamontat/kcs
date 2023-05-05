@@ -71,9 +71,9 @@ _kcs_register_hooks() {
     __kcs_main_clean:@optional
 
   kcs_add_hook post_clean \
-    __kcs_logger_clean
-  kcs_add_hook post_clean \
     __kcs_utils_clean
+  kcs_add_hook post_clean \
+    __kcs_logger_clean
 }
 
 __kcs_required_hook() {

@@ -127,6 +127,31 @@ kcs_should_load() {
     "$@"
 }
 
+## exit scripts
+kcs_exit() {
+  local code="$1"
+
+  local disable_hooks=(
+    pre_init init post_init
+    pre_load load post_load
+    pre_main main post_main
+  )
+
+  for hook in "${disable_hooks[@]}"; do
+    kcs_disable_hook "$hook"
+  done
+
+  export __KCS_EXIT_CODE
+  __KCS_EXIT_CODE=("$code")
+  kcs_add_hook post_clean __kcs_force_exit:@args=__KCS_EXIT_CODE
+}
+__kcs_force_exit() {
+  local code="$1"
+
+  unset __KCS_EXIT_CODE
+  exit "$code"
+}
+
 ## load file using source with error handler
 ## @param $1 - callback if command not found
 ##        $2 - callback if command failed
