@@ -190,9 +190,14 @@ _kcs_run_hook() {
 }
 
 _kcs_run_hooks() {
-  local args=("$@")
-
+  local args=()
   for name in "${_KCS_HOOK_NAMES[@]}"; do
+    if [ "${#KCS_ARGS[@]}" -gt 0 ]; then
+      args=("${KCS_ARGS[@]}")
+    else
+      args=("$@")
+    fi
+
     _kcs_run_hook "$name" "${args[@]}"
   done
 }
