@@ -54,7 +54,8 @@ There are several functions you can define listed below.
 ```sh
 ## desc      : The main entry of command;
 ##             all business logic should be here,
-##             or called from here.
+##             or called from here. 
+##             If alias exist, main will never run
 ## return    : <none>
 ## tags      : @required, @hook:main
 __kcs_main() {
@@ -330,6 +331,10 @@ __kcs_main_utils
 __kcs_main_alias() {
   printf full command
 }
+
+## desc      : Function has priority over variables
+## tags      : @optional, @hook:pre_init
+export KCS_ALIAS_COMMAND=("command" "name")
 
 ## caller    : __kcs_set_alias
 ## arguments : raw arguments

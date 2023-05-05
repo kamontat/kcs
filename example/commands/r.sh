@@ -11,9 +11,13 @@
 ## User defined function
 ####################################################
 
-__kcs_main_alias() {
-  printf release
-}
+export KCS_ALIAS_COMMAND=(
+  "release"
+)
+
+# __kcs_main_alias() {
+#   printf release
+# }
 
 ####################################################
 ## Internal function calls

@@ -87,12 +87,21 @@ kcs_get_help_all() {
 }
 
 __kcs_set_alias() {
+  local ns="alias-setter"
   local cb="$1" args=() cmd
   shift
   args=("$@")
 
   # shellcheck disable=SC2207
-  cmd=($(kcs_ignore_exec "$cb"))
+  if command -v "$cb" >/dev/null; then
+    kcs_debug "$ns" \
+      "set alias command from function"
+    cmd=($(kcs_ignore_exec "$cb"))
+  else
+    kcs_debug "$ns" \
+      "set alias command from variable"
+    cmd=("${KCS_ALIAS_COMMAND[@]}")
+  fi
 
   [ "${#cmd[@]}" -le 0 ] &&
     return 0
@@ -101,6 +110,7 @@ __kcs_set_alias() {
   ## we have to cleanup current command before
   ## call alias command
   unset __kcs_main_alias
+  unset KCS_ALIAS_COMMAND
 
   kcs_call_command "${cmd[@]}" "${args[@]}"
   exit $?
