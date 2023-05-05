@@ -87,8 +87,7 @@ __kcs_copy() {
   elif [[ "$ftype" == "file" ]]; then
     ## If lazy enabled and same content, return
     if test -n "$is_lazy"; then
-      sha256sum "$opath" >"$checksum" || return $?
-      read -r shasum _ <"$checksum"
+      read -r shasum _ < <(sha256sum "$opath")
       echo "$shasum $ipath" >"$checksum"
       if sha256sum --check --status "$checksum"; then
         no_change=true
