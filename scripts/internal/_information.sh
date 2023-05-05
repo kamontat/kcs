@@ -36,7 +36,7 @@ kcs_get_info() {
   local name="${KCS_NAME:-unknown}"
   local version="${KCS_VERSION:-dev}"
   printf '%s: %s\n' "$name" "$version"
-  exit 0
+  kcs_exit 0
 }
 
 __kcs_set_description() {
@@ -67,7 +67,7 @@ kcs_get_help() {
   printf "# %s (%s)
 %s%s%s" "$name" "$version" "$desc" \
     "$help" "$__KCS_GLOBAL_HELP_SHORT"
-  exit 0
+  kcs_exit 0
 }
 
 ## get fully help message
@@ -83,7 +83,7 @@ kcs_get_help_all() {
 %s%s%s%s" "$name" "$version" "$desc" \
     "$help" "$__KCS_GLOBAL_HELP" \
     "$__KCS_GLOBAL_HELP_ENV"
-  exit 0
+  kcs_exit 0
 }
 
 __kcs_set_alias() {
@@ -113,7 +113,7 @@ __kcs_set_alias() {
   unset KCS_ALIAS_COMMAND
 
   kcs_call_command "${cmd[@]}" "${args[@]}"
-  exit $?
+  kcs_exit "$?"
 }
 
 __kcs_set_dry_run() {
