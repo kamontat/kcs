@@ -19,8 +19,7 @@ export _KCS_DIR_ORIG="${_KCS_DIR_ORIG:-$PWD}"
 ## usually, created from execute files
 export _KCS_DIR_SCRIPT="${_KCS_DIR_SCRIPT:-$PWD}"
 
-## root directory
-## if KCS_MODE=internal, move root up <n> level
+## root directory, resolving using KCS_ROOT variable
 export _KCS_DIR_ROOT="${_KCS_DIR_SCRIPT:-$PWD}"
 if [[ $KCS_ROOT != "$_KCS_ROOT_CWD" ]]; then
   ## move to script directory
