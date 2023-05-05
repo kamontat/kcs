@@ -478,7 +478,7 @@ __kcs_main_check
 
 ```sh
 ## desc      : cleanup main variable and function
-## tags      : @optional, @hook:clean
+## tags      : @optional, @hook:pre_clean
 __kcs_main_clean() {
   unset __NAME __PASSWORD
 }

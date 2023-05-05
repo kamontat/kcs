@@ -65,14 +65,15 @@ _kcs_register_hooks() {
   kcs_add_hook main \
     __kcs_main:@raw
 
+  kcs_add_hook pre_clean \
+    __kcs_main_clean:@optional
+
   kcs_add_hook clean \
     __kcs_error_clean
   kcs_add_hook clean \
     __kcs_options_clean
   kcs_add_hook clean \
     __kcs_mode_clean
-  kcs_add_hook clean \
-    __kcs_main_clean:@optional
 
   kcs_add_hook post_clean \
     __kcs_utils_clean

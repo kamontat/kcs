@@ -61,6 +61,7 @@ kcs_throw() {
   for whitelist in "${__KCS_EC_WHITELIST[@]}"; do
     if [ "$whitelist" -eq "$code" ]; then
       kcs_exit "$code"
+      return "$code"
     fi
   done
 
@@ -68,6 +69,7 @@ kcs_throw() {
   kcs_warn "$1" "unknown error code %d, fallback to 1" \
     "$code"
   kcs_exit 1
+  return 1
 }
 
 kcs_get_errcode_help() {
