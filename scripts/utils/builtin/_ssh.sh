@@ -128,9 +128,12 @@ __kcs_ssh_cmd() {
   pbase="$_KCS_SSH_CONFIG_DIR/pkg"
   local pu_raw pu_scope pu_value pu_path
   ## copy command
+  kcs_debug "$ns" "copying command file (%s)" \
+    "$lfile"
   mkdir -p "$pbase/commands"
   cp "$cmd" "$pbase/commands/$lfile"
   ## copy internal
+  kcs_debug "$ns" "copying internal directory"
   mkdir -p "$pbase/internal"
   cp -r "$_KCS_DIR_INTERNAL" "$pbase"
   ## copy utils
@@ -151,6 +154,8 @@ __kcs_ssh_cmd() {
     test -n "$pu_scope" &&
       mkdir -p "$pbase/utils/$pu_scope"
     ## copy utils to packed output
+    kcs_debug "$ns" "copying utils '%s'" \
+      "$pu_raw"
     cp -r "$pu_path" "$pbase/utils/$pu_value"
   done
 
@@ -160,6 +165,8 @@ __kcs_ssh_cmd() {
   local sbase="/tmp/${sname//\//-}"
 
   ## remove tmp if exist
+  kcs_debug "$ns" "cleaning old package at '%s'" \
+    "$sbase"
   kcs_ssh "$name" -- rm -r "$sbase" 2>/dev/null
   kcs_ssh_copy_to "$name" \
     "$pbase:$sbase" || return $?
@@ -215,12 +222,14 @@ kcs_ssh() {
 
   ## Pass some script environment to server as well
   if [ "${#args[@]}" -gt 0 ]; then
-    local d dd ll
+    local d dd ll dy
     test -n "$DEBUG" && d="DEBUG=$DEBUG "
+    test -n "$DEBUG_ONLY" && dy="DEBUG_ONLY=$DEBUG_ONLY "
     test -n "$DEBUG_DISABLED" && dd="DEBUG_DISABLED=$DEBUG_DISABLED "
     test -n "$LOG_LEVEL" && ll="LOG_LEVEL=$LOG_LEVEL "
+    test -n "$LOG_LEVEL" && ll="LOG_LEVEL=$LOG_LEVEL "
 
-    args[0]="$d$dd$ll${args[0]}"
+    args[0]="$d$dd$dy$ll${args[0]}"
   fi
 
   kcs_debug "$ns" "options: %s" "${opts[*]}"
