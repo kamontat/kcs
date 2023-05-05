@@ -169,8 +169,8 @@ __kcs_main_help
 <details><summary>Init main</summary>
 
 ```sh
-## desc      : run init after parse all options
-## tags      : @optional, @hook:post_init
+## desc      : run init before everything
+## tags      : @optional, @hook:pre_init
 __kcs_main_init() {
   return 0
 }
@@ -178,6 +178,22 @@ __kcs_main_init() {
 ## caller    : hooks
 ## arguments : raw arguments
 __kcs_main_init
+```
+
+</details>
+
+<details><summary>Setup main</summary>
+
+```sh
+## desc      : run setup after parse all options
+## tags      : @optional, @hook:post_init
+__kcs_main_setup() {
+  return 0
+}
+
+## caller    : hooks
+## arguments : raw arguments
+__kcs_main_setup
 ```
 
 </details>
