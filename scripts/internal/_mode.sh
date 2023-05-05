@@ -30,6 +30,7 @@ __kcs_mode_load() {
   local actual="$KCS_MODE" expected="$_KCS_MODE_LIBRARY"
   if [[ "$actual" == "$expected" ]]; then
     local disable_hooks=(
+      post_load
       pre_main main post_main
       pre_clean clean post_clean
     )
