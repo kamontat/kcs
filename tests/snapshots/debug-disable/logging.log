@@ -1,12 +1,12 @@
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_mode.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_commands.sh'
 00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
-00:00:00 [DBG] |  command-finder | checking input disable
-00:00:00 [DBG] |  command-finder | add 'disable' to commands resolver
 00:00:00 [DBG] |  command-finder | checking input debug
 00:00:00 [DBG] |  command-finder | add 'debug' to commands resolver
-00:00:00 [DBG] |  command-finder | index 2 | checking file disable__debug.sh with ''
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/tests/commands/disable__debug.sh'
+00:00:00 [DBG] |  command-finder | checking input disable
+00:00:00 [DBG] |  command-finder | add 'disable' to commands resolver
+00:00:00 [DBG] |  command-finder | index 2 | checking file debug__disable.sh with ''
+00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/tests/commands/debug__disable.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_hook.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_hook_register.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_information.sh'

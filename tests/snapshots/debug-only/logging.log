@@ -1,0 +1,64 @@
+00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_mode.sh'
+00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_commands.sh'
+00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
+00:00:00 [DBG] |  command-finder | checking input debug
+00:00:00 [DBG] |  command-finder | add 'debug' to commands resolver
+00:00:00 [DBG] |  command-finder | checking input only
+00:00:00 [DBG] |  command-finder | add 'only' to commands resolver
+00:00:00 [DBG] |  command-finder | index 2 | checking file debug__only.sh with ''
+00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/tests/commands/debug__only.sh'
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_logger_pre_init' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_alias' with 1 argument (__kcs_main_alias)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_hook' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_hook' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_init' with 1 argument (__kcs_main_init_utils)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_init_utils' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_init_utils' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_name' with 1 argument (__kcs_main_name)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_name' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_name' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_version' with 1 argument (__kcs_main_version)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_version' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_version' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_options' with 1 argument (__kcs_main_option_keys)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_option_keys' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_option_keys' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_description' with 1 argument (__kcs_main_description)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_description' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_description' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_help' with 1 argument (__kcs_main_help)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_help' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_help' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_check' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_init_check' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_init_check' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_default_init' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_default_init' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_init' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_init' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_mode_load' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_parse_options' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_init' with 1 argument (__kcs_main_utils)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_utils' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_utils' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_default_setup' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_default_setup' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_setup' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_setup' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_check' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_load_check' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_load_check' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_default_config' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_default_config' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_config' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_config' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_check' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_check' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_clean' without argument
+00:00:00 [DBG] |    core-wrapper | command '__kcs_main_clean' not found
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_error_clean' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_options_clean' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_mode_clean' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_clean' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_logger_clean' without argument

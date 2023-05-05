@@ -3,10 +3,10 @@
 00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
 00:00:00 [DBG] |  command-finder | checking input main
 00:00:00 [DBG] |  command-finder | add 'main' to commands resolver
-00:00:00 [DBG] |  command-finder | checking input logs
-00:00:00 [DBG] |  command-finder | add 'logs' to commands resolver
-00:00:00 [DBG] |  command-finder | index 2 | checking file main__logs.sh with ''
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/tests/commands/main__logs.sh'
+00:00:00 [DBG] |  command-finder | checking input simple
+00:00:00 [DBG] |  command-finder | add 'simple' to commands resolver
+00:00:00 [DBG] |  command-finder | index 2 | checking file main__simple.sh with ''
+00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/tests/commands/main__simple.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_hook.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_hook_register.sh'
 00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_information.sh'

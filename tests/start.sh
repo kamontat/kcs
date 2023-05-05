@@ -3,115 +3,172 @@
 ## Possible values: 'validate', 'snapshot'
 # TEST_MODE=validate
 
-main() {
-  test_setup
+## Possible values: 'snap', 'code', 'out', 'log'
+# TEST_TYPE=snap
 
-  test_case \
-    main logs
-  test_case \
-    disable debug
+## Possible values: 'snapshot', 'exit-code', 'output', 'logging'
+# TEST_KEY=snapshot
 
-  test_cleanup
+tests() {
+  new_case \
+    main simple
+  new_case \
+    debug disable
+  new_case \
+    debug only
 }
 
-test_setup() {
-  ## Possible values: 'validate', 'snapshot'
-  export __TEST_MODE="${TEST_MODE:-validate}"
-  export __TEST_COMMAND_DIR="${TEST_COMMAND_DIR:-$PWD/tests/commands}"
-  export __TEST_SNAPSHOT_DIR="${TEST_COMMAND_DIR:-$PWD/tests/snapshots}"
-  export __TEST_RESULT_DIR="${TEST_COMMAND_DIR:-$PWD/tests/.results}"
-  export __TEST_TEMPORARY_DIR="${TEST_COMMAND_DIR:-$PWD/tests/.tmp}"
-  export __TEST_INDEX=1
+###################################################
+## Public functions
+###################################################
 
-  __remove_dirs "$__TEST_RESULT_DIR"
-  __create_dirs "$__TEST_SNAPSHOT_DIR" \
-    "$__TEST_RESULT_DIR" \
-    "$__TEST_TEMPORARY_DIR"
+new_case() {
+  local name
+  name="$(_test_name "$@")"
+
+  if _tests_is_snapshot_mode; then
+    _tests_run_snapshot "$name" "$@"
+  elif _tests_is_validate_mode; then
+    _test_run_validate "$name" "$@"
+  fi
 }
 
-test_cleanup() {
-  __remove_dirs "$__TEST_TEMPORARY_DIR"
+###################################################
+## Protected functions
+###################################################
 
-  unset __TEST_MODE __TEST_INDEX \
-    __TEST_COMMAND_DIR __TEST_SNAPSHOT_DIR \
-    __TEST_RESULT_DIR __TEST_TEMPORARY_DIR
+_tests_init() {
+  export __TEST_MODE_VALIDATE="validate"
+  export __TEST_MODE_SNAPSHOT="snapshot"
+  export __TEST_MODE="${TEST_MODE:-$__TEST_MODE_VALIDATE}"
+
+  export __TEST_STATUS_PASSED="passed"
+  export __TEST_STATUS_FAILED="failed"
+  export __TEST_STATUS_COMPLETED="completed"
+
+  export __TEST_TYPE_SNAP="snap"
+  export __TEST_TYPE_CODE="code"
+  export __TEST_TYPE_OUT="out"
+  export __TEST_TYPE_LOG="log"
+  export __TEST_TYPE_DIFF="diff"
+
+  export __TEST_KEY_SNAP="snapshot"
+  export __TEST_KEY_CODE="exit-code"
+  export __TEST_KEY_OUT="output"
+  export __TEST_KEY_LOG="logging"
+
+  export __TEST_DIR_COMMAND="${TEST_DIR_COMMAND:-$PWD/tests/commands}"
+  export __TEST_DIR_SNAPSHOT="${TEST_DIR_SNAPSHOT:-$PWD/tests/snapshots}"
+  export __TEST_DIR_RESULT="${TEST_DIR_RESULT:-$PWD/tests/.results}"
+  export __TEST_DIR_TEMPORARY="${TEST_DIR_TEMPORARY:-$PWD/tests/.tmp}"
+
+  export __TEST_INDEX=0
+  export __TEST_TOTAL=0
+  export __TEST_TOTAL_COMPLETED=0
+  export __TEST_TOTAL_PASSED=0
+  export __TEST_TOTAL_FAILED=0
 }
 
-test_case() {
-  local commands=("$@") name
-  name="$(__test_name "${commands[@]}")"
-
-  __test_runner "$name" "${commands[@]}"
-  __test_result "$name"
-
-  ((__TEST_INDEX++))
+_tests_setup() {
+  __remove_dirs "$__TEST_DIR_RESULT" "$__TEST_DIR_TEMPORARY"
+  __create_dirs "$__TEST_DIR_SNAPSHOT" \
+    "$__TEST_DIR_RESULT" \
+    "$__TEST_DIR_TEMPORARY"
 }
 
-__test_runner() {
-  local base code out log
+_tests_clean() {
+  local code="$__TEST_TOTAL_FAILED"
+
+  _test_summary
+
+  unset __TEST_MODE \
+    __TEST_MODE_VALIDATE __TEST_MODE_SNAPSHOT
+
+  unset __TEST_STATUS_PASSED \
+    __TEST_STATUS_FAILED __TEST_STATUS_COMPLETED
+
+  unset __TEST_TYPE_SNAP __TEST_TYPE_CODE \
+    __TEST_TYPE_OUT __TEST_TYPE_LOG __TEST_TYPE_DIFF
+
+  unset __TEST_KEY_SNAP __TEST_KEY_CODE \
+    __TEST_KEY_OUT __TEST_KEY_LOG
+
+  unset __TEST_DIR_COMMAND \
+    __TEST_DIR_RESULT __TEST_DIR_SNAPSHOT \
+    __TEST_DIR_TEMPORARY
+
+  unset __TEST_INDEX \
+    __TEST_TOTAL __TEST_TOTAL_COMPLETED \
+    __TEST_TOTAL_PASSED __TEST_TOTAL_FAILED
+
+  return "$code"
+}
+
+_tests_run_snapshot() {
   local name="$1"
   shift
 
-  base="$__TEST_TEMPORARY_DIR"
-  __test_is_snapshot && base="$__TEST_SNAPSHOT_DIR"
-
-  code="$(__test_filename "$base" "$name" "code")"
-  out="$(__test_filename "$base" "$name" "out")"
-  log="$(__test_filename "$base" "$name" "log")"
-
-  DEBUG=1 KCS_TEST=1 KCS_DIR_COMMANDS="$__TEST_COMMAND_DIR" \
-    ./scripts/main.sh "$@" >"$out" 2>"$log"
-
-  local exit_code="$?"
-  printf "%d" "$exit_code" >"$code"
-
-  return 0
+  __debug "starting '%s' (%s)" "$name" "snapshot"
+  _test_run_command "$name" "$__TEST_DIR_SNAPSHOT" "$@"
+  _tests_snapshot_result "$name"
 }
 
-__test_result() {
-  local code out log
+_tests_snapshot_result() {
   local name="$1"
 
-  if __test_is_snapshot; then
-    __test_print_result "$name" \
-      "snapshot:completed"
-    return 0
-  fi
+  _test_print_result "$name" \
+    "$__TEST_KEY_SNAP:$__TEST_STATUS_COMPLETED"
+}
 
+_test_run_validate() {
+  local name="$1"
+  shift
+
+  __debug "starting '%s' (%s)" "$name" "validate"
+  _test_run_command "$name" "$__TEST_DIR_TEMPORARY" "$@"
+  _test_validate_result "$name"
+}
+
+_test_validate_result() {
   local results=()
 
   ## Verify code
-  results+=("code:$(__test_compare "$name" "code")")
+  results+=("$__TEST_KEY_CODE:$(_test_compare \
+    "$name" "$__TEST_KEY_CODE" "$__TEST_TYPE_CODE")")
 
   ## Verify output
-  results+=("output:$(__test_compare "$name" "out")")
+  results+=("$__TEST_KEY_OUT:$(_test_compare \
+    "$name" "$__TEST_KEY_OUT" "$__TEST_TYPE_OUT")")
 
   ## Verify logging
-  results+=("logging:$(__test_compare "$name" "log")")
+  results+=("$__TEST_KEY_LOG:$(_test_compare \
+    "$name" "$__TEST_KEY_LOG" "$__TEST_TYPE_LOG")")
 
-  __test_print_result "$name" \
+  _test_print_result "$name" \
     "${results[@]}"
 }
 
-__test_compare() {
-  local name="$1" ttype="$2"
+_test_compare() {
+  local name="$1" key="$2" type="$3"
   local expected actual result
 
-  expected="$(__test_filename "$__TEST_SNAPSHOT_DIR" "$name" "$ttype")"
-  actual="$(__test_filename "$__TEST_TEMPORARY_DIR" "$name" "$ttype")"
+  expected="$(_test_filename "$__TEST_DIR_SNAPSHOT" "$name" "$key" "$type")"
+  actual="$(_test_filename "$__TEST_DIR_TEMPORARY" "$name" "$key" "$type")"
 
   if ! test -f "$expected"; then
-    printf "failed (no-snapshot)"
+    printf "%s:%s" "$__TEST_STATUS_FAILED" "no-snapshot"
     return 0
   fi
 
   if ! diff -q "$expected" "$actual" >/dev/null; then
-    result="$(__test_filename "$__TEST_RESULT_DIR" "$name-$ttype" "diff")"
+    result="$(_test_filename "$__TEST_DIR_RESULT" "$name" "$type" "$__TEST_TYPE_DIFF")"
     diff --new-file --suppress-common-lines \
       --ignore-space-change --ignore-case \
       --unified "$expected" "$actual" >"$result"
 
-    printf "failed (diff)"
+    ((__TEST_EXIT_CODE++))
+    export __TEST_EXIT_CODE
+    printf "%s:%s" "$__TEST_STATUS_FAILED" "diff"
     return 0
   fi
 
@@ -119,47 +176,118 @@ __test_compare() {
   return 0
 }
 
-__test_print_result() {
+_test_run_command() {
+  local name="$1" basepath="$2"
+  shift 2
+
+  local stdout stderr stdcode
+
+  stdout="$(_test_filename \
+    "$basepath" "$name" "$__TEST_KEY_OUT" "$__TEST_TYPE_OUT")"
+  stderr="$(_test_filename \
+    "$basepath" "$name" "$__TEST_KEY_LOG" "$__TEST_TYPE_LOG")"
+  stdcode="$(_test_filename \
+    "$basepath" "$name" "$__TEST_KEY_CODE" "$__TEST_TYPE_CODE")"
+
+  DEBUG=1 KCS_TEST=1 KCS_DIR_COMMANDS="$__TEST_DIR_COMMAND" \
+    ./scripts/main.sh "$@" >"$stdout" 2>"$stderr"
+  local exit_code="$?"
+  printf "%d" "$exit_code" >"$stdcode"
+
+  return 0
+}
+
+_test_print_result() {
   local name="$1"
   printf "Case #%d: '%s'\n" \
-    "$__TEST_INDEX" "$name"
+    "$((__TEST_INDEX + 1))" "$name"
+  ((__TEST_INDEX++))
 
   shift
 
-  local raw key status
+  local raw key status reason
+  local suffix
   for raw in "$@"; do
     key="${raw%%:*}"
     status="${raw#*:}"
+    reason="${status#*:}"
+    suffix=""
 
-    printf "%4s%s %-15s: %s\n" \
-      "" "-" "$key" "$status"
+    if [[ "$status" != "$reason" ]]; then
+      status="${status%%:*}"
+      suffix=" ($reason)"
+    fi
+
+    ((__TEST_TOTAL++))
+    [[ "$status" == "$__TEST_STATUS_COMPLETED" ]] &&
+      ((__TEST_TOTAL_COMPLETED++))
+    [[ "$status" == "$__TEST_STATUS_PASSED" ]] &&
+      ((__TEST_TOTAL_PASSED++))
+    [[ "$status" == "$__TEST_STATUS_FAILED" ]] &&
+      ((__TEST_TOTAL_FAILED++))
+
+    printf "%4s%s %-15s: %s%s\n" \
+      "" "-" "$key" "$status" "$suffix"
   done
   echo
 }
 
-__test_name() {
+_test_summary() {
+  local line="-----------"
+
+  printf "| %-9s | %-9s | %-9s |\n" \
+    "$__TEST_STATUS_COMPLETED" \
+    "$__TEST_STATUS_PASSED" "$__TEST_STATUS_FAILED"
+  printf "| %-9d | %-9d | %-9d |\n" \
+    "$__TEST_TOTAL_COMPLETED" \
+    "$__TEST_TOTAL_PASSED" "$__TEST_TOTAL_FAILED"
+  printf "|%-11s|%-11s|%-11s|\n" \
+    "$line" "$line" "$line"
+  printf "| %-9s | %-21s |\n" \
+    "Total" "$__TEST_TOTAL/$__TEST_INDEX (checks/cases)"
+}
+
+_test_name() {
   local name="$*" separator="-"
   name="${name// /$separator}"
   printf "%s" "$name"
 }
 
-## ttype is test type, possible values are 'code', 'out', 'log'
-__test_filename() {
-  local base="$1" name="$2" ttype="$3"
-  printf "%s/%s.%s" "$base" "$name" "$ttype"
+_test_filename() {
+  local base="$1" name="$2" key="$3" type="$4"
+
+  test -d "$base/$name" ||
+    mkdir -p "$base/$name"
+
+  printf "%s/%s/%s.%s" "$base" "$name" "$key" "$type"
 }
 
-__test_is_validate() {
-  [[ "$__TEST_MODE" == "validation" ]] ||
-    [[ "$__TEST_MODE" == "validate" ]] ||
+_tests_is_validate_mode() {
+  [[ "$__TEST_MODE" == "$__TEST_MODE_VALIDATE" ]] ||
+    [[ "$__TEST_MODE" == "validation" ]] ||
     [[ "$__TEST_MODE" == "verify" ]] ||
     [[ "$__TEST_MODE" == "v" ]]
 }
-__test_is_snapshot() {
-  [[ "$__TEST_MODE" == "snapshot" ]] ||
+
+_tests_is_snapshot_mode() {
+  [[ "$__TEST_MODE" == "$__TEST_MODE_SNAPSHOT" ]] ||
     [[ "$__TEST_MODE" == "snap" ]] ||
     [[ "$__TEST_MODE" == "ss" ]] ||
     [[ "$__TEST_MODE" == "s" ]]
+}
+
+###################################################
+## Private functions
+###################################################
+
+__debug() {
+  if test -n "$DEBUG"; then
+    local format="$1"
+    shift
+
+    # shellcheck disable=SC2059
+    printf "$format\n" "$@" >&2
+  fi
 }
 
 __create_dirs() {
@@ -182,4 +310,11 @@ __remove_dirs() {
   done
 }
 
-main
+###################################################
+## Main function
+###################################################
+
+_tests_init
+_tests_setup
+tests
+_tests_clean
