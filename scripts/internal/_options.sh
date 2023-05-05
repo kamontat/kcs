@@ -92,12 +92,16 @@ __kcs_parse_addition_options() {
   local main_cb="__kcs_main_option"
 
   if command -v "$default_cb" >/dev/null; then
+    kcs_debug "$ns" \
+      "parsing options from 'default' callback"
     if "$default_cb" "$flag" "$value"; then
       return 0
     fi
   fi
 
   if command -v "$main_cb" >/dev/null; then
+    kcs_debug "$ns" \
+      "parsing options from 'main' callback"
     if "$main_cb" "$flag" "$value"; then
       return 0
     fi
