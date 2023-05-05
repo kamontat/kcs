@@ -192,7 +192,7 @@ _kcs_run_hook() {
 _kcs_run_hooks() {
   local args=()
   for name in "${_KCS_HOOK_NAMES[@]}"; do
-    if [ "${#KCS_ARGS[@]}" -gt 0 ]; then
+    if test -n "$__KCS_CUSTOM_ARGS"; then
       args=("${KCS_ARGS[@]}")
     else
       args=("$@")

@@ -12,13 +12,17 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-## Override user input argument with
-## arguments passed to this function
-## The arguments normally use as raw argument
-## for passing options and commands
-## @param $n - [required] overrided arguments
+## Pass custom argument overwrote what user input
+## @param $n - [required] overwrote arguments
 ## @example  - kcs_argument_override --help
 kcs_argument_override() {
+  export __KCS_CUSTOM_ARGS=true
   export KCS_ARGS
   KCS_ARGS=("$@")
+}
+
+kcs_add_hook clean \
+  __kcs_argument_clean
+__kcs_argument_clean() {
+  unset KCS_ARGS __KCS_CUSTOM_ARGS
 }
