@@ -17,8 +17,12 @@ export KCS_NAME="default"
 export KCS_VERSION="v0.1.1"
 export KCS_HELP="
 Commands:
-  [example] <opts...>
-    - get example command
+  [release|r] <opts...>
+    - release new kcs variable
+  [upgrade] <opts...> <args>
+    - upgrade kcs version on target directory
+  [test] <opts...>
+    - test command
 "
 
 __kcs_main() {
