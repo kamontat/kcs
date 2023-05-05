@@ -112,13 +112,3 @@ __kcs_copy() {
     "$ipath" "$opath"
   kcs_exec "$cmd" "${cp_args[@]}"
 }
-
-## print input string
-## @param $1 - [required] input string
-## @return   - return zero
-## @exit 1   - if something wrong
-## @example  - __kcs_example "test"
-__kcs_example() {
-  printf "%s\n" "$1"
-  return 0
-}
