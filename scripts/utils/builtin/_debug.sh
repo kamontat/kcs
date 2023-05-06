@@ -22,10 +22,9 @@ __kcs_debug_key_value_format() {
     "$key" "$value"
 }
 
-## debugging hook
 kcs_add_hook \
-  pre_main __kcs_debug_pre_main
-__kcs_debug_pre_main() {
+  post_init __kcs_debug_post_init
+__kcs_debug_post_init() {
   __kcs_debug_key_value_format \
     "$KCS_NAME" "$KCS_VERSION"
   __kcs_debug_key_value_format \
@@ -35,8 +34,12 @@ __kcs_debug_pre_main() {
   __kcs_debug_key_value_format \
     "os" "$(uname -s)"
   __kcs_debug_key_value_format \
-    "hostname" "$(hostname)"
+    "hostname" "$HOSTNAME"
+}
 
+kcs_add_hook \
+  pre_main __kcs_debug_pre_main
+__kcs_debug_pre_main() {
   __kcs_debug_key_value_format \
     "original dir" "$_KCS_DIR_ORIG"
   __kcs_debug_key_value_format \
