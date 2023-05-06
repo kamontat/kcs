@@ -49,8 +49,16 @@ _tests_init() {
   export __TEST_MODE="${TEST_MODE:-$__TEST_MODE_VALIDATE}"
 
   export __TEST_STATUS_PASSED="passed"
+  export __TEST_STATUS_PASSED_SHORT="P"
   export __TEST_STATUS_FAILED="failed"
+  export __TEST_STATUS_FAILED_SHORT="F"
   export __TEST_STATUS_COMPLETED="completed"
+  export __TEST_STATUS_COMPLETED_SHORT="C"
+
+  export __TEST_REASON_NO_SNAPSHOT="no-snapshot"
+  export __TEST_REASON_NO_SNAPSHOT_SHORT="[NS]"
+  export __TEST_REASON_MISMATCH="mismatch"
+  export __TEST_REASON_MISMATCH_SHORT="[MM]"
 
   export __TEST_TYPE_SNAP="snap"
   export __TEST_TYPE_CODE="code"
@@ -90,8 +98,12 @@ _tests_clean() {
   unset __TEST_MODE \
     __TEST_MODE_VALIDATE __TEST_MODE_SNAPSHOT
 
-  unset __TEST_STATUS_PASSED \
-    __TEST_STATUS_FAILED __TEST_STATUS_COMPLETED
+  unset __TEST_STATUS_PASSED __TEST_STATUS_PASSED_SHORT \
+    __TEST_STATUS_FAILED __TEST_STATUS_FAILED_SHORT \
+    __TEST_STATUS_COMPLETED __TEST_STATUS_COMPLETED_SHORT
+
+  unset __TEST_REASON_NO_SNAPSHOT __TEST_REASON_NO_SNAPSHOT_SHORT \
+    __TEST_REASON_MISMATCH __TEST_REASON_MISMATCH_SHORT
 
   unset __TEST_TYPE_SNAP __TEST_TYPE_CODE \
     __TEST_TYPE_OUT __TEST_TYPE_LOG __TEST_TYPE_DIFF
@@ -162,7 +174,7 @@ _test_compare() {
   actual="$(_test_filename "$__TEST_DIR_TEMPORARY" "$name" "$key" "$type")"
 
   if ! test -f "$expected"; then
-    printf "%s:%s" "$__TEST_STATUS_FAILED" "no-snapshot"
+    printf "%s:%s" "$__TEST_STATUS_FAILED" "$__TEST_REASON_NO_SNAPSHOT"
     return 0
   fi
 
@@ -174,7 +186,7 @@ _test_compare() {
 
     ((__TEST_EXIT_CODE++))
     export __TEST_EXIT_CODE
-    printf "%s:%s" "$__TEST_STATUS_FAILED" "diff"
+    printf "%s:%s" "$__TEST_STATUS_FAILED" "$__TEST_REASON_MISMATCH"
     return 0
   fi
 
@@ -205,11 +217,63 @@ _test_run_command() {
 }
 
 _test_print_result() {
-  local name="$1"
-  printf "Case #%d: '%s'\n" \
-    "$((__TEST_INDEX + 1))" "$name"
-  ((__TEST_INDEX++))
+  if test -n "$CI"; then
+    _test_print_result_minimal "$@"
+  else
+    _test_print_result_verbose "$@"
+  fi
 
+  ((__TEST_INDEX++))
+}
+
+_test_print_result_minimal() {
+  local name="$1" suffix
+  shift
+
+  local raw key _status status _reason
+  local suffix
+  for raw in "$@"; do
+    key="${raw%%:*}"
+    _status="${raw#*:}"
+    _reason="${_status#*:}"
+    if [[ "$_status" != "$_reason" ]]; then
+      _status="${_status%%:*}"
+    fi
+
+    unset status
+
+    case "$_status" in
+    "$__TEST_STATUS_COMPLETED") status="$__TEST_STATUS_COMPLETED_SHORT" ;;
+    "$__TEST_STATUS_PASSED") status="$__TEST_STATUS_PASSED_SHORT" ;;
+    "$__TEST_STATUS_FAILED") status="$__TEST_STATUS_FAILED_SHORT" ;;
+    esac
+
+    suffix="$suffix$status"
+    _test_update_total "$_status"
+  done
+
+  test -n "$suffix" && suffix=" $suffix"
+
+  printf "Case #%03d %-27s:%s\n" \
+    "$((__TEST_INDEX + 1))" "$name" "$suffix"
+
+  #   if [[ "$status" != "$reason" ]]; then
+  #     status="${status%%:*}"
+  #     suffix=" ($reason)"
+  #   fi
+
+  #   printf "%4s%s %-15s: %s%s\n" \
+  #     "" "-" "$key" "$status" "$suffix"
+
+  #   _test_update_total "$status"
+  # done
+  # echo
+}
+
+_test_print_result_verbose() {
+  local name="$1"
+  printf "Case #%03d: '%s'\n" \
+    "$((__TEST_INDEX + 1))" "$name"
   shift
 
   local raw key status reason
@@ -225,16 +289,10 @@ _test_print_result() {
       suffix=" ($reason)"
     fi
 
-    ((__TEST_TOTAL++))
-    [[ "$status" == "$__TEST_STATUS_COMPLETED" ]] &&
-      ((__TEST_TOTAL_COMPLETED++))
-    [[ "$status" == "$__TEST_STATUS_PASSED" ]] &&
-      ((__TEST_TOTAL_PASSED++))
-    [[ "$status" == "$__TEST_STATUS_FAILED" ]] &&
-      ((__TEST_TOTAL_FAILED++))
-
     printf "%4s%s %-15s: %s%s\n" \
       "" "-" "$key" "$status" "$suffix"
+
+    _test_update_total "$status"
   done
   echo
 }
@@ -242,6 +300,7 @@ _test_print_result() {
 _test_summary() {
   local line="-----------"
 
+  printf "\n"
   printf "| %-9s | %-9s | %-9s |\n" \
     "$__TEST_STATUS_COMPLETED" \
     "$__TEST_STATUS_PASSED" "$__TEST_STATUS_FAILED"
@@ -252,6 +311,18 @@ _test_summary() {
     "$line" "$line" "$line"
   printf "| %-9s | %-21s |\n" \
     "Total" "$__TEST_TOTAL/$__TEST_INDEX (checks/cases)"
+}
+
+_test_update_total() {
+  local status="$1"
+  [[ "$status" == "$__TEST_STATUS_COMPLETED" ]] &&
+    ((__TEST_TOTAL_COMPLETED++))
+  [[ "$status" == "$__TEST_STATUS_PASSED" ]] &&
+    ((__TEST_TOTAL_PASSED++))
+  [[ "$status" == "$__TEST_STATUS_FAILED" ]] &&
+    ((__TEST_TOTAL_FAILED++))
+
+  ((__TEST_TOTAL++))
 }
 
 _test_name() {
