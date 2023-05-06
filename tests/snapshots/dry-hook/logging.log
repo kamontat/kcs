@@ -42,27 +42,20 @@
 00:00:00 [DBG] |      hook-adder | adding '__kcs_mode_clean' to hook name 'clean'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_clean' to hook name 'post_clean'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_logger_clean' to hook name 'post_clean'
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 3    pre_init hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |     hook-runner | running 6        init hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 4   post_init hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |     hook-runner | running 2    pre_load hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |     hook-runner | running 3        load hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 2   post_load hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 3    pre_main hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 1        main hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |     hook-runner | running 0   post_main hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 1   pre_clean hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 3       clean hook commands (disabled=0)
-00:00:00 [DBG] |    hooks-runner | use default arguments
 00:00:00 [DBG] |     hook-runner | running 2  post_clean hook commands (disabled=0)

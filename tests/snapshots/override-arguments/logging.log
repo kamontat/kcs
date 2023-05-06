@@ -1,12 +1,15 @@
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_mode.sh'
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_commands.sh'
 00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
-00:00:00 [DBG] |  command-finder | checking input main
-00:00:00 [DBG] |  command-finder | add 'main' to commands resolver
-00:00:00 [DBG] |  command-finder | checking input simple
-00:00:00 [DBG] |  command-finder | add 'simple' to commands resolver
-00:00:00 [DBG] |  command-finder | index 2 | checking file main__simple.sh with ''
-00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/tests/commands/main__simple.sh'
+00:00:00 [DBG] |  command-finder | checking input _args
+00:00:00 [DBG] |  command-finder | add '_args' to commands resolver
+00:00:00 [DBG] |  command-finder | checking input override
+00:00:00 [DBG] |  command-finder | add 'override' to commands resolver
+00:00:00 [DBG] |  command-finder | checking input value
+00:00:00 [DBG] |  command-finder | add 'value' to commands resolver
+00:00:00 [DBG] |  command-finder | index 3 | checking file _args__override__value.sh with ''
+00:00:00 [DBG] |  command-finder | index 2 | checking file _args__override.sh with 'value'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/tests/commands/_args__override.sh'
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_hook.sh'
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_hook_register.sh'
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_information.sh'
@@ -45,14 +48,16 @@
 00:00:00 [DBG] |     hook-runner | running 3    pre_init hook commands (disabled=0)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_logger_pre_init' without argument
 00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
-00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_alias' with 1 argument (__kcs_main_alias)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_alias' with 2 argument (__kcs_main_alias value)
 00:00:00 [DBG] |    alias-setter | set alias command from variable
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_hook' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_hook' not found
 00:00:00 [DBG] |     hook-runner | running 6        init hook commands (disabled=0)
-00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_init' with 1 argument (__kcs_main_init_utils)
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_init' with 2 argument (__kcs_main_init_utils builtin/arguments)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_init_utils' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_init_utils' not found
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/utils/builtin/_arguments.sh'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_argument_clean' to hook name 'clean'
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_name' with 1 argument (__kcs_main_name)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_name' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_name' not found
@@ -73,14 +78,12 @@
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_init_check' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_init_check' not found
 00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
-00:00:00 [DBG] |    core-wrapper | starting '__kcs_default_init' without argument
-00:00:00 [DBG] |    core-wrapper | command '__kcs_default_init' not found
-00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_default_init' with 1 argument (value)
+00:00:00 [DBG] |     hook-runner | pass 'custom' values as raw args
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_init' without argument
-00:00:00 [DBG] |    core-wrapper | command '__kcs_main_init' not found
 00:00:00 [DBG] |     hook-runner | running 2    pre_load hook commands (disabled=0)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_mode_load' without argument
-00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
+00:00:00 [DBG] |     hook-runner | pass 'custom' values as raw args
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_parse_options' without argument
 00:00:00 [DBG] |     hook-runner | running 3        load hook commands (disabled=0)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_init' with 1 argument (__kcs_main_utils)
@@ -102,16 +105,17 @@
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_check' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_check' not found
 00:00:00 [DBG] |     hook-runner | running 1        main hook commands (disabled=0)
-00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
+00:00:00 [DBG] |     hook-runner | pass 'custom' values as raw args
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main' without argument
 00:00:00 [DBG] |     hook-runner | running 0   post_main hook commands (disabled=0)
 00:00:00 [DBG] |     hook-runner | running 1   pre_clean hook commands (disabled=0)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_clean' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_clean' not found
-00:00:00 [DBG] |     hook-runner | running 3       clean hook commands (disabled=0)
+00:00:00 [DBG] |     hook-runner | running 4       clean hook commands (disabled=0)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_error_clean' without argument
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_options_clean' without argument
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_mode_clean' without argument
+00:00:00 [DBG] |    core-wrapper | starting '__kcs_argument_clean' without argument
 00:00:00 [DBG] |     hook-runner | running 2  post_clean hook commands (disabled=0)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_utils_clean' without argument
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_logger_clean' without argument
