@@ -160,7 +160,13 @@ _kcs_run_hook() {
         _callback="$tag_value"
         ;;
       "$KCS_HOOK_TAG_RAW")
-        _raw_args+=("${raw_args[@]}")
+        if test -n "$__KCS_CUSTOM_ARGS"; then
+          kcs_debug "$ns" "pass 'custom' values as raw args"
+          _raw_args+=("${KCS_ARGS[@]}")
+        else
+          kcs_debug "$ns" "pass 'default' values as raw args"
+          _raw_args+=("${raw_args[@]}")
+        fi
         ;;
       "$KCS_HOOK_TAG_ARGS")
         eval "_args+=(\"\${${tag_value}[@]}\")"
@@ -191,16 +197,8 @@ _kcs_run_hook() {
 
 _kcs_run_hooks() {
   local ns="hooks-runner"
-  local args=()
+  local args=("$@")
   for name in "${_KCS_HOOK_NAMES[@]}"; do
-    if test -n "$__KCS_CUSTOM_ARGS"; then
-      kcs_debug "$ns" "use custom arguments"
-      args=("${KCS_ARGS[@]}")
-    else
-      kcs_debug "$ns" "use default arguments"
-      args=("$@")
-    fi
-
     _kcs_run_hook "$name" "${args[@]}"
   done
 }
