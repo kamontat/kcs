@@ -3,10 +3,10 @@
 00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
 00:00:00 [DBG] |  command-finder | checking input debug
 00:00:00 [DBG] |  command-finder | add 'debug' to commands resolver
-00:00:00 [DBG] |  command-finder | checking input only
-00:00:00 [DBG] |  command-finder | add 'only' to commands resolver
-00:00:00 [DBG] |  command-finder | index 2 | checking file debug__only.sh with ''
-00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/tests/commands/debug__only.sh'
+00:00:00 [DBG] |  command-finder | checking input single-only
+00:00:00 [DBG] |  command-finder | add 'single-only' to commands resolver
+00:00:00 [DBG] |  command-finder | index 2 | checking file debug__single-only.sh with ''
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/tests/commands/debug__single-only.sh'
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_logger_pre_init' without argument
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_set_alias' with 1 argument (__kcs_main_alias)
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_hook' without argument

@@ -1,0 +1,68 @@
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_mode.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_commands.sh'
+00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
+00:00:00 [DBG] |  command-finder | checking input dry
+00:00:00 [DBG] |  command-finder | add 'dry' to commands resolver
+00:00:00 [DBG] |  command-finder | checking input hook
+00:00:00 [DBG] |  command-finder | add 'hook' to commands resolver
+00:00:00 [DBG] |  command-finder | index 2 | checking file dry__hook.sh with ''
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/tests/commands/dry__hook.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_hook.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_hook_register.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_information.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_options.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_options_internal.sh'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_logger_pre_init' to hook name 'pre_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_set_alias' with '@optional,@cb,@raw' to hook name 'pre_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_hook' with '@optional' to hook name 'pre_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_init' with '@optional,@cb,@args' to hook name 'init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_set_name' with '@optional,@cb' to hook name 'init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_set_version' with '@optional,@cb' to hook name 'init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_set_options' with '@optional,@cb' to hook name 'init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_set_description' with '@optional,@cb' to hook name 'init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_set_help' with '@optional,@cb' to hook name 'init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_check' with '@optional' to hook name 'post_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_init_check' with '@optional' to hook name 'post_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_default_init' with '@optional,@raw' to hook name 'post_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_init' with '@optional,@raw' to hook name 'post_init'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_mode_load' to hook name 'pre_load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_parse_options' with '@optional,@raw' to hook name 'pre_load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_init' with '@optional,@cb,@args' to hook name 'load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_default_setup' with '@optional' to hook name 'load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_setup' with '@optional' to hook name 'load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_check' with '@optional' to hook name 'post_load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_load_check' with '@optional' to hook name 'post_load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_default_config' with '@optional' to hook name 'pre_main'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_config' with '@optional' to hook name 'pre_main'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_check' with '@optional' to hook name 'pre_main'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main' with '@raw' to hook name 'main'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_clean' with '@optional' to hook name 'pre_clean'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_error_clean' to hook name 'clean'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_options_clean' to hook name 'clean'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_mode_clean' to hook name 'clean'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_clean' to hook name 'post_clean'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_logger_clean' to hook name 'post_clean'
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 3    pre_init hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 6        init hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 4   post_init hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 2    pre_load hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 3        load hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 2   post_load hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 3    pre_main hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 1        main hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 0   post_main hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 1   pre_clean hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 3       clean hook commands (disabled=0)
+00:00:00 [DBG] |    hooks-runner | use default arguments
+00:00:00 [DBG] |     hook-runner | running 2  post_clean hook commands (disabled=0)

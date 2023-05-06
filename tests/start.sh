@@ -15,7 +15,13 @@ tests() {
   new_case \
     debug disable
   new_case \
-    debug only
+    debug single-only
+  new_case \
+    debug multiple-only
+  new_case \
+    dry hook
+  new_case \
+    utils init-phase
 }
 
 ###################################################
@@ -189,7 +195,8 @@ _test_run_command() {
   stdcode="$(_test_filename \
     "$basepath" "$name" "$__TEST_KEY_CODE" "$__TEST_TYPE_CODE")"
 
-  DEBUG=1 KCS_TEST=1 KCS_DIR_COMMANDS="$__TEST_DIR_COMMAND" \
+  DEBUG=1 KCS_TEST=1 \
+    KCS_DIR_COMMANDS="$__TEST_DIR_COMMAND" \
     ./scripts/main.sh "$@" >"$stdout" 2>"$stderr"
   local exit_code="$?"
   printf "%d" "$exit_code" >"$stdcode"
