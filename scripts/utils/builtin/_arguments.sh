@@ -6,6 +6,7 @@
 ## Hook: init_utils
 ## Public functions:
 ##   `kcs_argument_override <args...>` - override user argument with input args
+##   `kcs_argument_is_option <input>` - check is input options or not
 
 # set -x #DEBUG    - Display commands and their arguments as they are executed.
 # set -v #VERBOSE  - Display shell input lines as they are read.
@@ -19,6 +20,14 @@ kcs_argument_override() {
   export __KCS_CUSTOM_ARGS=true
   export KCS_ARGS
   KCS_ARGS=("$@")
+}
+
+## Check is input argument is option
+## @param $1 - [required] input string
+## @return   - 0 if input is options; otherwise, return 1
+kcs_argument_is_option() {
+  local input
+  [[ "$input" =~ ^- ]]
 }
 
 kcs_add_hook clean \
