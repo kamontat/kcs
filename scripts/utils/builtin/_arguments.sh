@@ -26,7 +26,7 @@ kcs_argument_override() {
 ## @param $1 - [required] input string
 ## @return   - 0 if input is options; otherwise, return 1
 kcs_argument_is_option() {
-  local input
+  local input="$1"
   [[ "$input" =~ ^- ]]
 }
 
