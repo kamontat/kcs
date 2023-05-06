@@ -115,7 +115,16 @@ __kcs_log() {
     __args+=("$__datetime" "$level" "$namespace")
     if [ "${#args[@]}" -gt 0 ] &&
       echo "$format" | grep -q "%"; then
-      __args+=("${args[@]}")
+      local arg
+      for arg in "${args[@]}"; do
+        ## Override root directory with constant
+        if test -n "$KCS_TEST"; then
+          arg="${arg//$_KCS_DIR_ROOT/\$KCS_DIR_ROOT}"
+          arg="${arg//$HOME/\$HOME}"
+        fi
+
+        __args+=("$arg")
+      done
     fi
 
     if test -n "$__logfile"; then

@@ -1,17 +1,17 @@
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_mode.sh'
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_commands.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_mode.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_commands.sh'
 00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
 00:00:00 [DBG] |  command-finder | checking input main
 00:00:00 [DBG] |  command-finder | add 'main' to commands resolver
 00:00:00 [DBG] |  command-finder | checking input simple
 00:00:00 [DBG] |  command-finder | add 'simple' to commands resolver
 00:00:00 [DBG] |  command-finder | index 2 | checking file main__simple.sh with ''
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/tests/commands/main__simple.sh'
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_hook.sh'
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_hook_register.sh'
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_information.sh'
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_options.sh'
-00:00:00 [DBG] |     file-loader | loading '/Users/kamontat/Desktop/Personal/kcs/scripts/internal/_options_internal.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/tests/commands/main__simple.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_hook.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_hook_register.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_information.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_options.sh'
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_options_internal.sh'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_logger_pre_init' to hook name 'pre_init'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_set_alias' with '@optional,@cb,@raw' to hook name 'pre_init'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_main_hook' with '@optional' to hook name 'pre_init'
