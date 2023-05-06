@@ -42,7 +42,6 @@ kcs_load_utils() {
   else
     kcs_debug "$ns" "utils name '%s' has been loaded, skipped" \
       "$name"
-    return 1
   fi
 }
 
