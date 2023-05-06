@@ -74,12 +74,15 @@ __kcs_log() {
   shift 3
   args=("$@")
 
+  local is_disable_log=false
+
   ## disable logging if it listed on DEBUG_DISABLED and level=debug
   if test -n "$DEBUG_DISABLED" &&
     [[ "$level" == "$KCS_DEBUG_LVL" ]]; then
     for disabled in ${DEBUG_DISABLED//,/ }; do
       if [[ "$disabled" == "$namespace" ]]; then
-        return 0
+        is_disable_log=true
+        break
       fi
     done
   fi
@@ -87,11 +90,17 @@ __kcs_log() {
   ## enabled only logging name if it listed on DEBUG_ONLY and level=debug
   if test -n "$DEBUG_ONLY" &&
     [[ "$level" == "$KCS_DEBUG_LVL" ]]; then
+    is_disable_log=true
     for only in ${DEBUG_ONLY//,/ }; do
-      if [[ "$only" != "$namespace" ]]; then
-        return 0
+      if [[ "$only" == "$namespace" ]]; then
+        is_disable_log=false
+        break
       fi
     done
+  fi
+
+  if "$is_disable_log"; then
+    return 0
   fi
 
   ## only print if user enabled an input level
