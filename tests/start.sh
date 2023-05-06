@@ -10,33 +10,50 @@
 # TEST_KEY=snapshot
 
 tests() {
-  new_case \
-    main simple
-  new_case \
-    debug disable
-  new_case \
-    debug single-only
-  new_case \
-    debug multiple-only
-  new_case \
-    dry hook
-  new_case \
-    utils init-phase
+  tests_case_autodiscovery \
+    "$__TEST_DIR_COMMAND"
+
+  tests_case "override-arguments" \
+    _args override value
 }
 
 ###################################################
 ## Public functions
 ###################################################
 
-new_case() {
-  local name
-  name="$(_test_name "$@")"
-
+tests_case() {
+  local name="$1"
+  shift
   if _tests_is_snapshot_mode; then
     _tests_run_snapshot "$name" "$@"
   elif _tests_is_validate_mode; then
     _test_run_validate "$name" "$@"
   fi
+}
+
+## Only commands without _ prefix will be autodiscovery
+tests_case_autodiscovery() {
+  local dir="$1"
+
+  local name
+  local filepath filename commands=()
+  for filepath in "$dir"/*.sh; do
+    filename="$(basename "${filepath//__/ }")"
+    if [[ "$filename" =~ ^_ ]]; then
+      continue
+    fi
+
+    filename="${filename/\.sh/}"
+    # shellcheck disable=SC2206
+    commands=($filename)
+
+    name="$(_test_name "${commands[@]}")"
+    if _tests_is_snapshot_mode; then
+      _tests_run_snapshot "$name" "${commands[@]}"
+    elif _tests_is_validate_mode; then
+      _test_run_validate "$name" "${commands[@]}"
+    fi
+  done
 }
 
 ###################################################
