@@ -48,7 +48,7 @@ _kcs_register_hooks() {
   kcs_add_hook load \
     __kcs_default_setup:@optional
   kcs_add_hook load \
-    __kcs_main_setup:@optional
+    __kcs_main_setup:@optional,@raw
 
   kcs_add_hook post_load \
     __kcs_utils_check:@optional
