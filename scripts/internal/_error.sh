@@ -15,8 +15,31 @@ __KCS_EC_HELP="# Error codes"
 ## register new errcode
 ## code must be between 0 - 255
 __kcs_register_error() {
+  local ns="error-registry"
   local name="$1" code="$2" desc="$3"
 
+  for n in "${__KCS_EC_VARIABLES[@]}"; do
+    if [[ "$name" == "$n" ]]; then
+      kcs_warn "$ns" \
+        "duplicate error: name='%s'" \
+        "$name"
+      return 1
+    fi
+  done
+
+  for c in "${__KCS_EC_WHITELIST[@]}"; do
+    if [[ "$code" == "$c" ]]; then
+      kcs_warn "$ns" \
+        "duplicate error: name='%s' code='%d'" \
+        "$name" "$code"
+
+      return 1
+    fi
+  done
+
+  kcs_debug "$ns" \
+    "register new error '%d' (%s)" \
+    "$code" "$name"
   ## create errcode variable
   eval "export $name=$code"
   ## add errcode to code whitelist
@@ -40,15 +63,15 @@ __kcs_register_error \
   "KCS_EC_CHECK_FAIL" 30 "validation failed"
 
 __kcs_register_error \
+  "KCS_EC_FILE_NOT_FOUND" 125 "file not found"
+__kcs_register_error \
+  "KCS_EC_UTIL_NOT_FOUND" 126 "missing required utility file"
+__kcs_register_error \
   "KCS_EC_CMD_NOT_FOUND" 127 "command not found"
 __kcs_register_error \
   "KCS_EC_ARG_NOT_FOUND" 128 "missing required argument"
 __kcs_register_error \
   "KCS_EC_OPT_NOT_FOUND" 129 "missing required option"
-__kcs_register_error \
-  "KCS_EC_FILE_NOT_FOUND" 130 "file not found"
-__kcs_register_error \
-  "KCS_EC_UTIL_NOT_FOUND" 131 "missing required utility file"
 
 unset __kcs_register_error
 

@@ -1,3 +1,14 @@
+00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_error.sh'
+00:00:00 [DBG] |  error-registry | register new error '1' (KCS_EC_UNKNOWN)
+00:00:00 [DBG] |  error-registry | register new error '11' (KCS_EC_INVALID_ARGS)
+00:00:00 [DBG] |  error-registry | register new error '12' (KCS_EC_INVALID_OPTS)
+00:00:00 [DBG] |  error-registry | register new error '13' (KCS_EC_INVALID_MODE)
+00:00:00 [DBG] |  error-registry | register new error '30' (KCS_EC_CHECK_FAIL)
+00:00:00 [DBG] |  error-registry | register new error '125' (KCS_EC_FILE_NOT_FOUND)
+00:00:00 [DBG] |  error-registry | register new error '126' (KCS_EC_UTIL_NOT_FOUND)
+00:00:00 [DBG] |  error-registry | register new error '127' (KCS_EC_CMD_NOT_FOUND)
+00:00:00 [DBG] |  error-registry | register new error '128' (KCS_EC_ARG_NOT_FOUND)
+00:00:00 [DBG] |  error-registry | register new error '129' (KCS_EC_OPT_NOT_FOUND)
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_mode.sh'
 00:00:00 [DBG] |     file-loader | loading '$KCS_DIR_ROOT/scripts/internal/_commands.sh'
 00:00:00 [DBG] |     file-loader | loaded _base.sh in internal file
