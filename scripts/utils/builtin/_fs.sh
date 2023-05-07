@@ -36,7 +36,9 @@ kcs_create_dir() {
 
   local dir="$base/$path"
   if ! test -d "$dir"; then
-    mkdir -r "$dir" || return $?
+    mkdir -r "$dir" 2>/dev/null ||
+      sudo mkdir -r "$dir" 2>/dev/null ||
+      return $?
     printf "%s" "$dir"
     return 0
   fi
@@ -62,7 +64,9 @@ kcs_create_file() {
 
   local file="$base/$path"
   if ! test -f "$file"; then
-    touch "$file" || return $?
+    touch "$file" 2>/dev/null ||
+      sudo touch "$file" 2>/dev/null ||
+      return $?
     printf "%s" "$file"
     return 0
   fi

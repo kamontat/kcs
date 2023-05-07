@@ -6,7 +6,7 @@
 ## Hook: <any>
 ## Public functions:
 ##   `kcs_copy <base> <target> <name> <new>` - copy file or directory from base
-##   `kcs_lazy_copy <b> <t> <n> <w>` - copy file or directory if required
+##   `kcs_copy_lazy <b> <t> <n> <w>` - copy file or directory if required
 
 ## NOTE: All utility files must formatted as `_<name>.sh`.
 
@@ -37,7 +37,7 @@ kcs_copy() {
 ##        $2 - [required] target base directory
 ##        $3 - [required] current file/directory name
 ##        $4 - [optional] copied file/directory name
-kcs_lazy_copy() {
+kcs_copy_lazy() {
   __kcs_copy "$1" "$2" "$3" "$4" "lazy"
 }
 

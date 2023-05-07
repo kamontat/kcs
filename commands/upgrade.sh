@@ -42,13 +42,13 @@ __kcs_main() {
   kcs_copy "$basepath" "$target" "internal" || return $?
   kcs_copy "$basepath" "$target" "utils/builtin" || return $?
 
-  kcs_lazy_copy "$basepath" "$target" "README.md" || return $?
-  kcs_lazy_copy "$basepath" "$target" ".gitignore" || return $?
-  kcs_lazy_copy "$basepath" "$target" "main.sh" || return $?
+  kcs_copy_lazy "$basepath" "$target" "README.md" || return $?
+  kcs_copy_lazy "$basepath" "$target" ".gitignore" || return $?
+  kcs_copy_lazy "$basepath" "$target" "main.sh" || return $?
 
-  kcs_lazy_copy "$basepath" "$target" "commands/__example.sh" || return $?
-  kcs_lazy_copy "$basepath" "$target" "commands/__exec.sh" || return $?
-  kcs_lazy_copy "$basepath" "$target" "commands/README.md" || return $?
+  kcs_copy_lazy "$basepath" "$target" "commands/__example.sh" || return $?
+  kcs_copy_lazy "$basepath" "$target" "commands/__exec.sh" || return $?
+  kcs_copy_lazy "$basepath" "$target" "commands/README.md" || return $?
 
   kcs_info "$ns" \
     "upgraded successfully"
