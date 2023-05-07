@@ -40,7 +40,7 @@
 00:00:00 [DBG] |      hook-adder | adding '__kcs_parse_options' with '@optional,@raw' to hook name 'pre_load'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_init' with '@optional,@cb,@args' to hook name 'load'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_default_setup' with '@optional' to hook name 'load'
-00:00:00 [DBG] |      hook-adder | adding '__kcs_main_setup' with '@optional' to hook name 'load'
+00:00:00 [DBG] |      hook-adder | adding '__kcs_main_setup' with '@optional,@raw' to hook name 'load'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_utils_check' with '@optional' to hook name 'post_load'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_load_check' with '@optional' to hook name 'post_load'
 00:00:00 [DBG] |      hook-adder | adding '__kcs_default_config' with '@optional' to hook name 'pre_main'
@@ -101,6 +101,7 @@
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_utils' not found
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_default_setup' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_default_setup' not found
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |    core-wrapper | starting '__kcs_main_setup' without argument
 00:00:00 [DBG] |    core-wrapper | command '__kcs_main_setup' not found
 00:00:00 [DBG] |     hook-runner | running 2   post_load hook commands (disabled=0)

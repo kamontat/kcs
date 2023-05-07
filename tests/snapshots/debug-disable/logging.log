@@ -33,6 +33,7 @@
 00:00:00 [DBG] |     hook-runner | running 2    pre_load hook commands (disabled=0)
 00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |     hook-runner | running 3        load hook commands (disabled=0)
+00:00:00 [DBG] |     hook-runner | pass 'default' values as raw args
 00:00:00 [DBG] |     hook-runner | running 2   post_load hook commands (disabled=0)
 00:00:00 [DBG] |     hook-runner | running 3    pre_main hook commands (disabled=0)
 00:00:00 [DBG] |     hook-runner | running 1        main hook commands (disabled=0)
