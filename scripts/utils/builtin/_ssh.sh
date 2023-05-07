@@ -275,6 +275,7 @@ kcs_ssh_copy_to() {
   shift
 
   local raw src dest
+  local is_err=false
   for raw in "$@"; do
     src="${raw%%:*}"
     dest="${raw#*:}"
@@ -286,8 +287,13 @@ kcs_ssh_copy_to() {
     else
       kcs_error "$ns" "file/folder not found at '%s'" \
         "$src"
+      is_err=true
     fi
   done
+
+  if $is_err; then
+    return "$KCS_EC_FILE_NOT_FOUND"
+  fi
 }
 
 ## works same as scp on profile
