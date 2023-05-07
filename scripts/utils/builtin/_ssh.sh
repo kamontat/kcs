@@ -232,9 +232,6 @@ kcs_ssh() {
     args[0]="$d$dd$dy$ll${args[0]}"
   fi
 
-  kcs_debug "$ns" "options: %s" "${opts[*]}"
-  kcs_debug "$ns" "arguments: %s" "${args[*]}"
-
   # shellcheck disable=SC2029
   kcs_exec ssh "${opts[@]}" \
     "$name" \
@@ -310,6 +307,8 @@ kcs_scp() {
   config="$(__kcs_ssh_get_config "$name" "$ctype")"
   shift
 
+  kcs_debug "$ns" "connecting '%s' using '%s' config" "$name" "$ctype"
+
   ## -C => Requests compression of all data
   ## -T => Disable pseudo-terminal allocation
   local opts=("-CT" "-rq") args=("$@")
@@ -317,8 +316,6 @@ kcs_scp() {
     opts+=("-F" "$config")
   fi
 
-  kcs_debug "$ns" "options: %s" "${opts[*]}"
-  kcs_debug "$ns" "arguments: %s" "${args[*]}"
   kcs_exec scp "${opts[@]}" "${args[@]}"
 }
 
@@ -326,16 +323,25 @@ kcs_scp() {
 ## @param $1 - [required] profile name
 ## @return   - ssh type
 __kcs_ssh_get_type() {
+  local ns="ssh-type-getter"
   local name="$1"
 
   ## If cached exist, use cached type instead
   if test -n "$__KCS_SSH_TYPE"; then
+    kcs_debug "$ns" \
+      "use cached type, return '%s' type" \
+      "$__KCS_SSH_TYPE"
+
     printf "%s" "$__KCS_SSH_TYPE"
     return 0
   fi
 
   case "$__KCS_SSH_MODE" in
   "$KCS_SSH_MODE_AUTO")
+    kcs_debug "$ns" \
+      "resolving '%s' mode" \
+      "$__KCS_SSH_MODE"
+
     if __kcs_ssh_can_connect "$name"; then
       __KCS_SSH_TYPE="$KCS_SSH_TYPE_LOCAL"
     elif __kcs_ssh_has_profile "$name" "$KCS_SSH_TYPE_PROXY"; then
@@ -388,12 +394,15 @@ __kcs_ssh_new_profile() {
 ## @param $1 - [required] profile name
 ## @return   - zero if profile is connectable; otherwise, return 1
 __kcs_ssh_can_connect() {
+  local ns="ssh-connector"
   local name="$1" hostname port
   hostname="$(__kcs_ssh_search_config "$name" "$KCS_SSH_TYPE_LOCAL" "HostName")"
   port="$(__kcs_ssh_search_config "$name" "$KCS_SSH_TYPE_LOCAL" "Port")"
 
   ## No config found, meaning cannot connect
   if test -z "$hostname" || test -z "$port"; then
+    kcs_debug "$ns" \
+      "ssh-config not found"
     return 1
   fi
 
@@ -404,6 +413,10 @@ __kcs_ssh_can_connect() {
   args+=("-w" "1" "-H" "1" "-J" "1" "-G" "1")
   ## set arguments
   args+=("$hostname" "$port")
+  kcs_debug "$ns" \
+    "checking '%s' using %s %s" \
+    "$name" "$cmd" "${args[*]}"
+
   ## Only tested on MacOS
   "$cmd" "${args[@]}" 2>/dev/null
 }
