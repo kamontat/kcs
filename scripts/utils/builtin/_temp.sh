@@ -26,7 +26,7 @@ __KCS_EXEC_TEMP_CLEANUP=".temp.ekcs"
 ## cleanup all files/folders created by
 ## kcs_temp_create_* function when on clean hook
 kcs_conf_temp_auto_clean() {
-  local ns="config temp"
+  local ns="temp-configure"
   __KCS_TEMP_AUTO_CLEANUP=true
   kcs_debug "$ns" \
     "enabled auto cleanup"
@@ -35,7 +35,7 @@ kcs_conf_temp_auto_clean() {
 ## cleanup all files/folders created by
 ## kcs_temp_create_* function when on clean hook
 kcs_conf_temp_auto_clean_all() {
-  local ns="config temp"
+  local ns="temp-configure"
   __KCS_TEMP_AUTO_CLEANUP=all
   kcs_debug "$ns" \
     "enabled auto cleanup all"
@@ -44,7 +44,7 @@ kcs_conf_temp_auto_clean_all() {
 ## not cleanup any file/folder created by
 ## kcs_temp_create_* function
 kcs_conf_temp_no_clean() {
-  local ns="config temp"
+  local ns="temp-configure"
   unset __KCS_TEMP_AUTO_CLEANUP
   kcs_debug "$ns" \
     "disabled auto cleanup"
