@@ -125,6 +125,11 @@ __kcs_copy() {
   elif test -d "$ipath"; then
     ftype="directory"
     test_args+=("-d")
+
+    ipath="$ipath/./"
+    ## remove double slash if exist
+    ipath="${ipath//\/\///}"
+
     "$__KCS_COPIER_AUTO_CREATE" &&
       kcs_create_dir "$opath"
   fi
@@ -170,9 +175,6 @@ __kcs_cp() {
   local shasum no_change=false
   if [[ "$ftype" == "directory" ]]; then
     args+=("-r")
-    ipath="$ipath/./"
-    ## remove double slash if exist
-    ipath="${ipath//\/\///}"
 
     local checksum1 checksum2
     checksum1="$(kcs_temp_create_file)"
@@ -236,6 +238,10 @@ __kcs_rsync() {
 
   if [[ "$mode" == "lazy" ]]; then
     args+=(--checksum)
+  fi
+
+  if [[ "$ftype" == "directory" ]]; then
+    args+=(--recursive)
   fi
 
   args+=("$ipath" "$opath")
