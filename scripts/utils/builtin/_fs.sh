@@ -22,24 +22,22 @@ kcs_utils_register "builtin/fs"
 ## @param $1 - [required] base directory
 ##        $n - [optional] optional sub directory
 ## @return   - return non-zero if cannot create
-##           - and print absolute filepath
+##           - and print absolute filepath (only if input second arguments)
 ## @example  - kcs_create_dir "/tmp/test"
 ##           - kcs_create_dir "/tmp/test" "hello"
 kcs_create_dir() {
-  local base="$1" path
-  shift
-
-  path="$(
+  local dir
+  dir="$(
     IFS=/
     echo "$*" | tr -s /
   )"
 
-  local dir="$base/$path"
   if ! test -d "$dir"; then
-    mkdir -r "$dir" 2>/dev/null ||
-      sudo mkdir -r "$dir" 2>/dev/null ||
+    mkdir -p "$dir" 2>/dev/null ||
+      sudo mkdir -p "$dir" 2>/dev/null ||
       return $?
-    printf "%s" "$dir"
+    [ "$#" -gt 1 ] &&
+      printf "%s" "$dir"
     return 0
   fi
 
@@ -50,24 +48,24 @@ kcs_create_dir() {
 ## @param $1 - [required] base directory (or file)
 ##        $n - [optional] optional file path
 ## @return   - return non-zero if cannot create
-##           - and print absolute filepath
+##           - and print absolute filepath (only if input second arguments)
 ## @example  - kcs_create_file "/tmp/test.txt"
 ##           - kcs_create_file "/tmp" "test.txt"
 kcs_create_file() {
-  local base="$1" path
-  shift
-
-  path="$(
+  local file
+  file="$(
     IFS=/
     echo "$*" | tr -s /
   )"
 
-  local file="$base/$path"
   if ! test -f "$file"; then
+    kcs_create_dir "$(dirname "$file")"
+
     touch "$file" 2>/dev/null ||
       sudo touch "$file" 2>/dev/null ||
       return $?
-    printf "%s" "$file"
+    [ "$#" -gt 1 ] &&
+      printf "%s" "$file"
     return 0
   fi
 

@@ -5,8 +5,11 @@
 ##   copy current to target
 ## Hook: <any>
 ## Public functions:
+##   `kcs_conf_copy_auto_create` - force copy to create missing directory
+##   `kcs_conf_copy_never_create` - force copy to never missing directory
 ##   `kcs_copy <base> <target> <name> <new>` - copy file or directory from base
-##   `kcs_copy_lazy <b> <t> <n> <w>` - copy file or directory if required
+##   `kcs_copy_missing <b> <t> <n> <w>` - copy file or directory if missing
+##   `kcs_copy_lazy <b> <t> <n> <w>` - copy file or directory if needed
 
 ## NOTE: All utility files must formatted as `_<name>.sh`.
 
@@ -17,7 +20,25 @@
 
 ## Register loaded utilities
 kcs_utils_register "builtin/copier" \
-  "builtin/temp"
+  "builtin/temp" builtin/fs
+
+__KCS_COPIER_AUTO_CREATE=true
+
+## make copy will auto create directory on target
+kcs_conf_copy_auto_create() {
+  local ns="copy-configure"
+  __KCS_COPIER_AUTO_CREATE=true
+  kcs_debug "$ns" \
+    "enabled auto create directory"
+}
+
+## make copy never create directory on target
+kcs_conf_copy_never_create() {
+  local ns="copy-configure"
+  __KCS_COPIER_AUTO_CREATE=false
+  kcs_debug "$ns" \
+    "disable auto create directory"
+}
 
 ## copy file or directory from base
 ## @param $1 - [required] current base directory
@@ -41,6 +62,15 @@ kcs_copy_lazy() {
   __kcs_copy "$1" "$2" "$3" "$4" "lazy"
 }
 
+## copying if and only if target is missing
+## @param $1 - [required] current base directory
+##        $2 - [required] target base directory
+##        $3 - [required] current file/directory name
+##        $4 - [optional] copied file/directory name
+kcs_copy_missing() {
+  __kcs_copy "$1" "$2" "$3" "$4" "missing"
+}
+
 ## internal copy wrapper using cp command with kcs configuration
 ## this is not support regex/globcard path
 ## @param $1 - [required] current base directory
@@ -52,14 +82,12 @@ __kcs_copy() {
   local ns="copier" ftype="unknown"
   local ibase="${1:?}" obase="${2:?}"
   local iname="${3#/*}" oname="${4:-$3}"
-  local is_lazy="$5"
+  local mode="$5"
 
-  test -n "$is_lazy" && ns="lazy-copier"
+  test -n "$mode" && ns="$mode-copier"
   oname="${oname#/*}"
 
   local ipath opath
-  local checksum
-  checksum="$(kcs_temp_create_file)"
 
   if test -n "$iname"; then
     ipath="$ibase/$iname"
@@ -75,24 +103,46 @@ __kcs_copy() {
   fi
 
   kcs_debug "$ns" "starting copy '%s'" "$ftype"
+  kcs_debug "$ns" \
+    "input: %s, output: %s" \
+    "$ipath" "$opath"
 
-  local cmd="cp" cp_args=()
+  local cmd="cp" cp_args=() test_args=()
   local shasum no_change
   if [[ "$ftype" == "directory" ]]; then
+    "$__KCS_COPIER_AUTO_CREATE" &&
+      kcs_create_dir "$opath"
+
     cp_args+=("-r")
+    test_args+=("-d")
 
     ipath="$ipath/./"
     ## remove double slash if exist
     ipath="${ipath//\/\///}"
+
+    return 0
   elif [[ "$ftype" == "file" ]]; then
+    test_args+=("-f")
+
     ## If lazy enabled and same content, return
-    if test -n "$is_lazy"; then
+    if [[ "$mode" == "lazy" ]]; then
+      local checksum
+      checksum="$(kcs_temp_create_file)"
+
+      "$__KCS_COPIER_AUTO_CREATE" &&
+        kcs_create_file "$opath"
       read -r shasum _ < <(sha256sum "$opath")
       echo "$shasum $ipath" >"$checksum"
       if sha256sum --check --status "$checksum"; then
         no_change=true
       fi
     fi
+  fi
+
+  test_args+=("$opath")
+  if [[ "$mode" == "missing" ]] &&
+    test "${test_args[@]}"; then
+    no_change=true
   fi
 
   if test -n "$no_change"; then
