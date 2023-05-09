@@ -21,14 +21,14 @@ This is a scripts collection for highly customizable shell scripts.
 
 OR
 
-Using `KCS_DIR_COMMANDS=$PWD/commands ./scripts/main.sh release` to release new version
+Using `./scripts/main.sh release` to release new version
 
 ## Example
 
 You can try example command using below script:
 
 ```bash
-KCS_DIR_COMMANDS=$PWD/commands ./scripts/main.sh test
+./scripts/main.sh test
 ```
 
 ## Tests

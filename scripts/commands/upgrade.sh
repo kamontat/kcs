@@ -26,18 +26,26 @@ export KCS_INIT_UTILS=(
   builtin/checker
   builtin/validator
   builtin/copier
+  builtin/fs
 )
+
+__kcs_main_check() {
+  local arg="${KCS_COMMANDS[0]}"
+  local basepath="$_KCS_DIR_SCRIPT" target="$arg/scripts"
+
+  kcs_create_dir "$target"
+
+  kcs_verify_present "$arg" "first argument"
+
+  kcs_verify_dir "$basepath"
+  kcs_verify_dir "$target"
+}
 
 __kcs_main() {
   local ns="$KCS_NAME"
   local arg="${KCS_COMMANDS[0]}"
 
-  kcs_verify_present "$arg" "first argument"
-
   local basepath="$_KCS_DIR_SCRIPT" target="$arg/scripts"
-
-  kcs_verify_dir "$basepath"
-  kcs_verify_dir "$target"
 
   kcs_copy "$basepath" "$target" "internal" || return $?
   kcs_copy "$basepath" "$target" "utils/builtin" || return $?
@@ -48,6 +56,7 @@ __kcs_main() {
 
   kcs_copy_lazy "$basepath" "$target" "commands/__example.sh" || return $?
   kcs_copy_lazy "$basepath" "$target" "commands/__exec.sh" || return $?
+  kcs_copy_missing "$basepath" "$target" "commands/_default.sh" || return $?
   kcs_copy_lazy "$basepath" "$target" "commands/README.md" || return $?
 
   kcs_info "$ns" \
