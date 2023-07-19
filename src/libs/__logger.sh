@@ -52,13 +52,15 @@ _kcs_log_init() {
     kcs_log_debug "$ns" "logger already initiated, skipped" &&
     return 0
 
-  local i
-  for i in ${LOG_LEVEL//,/ }; do
-    __kcs_log_is_silent "$i" && _KCS_LOG_SLT_ENABLED=true
-    __kcs_log_is_error "$i" && _KCS_LOG_ERR_ENABLED=true
-    __kcs_log_is_warn "$i" && _KCS_LOG_WRN_ENABLED=true
-    __kcs_log_is_info "$i" && _KCS_LOG_INF_ENABLED=true
-    __kcs_log_is_debug "$i" && _KCS_LOG_DBG_ENABLED=true
+  test -z "$LOG_LEVEL" && LOG_LEVEL="error,warn,info"
+
+  local lvl
+  for lvl in ${LOG_LEVEL//,/ }; do
+    __kcs_log_is_silent "$lvl" && _KCS_LOG_SLT_ENABLED=true
+    __kcs_log_is_error "$lvl" && _KCS_LOG_ERR_ENABLED=true
+    __kcs_log_is_warn "$lvl" && _KCS_LOG_WRN_ENABLED=true
+    __kcs_log_is_info "$lvl" && _KCS_LOG_INF_ENABLED=true
+    __kcs_log_is_debug "$lvl" && _KCS_LOG_DBG_ENABLED=true
   done
 
   test -n "$DEBUG" && [[ "$DEBUG" =~ ^$KCS_LOG_NAME ]] &&

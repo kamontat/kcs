@@ -72,7 +72,7 @@ __kcs_cmd_with_silent() {
 }
 __kcs_cmd_with_optional() {
   local ns="callback.cmd"
-  kcs_log_error "$ns" "command for arguments [%s] is missing" "$*"
+  kcs_log_error "$ns" "arguments [%s] is invalid" "$*"
   return 1
 }
 __kcs_cmd_with_throw() {
