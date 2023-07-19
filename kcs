@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [ -f "$PWD/src/main.sh" ]; then
+  "$PWD/src/main.sh" "$@"
+else
+  echo "cannot found main.sh file" >&2
+  exit 1
+fi
