@@ -108,9 +108,6 @@ _kct_run_verify() {
   local tmpdir
   tmpdir="$(_kct_tmp_new_dir "$name")"
 
-  local tmpout="$tmpdir/$KCT_SNAPSHOT_STDOUT"
-  local tmperr=""
-  local tmplog="$tmpdir/$KCT_SNAPSHOT_STDLOG"
   _kct_run_snapshot "$name" "$tmpdir" "$@"
 
   local is_match_err=false is_match_out=false is_match_log=false

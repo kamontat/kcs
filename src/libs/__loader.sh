@@ -149,8 +149,8 @@ __kcs_ld_acb_shell() {
   runner="$(command -v bash)"
   test -z "$runner" && runner="$SHELL"
 
-  kcs_log_debug "$ns" \
-    "run '%s' using '%s' with %d args [%s]" "$filepath" "$runner" "$#" "$*"
+  kcs_log_debug "$ns" "run '%s' using '%s' with %d args [%s]" \
+    "$filepath" "$(basename "$runner")" "$#" "$*"
   "$runner" "$filepath" "$@"
 }
 __kcs_ld_acb_function() {

@@ -7,7 +7,7 @@
 [DBG] argument.base        checking input: 'echo'
 [DBG] argument.base        add 'echo' as arguments
 [DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/commands/echo.sh'
-[DBG] shell.loader         run '$KCT_PATH_TESTDIR/commands/echo.sh' using '/bin/bash' with 0 args []
+[DBG] shell.loader         run '$KCT_PATH_TESTDIR/commands/echo.sh' using 'bash' with 0 args []
 [DBG] init.logger          logger already initiated, skipped
 [DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_lifecycle.sh'
 [DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_lifecycle.sh'
