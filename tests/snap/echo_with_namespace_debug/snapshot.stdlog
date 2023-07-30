@@ -1,0 +1,13 @@
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_commands.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_commands.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_DIR_SRC/libs/_commands.sh'
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/commands/echo.sh'
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_lifecycle.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_lifecycle.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_DIR_SRC/libs/_lifecycle.sh'
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_hooks.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_hooks.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_DIR_SRC/libs/_hooks.sh'
+[DBG] do.loader            checking '__kcs_echo_main' function
+[DBG] do.loader            checking '_kcs_commands_clean' function
+[DBG] do.loader            checking '_kcs_log_clean' function

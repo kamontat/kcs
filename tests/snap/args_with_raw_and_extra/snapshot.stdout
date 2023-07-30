@@ -1,0 +1,5 @@
+name  : arguments
+ns    : arguments.command
+args  : 3 [a b c]
+raw   : hello -- extra argument
+extra : <missing>

@@ -5,15 +5,21 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_PATH_DIR_ORIG="$PWD"
-cd "$(dirname "$0")" || exit 1
-export KCS_PATH_DIR_SRC="$PWD"
-cd ".." || exit 1
-export KCS_PATH_DIR_ROOT="$PWD"
+__kcs_default_main() {
+  return 0
+}
+
+if test -z "$_KCS_MAIN_MODE"; then
+  export KCS_PATH_DIR_ORIG="$PWD"
+  cd "$(dirname "$0")" || exit 1
+  export KCS_PATH_DIR_SRC="$PWD"
+  cd ".." || exit 1
+  export KCS_PATH_DIR_ROOT="$PWD"
+fi
 
 # shellcheck source=/dev/null
 source "$KCS_PATH_DIR_SRC/libs/base.sh" || exit 1
 # shellcheck source=/dev/null
-source "$KCS_PATH_DIR_SRC/libs/main.sh" || exit 1
+source "$KCS_PATH_DIR_SRC/libs/command.sh" || exit 1
 
-kcs_main_start "$@"
+kcs_command_start 'default' "$@"

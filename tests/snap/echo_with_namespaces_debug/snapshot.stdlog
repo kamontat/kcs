@@ -1,0 +1,15 @@
+[DBG] add.hooks            adding '__kcs_echo_main' with '@raw,@varargs' to hook name 'main'
+[DBG] add.hooks            adding '_kcs_commands_clean' with '@optional' to hook name 'clean'
+[DBG] add.hooks            adding '_kcs_log_clean' to hook name 'post_clean'
+[DBG] runner.hooks         found 0 callbacks on 'pre_init' hook
+[DBG] runner.hooks         found 0 callbacks on 'init' hook
+[DBG] runner.hooks         found 0 callbacks on 'post_init' hook
+[DBG] runner.hooks         found 0 callbacks on 'pre_main' hook
+[DBG] runner.hooks         found 1 callbacks on 'main' hook
+[DBG] runner.hooks         using 'kcs_ld_func' for '__kcs_echo_main' callback
+[DBG] runner.hooks         found 0 callbacks on 'post_main' hook
+[DBG] runner.hooks         found 0 callbacks on 'pre_clean' hook
+[DBG] runner.hooks         found 1 callbacks on 'clean' hook
+[DBG] runner.hooks         using 'kcs_ld_func_optional' for '_kcs_commands_clean' callback
+[DBG] runner.hooks         found 1 callbacks on 'post_clean' hook
+[DBG] runner.hooks         using 'kcs_ld_func' for '_kcs_log_clean' callback

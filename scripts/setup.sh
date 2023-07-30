@@ -17,15 +17,16 @@ if [ -f \"\$(dirname \"\$0\")/.kcs/main.sh\" ]; then
 else
   echo \"cannot found main.sh file\" >&2
   exit 1
-fi
-"
+fi"
 
 echo "On $__INSTALL_DIR, installing..."
 
 test -d "$__INSTALL_DIR/scripts/.kcs" &&
   rm -r "$__INSTALL_DIR/scripts/.kcs"
 mkdir -p "$__INSTALL_DIR/scripts" &&
-  git clone "$__REPO" "$__TEMP" &&
+  git clone "$__REPO" \
+    --branch "main" --single-branch \
+    "$__TEMP" &&
   mv "$__TEMP/src" "$__INSTALL_DIR/scripts/.kcs" &&
   echo "$__ENTRYPOINT" >"$__INSTALL_DIR/scripts/kcs" &&
   chmod +x "$__INSTALL_DIR/scripts/kcs" &&

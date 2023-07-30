@@ -52,10 +52,11 @@ _kcs_log_init() {
     kcs_log_debug "$ns" "logger already initiated, skipped" &&
     return 0
 
-  test -z "$LOG_LEVEL" && LOG_LEVEL="error,warn,info"
+  ## Default log levels
+  test -z "$KCS_LOGLVL" && KCS_LOGLVL="error,warn,info"
 
   local lvl
-  for lvl in ${LOG_LEVEL//,/ }; do
+  for lvl in ${KCS_LOGLVL//,/ }; do
     __kcs_log_is_silent "$lvl" && _KCS_LOG_SLT_ENABLED=true
     __kcs_log_is_error "$lvl" && _KCS_LOG_ERR_ENABLED=true
     __kcs_log_is_warn "$lvl" && _KCS_LOG_WRN_ENABLED=true
@@ -85,12 +86,14 @@ _kcs_log_clean() {
 ## variables:
 ##   $DEBUG='kcs[:<ns>,<ns>]'
 ##         - to enabled debug (omit ns to enabled all)
-##   $LOG_LEVEL='level,level,...'
+##   $KCS_LOGLVL='level,level,...'
 ##         - to enabled only specific level
 ##         - supported list: debug,info,warn,error,silent
-##   $LOG_FORMAT='{dt} {ns} {lvl} {msg}'
+##   $KCS_LOGFMT='{dt} {ns} {lvl} {msg}'
 ##         - to custom log output style
 ##         - supported list: dt, d, t, ns, lvl, msg, fmt, args
+##   $KCS_LOGOUT=/tmp/abc
+##         - writing log message to input filepath
 __kcs_log() {
   local lvl="$1" ns="${2// /-}"
   local format="$3"
@@ -138,12 +141,36 @@ __kcs_log() {
     "t=$(date +"%H:%M:%S")"
   )
   variables+=(
-    "lvl=$lvl" "ns=$(printf '%-15s' "$ns")"
+    "lvl=$lvl" "ns=$(printf '%-20s' "$ns")"
     "msg=$msg" "fmt=$format" "args=${args[*]}"
   )
 
-  _kcs_template "${LOG_FORMAT:-$template}" "${variables[@]}" >&2
-  echo >&2
+  local output
+  output="$(kcs_template "${KCS_LOGFMT:-$template}" "${variables[@]}")"
+  output="$(__kcs_log_normalize "$output")"
+
+  if test -n "$KCS_LOGOUT"; then
+    local dir
+    dir="$(dirname "$KCS_LOGOUT")"
+    if ! test -d "$dir"; then
+      echo "logs directory is missing ($dir)" >&2
+      exit 1
+    fi
+
+    echo "$output" >>"$KCS_LOGOUT"
+  else
+    echo "$output" >&2
+  fi
+}
+
+__kcs_log_normalize() {
+  local input="$1"
+  input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
+  input="${input//$KCS_PATH_DIR_SRC/\$KCS_PATH_DIR_SRC}"
+  input="${input//$KCS_PATH_DIR_ROOT/\$KCS_PATH_DIR_ROOT}"
+  input="${input//$HOME/\$HOME}"
+
+  printf '%s' "$input"
 }
 
 __kcs_log_is_debug() {

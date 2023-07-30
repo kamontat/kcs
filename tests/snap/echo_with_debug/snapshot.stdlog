@@ -1,0 +1,43 @@
+[DBG] init.logger          initiated logger settings
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_commands.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_commands.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_DIR_SRC/libs/_commands.sh'
+[DBG] source.loader        run '$KCS_PATH_DIR_SRC/libs/_commands.sh' with 0 args []
+[DBG] loaded.loader        saving 'libs:commands' as loaded module
+[DBG] argument.base        checking input: 'echo'
+[DBG] argument.base        add 'echo' as arguments
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/commands/echo.sh'
+[DBG] shell.loader         run '$KCT_PATH_TESTDIR/commands/echo.sh' using '/bin/bash' with 0 args []
+[DBG] init.logger          logger already initiated, skipped
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_lifecycle.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_lifecycle.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_DIR_SRC/libs/_lifecycle.sh'
+[DBG] source.loader        run '$KCS_PATH_DIR_SRC/libs/_lifecycle.sh' with 0 args []
+[DBG] loaded.loader        saving 'libs:lifecycle' as loaded module
+[DBG] command.lib          start 'echo' command without args
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/_hooks.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_DIR_ROOT/libs/_hooks.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_DIR_SRC/libs/_hooks.sh'
+[DBG] source.loader        run '$KCS_PATH_DIR_SRC/libs/_hooks.sh' with 0 args []
+[DBG] loaded.loader        saving 'libs:hooks' as loaded module
+[DBG] add.hooks            adding '__kcs_echo_main' with '@raw,@varargs' to hook name 'main'
+[DBG] add.hooks            adding '_kcs_commands_clean' with '@optional' to hook name 'clean'
+[DBG] add.hooks            adding '_kcs_log_clean' to hook name 'post_clean'
+[DBG] runner.hooks         found 0 callbacks on 'pre_init' hook
+[DBG] runner.hooks         found 0 callbacks on 'init' hook
+[DBG] runner.hooks         found 0 callbacks on 'post_init' hook
+[DBG] runner.hooks         found 0 callbacks on 'pre_main' hook
+[DBG] runner.hooks         found 1 callbacks on 'main' hook
+[DBG] runner.hooks         using 'kcs_ld_func' for '__kcs_echo_main' callback
+[DBG] do.loader            checking '__kcs_echo_main' function
+[DBG] function.loader      run '__kcs_echo_main' function with 1 args [echo.command]
+[DBG] runner.hooks         found 0 callbacks on 'post_main' hook
+[DBG] runner.hooks         found 0 callbacks on 'pre_clean' hook
+[DBG] runner.hooks         found 1 callbacks on 'clean' hook
+[DBG] runner.hooks         using 'kcs_ld_func_optional' for '_kcs_commands_clean' callback
+[DBG] do.loader            checking '_kcs_commands_clean' function
+[DBG] miss-cb.loader       missing 'func:_kcs_commands_clean'
+[DBG] runner.hooks         found 1 callbacks on 'post_clean' hook
+[DBG] runner.hooks         using 'kcs_ld_func' for '_kcs_log_clean' callback
+[DBG] do.loader            checking '_kcs_log_clean' function
+[DBG] function.loader      run '_kcs_log_clean' function with 0 args []

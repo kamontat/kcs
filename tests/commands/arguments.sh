@@ -5,12 +5,15 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_hello_main() {
+__kcs_arguments_main() {
   local ns="$1"
   shift
 
-  kcs_log_info "$ns" "start new world"
-  return 0
+  echo "name  : $KCS_CMD_NAME"
+  echo "ns    : $ns"
+  echo "args  : $# [$*]"
+  echo "raw   : ${KCS_CMD_ARGS_RAW:-<missing>}"
+  echo "extra : ${KCS_CMD_ARGS_EXTRA:-<missing>}"
 }
 
 if test -z "$_KCS_MAIN_MODE"; then
@@ -26,4 +29,4 @@ source "$KCS_PATH_DIR_SRC/libs/base.sh" || exit 1
 # shellcheck source=/dev/null
 source "$KCS_PATH_DIR_SRC/libs/command.sh" || exit 1
 
-kcs_command_start hello "$@"
+kcs_command_start arguments "$@"
