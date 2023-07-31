@@ -6,9 +6,33 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 ## Call libraries file
-## usage: `kcs_ld_lib <name> <args...>`
+## usage: `kcs_ld_lib <name...>`
 kcs_ld_lib() {
-  __kcs_ld_do source throw throw libs "$@"
+  local name
+  for name in "$@"; do
+    __kcs_ld_do source throw throw libs "$name"
+  done
+}
+
+## Check is input lib is loaded
+## usage: `kcs_ld_lib_is_loaded 'logger' && echo 'loaded'`
+kcs_ld_lib_is_loaded() {
+  __kcs_ld_is_loaded libs "$1"
+}
+
+## Call utilities file
+## usage: `kcs_ld_utils <name...>`
+kcs_ld_utils() {
+  local name
+  for name in "$@"; do
+    __kcs_ld_do source throw throw utils "$name"
+  done
+}
+
+## Check is input utils is loaded
+## usage: `kcs_ld_utils_is_loaded 'example' && echo 'loaded'`
+kcs_ld_utils_is_loaded() {
+  __kcs_ld_is_loaded utils "$1"
 }
 
 ## Call command file
@@ -21,12 +45,6 @@ kcs_ld_cmd() {
 ## usage: `kcs_ld_cmd_default <name> <args...>`
 kcs_ld_cmd_default() {
   __kcs_ld_do shell throw throw cmd "$@"
-}
-
-## Call utilities file
-## usage: `kcs_ld_utils <name> <args...>`
-kcs_ld_utils() {
-  __kcs_ld_do source throw throw utils "$@"
 }
 
 ## Call function
@@ -52,29 +70,30 @@ __kcs_ld_do() {
   local action_cb="__kcs_ld_acb_${1:?}"
   local miss_cb="__kcs_ld_mcb_${2:?}"
   local error_cb="__kcs_ld_ecb_${3:?}"
-  local key="${4:?}" name="${5:?}"
+  local _key="${4:?}" name="${5:?}"
   shift 5
 
   local fs=true saved=true
-  local dir prefix suffix
-  case "$key" in
+  local key prefix suffix
+  case "$_key" in
   libraries | libs | lib | l)
-    dir="libs"
+    key="libs"
     prefix="_"
     suffix=".sh"
     ;;
   utilities | utils | util | u)
-    dir="utils"
+    key="utils"
     prefix=""
     suffix=".sh"
     ;;
   commands | cmds | cmd | c)
     saved=false
-    dir="commands"
+    key="commands"
     prefix=""
     suffix=".sh"
     ;;
   functions | func | fn | f)
+    key="func"
     saved=false
     fs=false
     ;;
@@ -99,7 +118,7 @@ __kcs_ld_do() {
     local basepath filepath
     for basepath in "${basepaths[@]}"; do
       filepath="$(__kcs_ld_path_builder \
-        "$basepath" "$dir" "$prefix" "$name" "$suffix")"
+        "$basepath" "$key" "$prefix" "$name" "$suffix")"
       paths+=("$filepath")
       kcs_log_debug "$ns" "[%s] trying '%s'" "${index_str[$index]}" "$filepath"
       ((index++))
@@ -192,11 +211,9 @@ __kcs_ld_mcb_error() {
   return 1
 }
 __kcs_ld_mcb_throw() {
-  local ns="miss-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_error "$ns" "missing '%s:%s'" \
+  kcs_exit 1 "missing '%s:%s'" \
     "$key" "$name"
-  exit 1
 }
 
 __kcs_ld_ecb_mute() {
@@ -228,11 +245,9 @@ __kcs_ld_ecb_error() {
   return 1
 }
 __kcs_ld_ecb_throw() {
-  local ns="error-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_error "$ns" "loading '%s:%s' failed (%s)" \
+  kcs_exit 1 "loading '%s:%s' failed (%s)" \
     "$key" "$name" "$filepath"
-  exit 1
 }
 
 __kcs_ld_is_loaded() {

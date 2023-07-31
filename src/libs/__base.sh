@@ -62,3 +62,24 @@ kcs_argument() {
     return 1
   fi
 }
+
+## Save exit result for grateful exit
+## usage: `kcs_exit <code> [<reason...>]`
+kcs_exit() {
+  local ns="exit.base"
+  local code="$1"
+  shift
+
+  if ! kcs_ld_lib_is_loaded 'hooks'; then
+    kcs_log_debug "$ns" "exit instantly because missing hooks"
+    [ "$#" -gt 0 ] && kcs_log_error "$ns" "$@"
+    exit "$code"
+  fi
+
+  kcs_log_debug "$ns" "register exit hooks for grateful exit"
+  kcs_log_error "$ns" "$@"
+  kcs_hooks_add finish __kcs_exit "@varargs=$code"
+}
+__kcs_exit() {
+  exit "${1:-1}"
+}
