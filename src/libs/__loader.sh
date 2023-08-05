@@ -6,12 +6,9 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 ## Call libraries file
-## usage: `kcs_ld_lib <name...>`
+## usage: `kcs_ld_lib <name> <args...>`
 kcs_ld_lib() {
-  local name
-  for name in "$@"; do
-    _kcs_ld_do source deps throw throw libs "$name"
-  done
+  _kcs_ld_do source lifecycle throw throw libs "$@"
 }
 
 ## Check is input lib is loaded
@@ -21,12 +18,9 @@ kcs_ld_lib_is_loaded() {
 }
 
 ## Call utilities file
-## usage: `kcs_ld_utils <name...>`
+## usage: `kcs_ld_utils <name> <args...>`
 kcs_ld_utils() {
-  local name
-  for name in "$@"; do
-    _kcs_ld_do source deps throw throw utils "$name"
-  done
+  _kcs_ld_do source lifecycle throw throw utils "$@"
 }
 
 ## Check is input utils is loaded
@@ -105,8 +99,8 @@ _kcs_ld_do() {
           return $?
         fi
         "$saved" && __kcs_ld_loaded "$key" "$name"
-        "$success_cb" "$key" "$name"
-        return 0
+        "$success_cb" "$key" "$name" "$@"
+        return $?
       fi
     done
   else
@@ -119,8 +113,8 @@ _kcs_ld_do() {
         "$error_cb" "$key" "$name" "$fn" "$@"
         return $?
       fi
-      "$success_cb" "$key" "$name"
-      return 0
+      "$success_cb" "$key" "$name" "$@"
+      return $?
     fi
   fi
 
@@ -164,19 +158,38 @@ __kcs_ld_acb_function() {
 __kcs_ld_scb_nothing() {
   local ns="success-cb.loader"
   local key="$1" name="$2"
+  shift 2
+
   return 0
 }
-__kcs_ld_scb_deps() {
+__kcs_ld_scb_lifecycle() {
   local ns="success-cb.loader"
   local key="$1" name="$2"
+  shift 2
 
-  local deps="__kcs_${name}_deps"
-  if command -v "$deps" >/dev/null; then
-    kcs_log_debug "$ns" "'%s:%s' dependencies: [%s]" \
-      "$key" "$name" "$($deps)"
-    # shellcheck disable=SC2046
-    kcs_ld_lib $($deps) && unset -f "$deps"
+  ## Alias is not useful as it should be
+  ## To reduce calculate time, I would comment this first
+  # local alias="__kcs_${name}_lc_alias"
+  # if command -v "$alias" >/dev/null; then
+  #   local old="$name"
+  #   name="$("$alias")"
+  #   unset -f "$alias"
+  #   kcs_log_debug "$ns" "found name alias of '%s:%s' as '%s'" "$key" "$old" "$name"
+  # fi
+
+  local init="__kcs_${name}_lc_init"
+  if command -v "$init" >/dev/null; then
+    kcs_log_debug "$ns" \
+      "found init function of '%s:%s' with [%s]" "$key" "$name" "$*"
+    "$init" "$@" && unset -f "$init" || return 1
   fi
+  local start="__kcs_${name}_lc_start"
+  if command -v "$start" >/dev/null; then
+    kcs_log_debug "$ns" \
+      "found start function of '%s:%s' with [%s]" "$key" "$name" "$*"
+    "$start" "$@" && unset -f "$start" || return 1
+  fi
+  return 0
 }
 
 __kcs_ld_mcb_mute() {

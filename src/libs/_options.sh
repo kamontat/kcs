@@ -5,6 +5,14 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-kcs_option_parse() {
+__kcs_options_lc_init() {
+  local ns="init.options"
+
+  if ! kcs_ld_lib_is_loaded 'hooks'; then
+    kcs_log_error "$ns" "options is requires 'hooks' to be loaded"
+    return 1
+  fi
+
+  kcs_log_debug "$ns" "initiate options library"
   return 0
 }

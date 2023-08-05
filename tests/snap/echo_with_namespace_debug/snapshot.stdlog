@@ -12,5 +12,4 @@
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/libs/_functions.sh'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/libs/_functions.sh'
 [DBG] do.loader            checking '__kcs_echo_hook_main' function
-[DBG] do.loader            checking '__kcs_commands_hook_clean' function
 [DBG] do.loader            checking '__kcs_log_hook_clean' function

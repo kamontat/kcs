@@ -6,9 +6,6 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 kcs_command_start() {
-  ## Command default lifecycle
-  kcs_ld_lib lifecycle
-
   if test -z "$_KCS_MAIN_MODE"; then
     kcs_argument __kcs_command_start "$@"
   else
@@ -36,6 +33,5 @@ __kcs_command_start() {
     message="$message with extra args [$KCS_CMD_ARGS_EXTRA]"
 
   kcs_log_debug "$ns" "$message"
-  __kcs_lifecycle_init "$name" "$@"
-  __kcs_lifecycle_start "$@"
+  kcs_ld_lib lifecycle "$name" "$@"
 }

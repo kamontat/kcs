@@ -198,6 +198,6 @@ kcs_hooks_stop() {
   unset _KCS_HOOKS_TAGS _KCS_HOOKS_NAMES
 }
 
-__kcs_hooks_deps() {
-  printf functions
+__kcs_hooks_lc_init() {
+  kcs_ld_lib functions
 }
