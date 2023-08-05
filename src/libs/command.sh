@@ -35,13 +35,7 @@ __kcs_command_start() {
   test -n "${KCS_CMD_ARGS_EXTRA:-}" &&
     message="$message with extra args [$KCS_CMD_ARGS_EXTRA]"
 
-  local main="__kcs_${name}_main"
-  if ! command -v "$main" >/dev/null; then
-    kcs_log_warn "$ns" "missing commands main (%s) function" "$main"
-    return 1
-  fi
-
   kcs_log_debug "$ns" "$message"
-  __kcs_lifecycle_init "$name" "$main" "$@"
+  __kcs_lifecycle_init "$name" "$@"
   __kcs_lifecycle_start "$@"
 }

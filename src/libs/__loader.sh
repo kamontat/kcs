@@ -10,7 +10,7 @@
 kcs_ld_lib() {
   local name
   for name in "$@"; do
-    __kcs_ld_do source throw throw libs "$name"
+    _kcs_ld_do source deps throw throw libs "$name"
   done
 }
 
@@ -25,7 +25,7 @@ kcs_ld_lib_is_loaded() {
 kcs_ld_utils() {
   local name
   for name in "$@"; do
-    __kcs_ld_do source throw throw utils "$name"
+    _kcs_ld_do source deps throw throw utils "$name"
   done
 }
 
@@ -38,40 +38,17 @@ kcs_ld_utils_is_loaded() {
 ## Call command file
 ## usage: `kcs_ld_cmd <name> <args...>`
 kcs_ld_cmd() {
-  __kcs_ld_do shell silent throw cmd "$@"
+  _kcs_ld_do shell nothing silent throw cmd "$@"
 }
 
-## Call default command file
-## usage: `kcs_ld_cmd_default <name> <args...>`
-kcs_ld_cmd_default() {
-  __kcs_ld_do shell throw throw cmd "$@"
-}
-
-## Call function
-## usage: `kcs_ld_func <name> <func> <args...>`
-kcs_ld_func() {
-  __kcs_ld_do function throw throw func "$@"
-}
-
-## Call optional function
-## usage: `kcs_ld_func_optional <name> <func> <args...>`
-kcs_ld_func_optional() {
-  __kcs_ld_do function mute throw func "$@"
-}
-
-## Silently call function
-## usage: `kcs_ld_func_silent <name> <func> <args...>`
-kcs_ld_func_silent() {
-  __kcs_ld_do function mute silent func "$@"
-}
-
-__kcs_ld_do() {
+_kcs_ld_do() {
   local ns="do.loader"
   local action_cb="__kcs_ld_acb_${1:?}"
-  local miss_cb="__kcs_ld_mcb_${2:?}"
-  local error_cb="__kcs_ld_ecb_${3:?}"
-  local _key="${4:?}" name="${5:?}"
-  shift 5
+  local success_cb="__kcs_ld_scb_${2:?}"
+  local miss_cb="__kcs_ld_mcb_${3:?}"
+  local error_cb="__kcs_ld_ecb_${4:?}"
+  local _key="${5:?}" name="${6:?}"
+  shift 6
 
   local fs=true saved=true
   local key prefix suffix
@@ -112,7 +89,7 @@ __kcs_ld_do() {
   if "$fs"; then
     local basepaths=() paths=()
     test -n "$KCS_PATH" && basepaths+=("$KCS_PATH")
-    basepaths+=("$KCS_PATH_DIR_ROOT" "$KCS_PATH_DIR_SRC")
+    basepaths+=("$_KCS_PATH_ROOT" "$_KCS_PATH_SRC")
 
     local index=0 index_str=('1st' '2nd' '3rd')
     local basepath filepath
@@ -128,6 +105,7 @@ __kcs_ld_do() {
           return $?
         fi
         "$saved" && __kcs_ld_loaded "$key" "$name"
+        "$success_cb" "$key" "$name"
         return 0
       fi
     done
@@ -141,6 +119,7 @@ __kcs_ld_do() {
         "$error_cb" "$key" "$name" "$fn" "$@"
         return $?
       fi
+      "$success_cb" "$key" "$name"
       return 0
     fi
   fi
@@ -180,6 +159,24 @@ __kcs_ld_acb_function() {
   kcs_log_debug "$ns" \
     "run '%s' function with %d args [%s]" "$fn" "$#" "$*"
   "$fn" "$@"
+}
+
+__kcs_ld_scb_nothing() {
+  local ns="success-cb.loader"
+  local key="$1" name="$2"
+  return 0
+}
+__kcs_ld_scb_deps() {
+  local ns="success-cb.loader"
+  local key="$1" name="$2"
+
+  local deps="__kcs_${name}_deps"
+  if command -v "$deps" >/dev/null; then
+    kcs_log_debug "$ns" "'%s:%s' dependencies: [%s]" \
+      "$key" "$name" "$($deps)"
+    # shellcheck disable=SC2046
+    kcs_ld_lib $($deps) && unset -f "$deps"
+  fi
 }
 
 __kcs_ld_mcb_mute() {
@@ -255,7 +252,7 @@ __kcs_ld_is_loaded() {
   [[ "$_KCS_LOADED" =~ $key:$name ]]
 }
 __kcs_ld_loaded() {
-  local ns="loaded.loader"
+  local ns="status.loader"
   local key="$1" name="$2"
   kcs_log_debug "$ns" "saving '%s:%s' as loaded module" \
     "$key" "$name"

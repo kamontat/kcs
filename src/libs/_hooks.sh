@@ -35,7 +35,9 @@ _KCS_HOOKS_TAGS=(
 
 ## Adding callback on hook name
 ## usage `kcs_hooks_add <name> <callback> <tags...>`
-## example `kcs_hooks_add 'pre_init' '_kcs_logger_init' '@varargs=EXAMPLE' '@raw=hello world'`
+## example `kcs_hooks_add 'pre_init' logger '@varargs=EXAMPLE' '@raw=hello world'`
+## signature:
+##   - callback: `__kcs_<callback>_hook_<name>` = `__kcs_logger_hook_pre_init`
 kcs_hooks_add() {
   local ns="add.hooks"
   local name="$1" callback="$2"
@@ -83,6 +85,10 @@ kcs_hooks_add() {
 
   local tag_msg=""
   test -n "$tag_keys_str" && tag_msg="with '$tag_keys_str' "
+
+  local key="${name##*_}"
+  callback="__kcs_${callback}_hook_${key}"
+
   kcs_log_debug "$ns" "adding '%s' %sto hook name '%s'" \
     "$callback" "$tag_msg" "$name"
 
@@ -149,15 +155,15 @@ kcs_hooks_run() {
       continue
     fi
 
-    local executor=kcs_ld_func
+    local executor=kcs_func_must
     local args=() is_tag_raw=false tag_cb tag_vararg
     while read -r tag_raw; do
       tag_key="${tag_raw%%=*}"
       tag_value="${tag_raw#*=}"
 
       case "$tag_key" in
-      "$KCS_HOOKS_TAG_OPTIONAL") executor=kcs_ld_func_optional ;;
-      "$KCS_HOOKS_TAG_SILENT") executor=kcs_ld_func_silent ;;
+      "$KCS_HOOKS_TAG_OPTIONAL") executor=kcs_func_optional ;;
+      "$KCS_HOOKS_TAG_SILENT") executor=kcs_func_silent ;;
       "$KCS_HOOKS_TAG_RAW") is_tag_raw=true ;;
       "$KCS_HOOKS_TAG_CALLBACK") tag_cb="$tag_value" ;;
       "$KCS_HOOKS_TAG_VARARGS") tag_vararg="$tag_value" ;;
@@ -190,4 +196,8 @@ kcs_hooks_stop() {
 
   unset _KCS_HOOKS_DB_ALL _KCS_HOOKS_DB_DISABLE
   unset _KCS_HOOKS_TAGS _KCS_HOOKS_NAMES
+}
+
+__kcs_hooks_deps() {
+  printf functions
 }

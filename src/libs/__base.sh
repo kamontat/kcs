@@ -78,8 +78,8 @@ kcs_exit() {
 
   kcs_log_debug "$ns" "register exit hooks for grateful exit"
   kcs_log_error "$ns" "$@"
-  kcs_hooks_add finish __kcs_exit "@varargs=$code"
+  kcs_hooks_add finish exit "@varargs=$code"
 }
-__kcs_exit() {
+__kcs_exit_hook_finish() {
   exit "${1:-1}"
 }

@@ -5,50 +5,50 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_LOG_NAME=kcs
+export _KCS_LOG_NAME=kcs
 
-export KCS_LOG_PRT="PRT"
-export KCS_LOG_DBG="DBG"
-export KCS_LOG_INF="INF"
-export KCS_LOG_WRN="WRN"
-export KCS_LOG_ERR="ERR"
+export _KCS_LOG_PRT="PRT"
+export _KCS_LOG_DBG="DBG"
+export _KCS_LOG_INF="INF"
+export _KCS_LOG_WRN="WRN"
+export _KCS_LOG_ERR="ERR"
 
-export _KCS_LOG_INITIATE
-export _KCS_LOG_SLT_ENABLED
-export _KCS_LOG_DBG_ENABLED
-export _KCS_LOG_INF_ENABLED
-export _KCS_LOG_WRN_ENABLED
-export _KCS_LOG_ERR_ENABLED
+export _KCS_LOG_INITIATE=false
+export _KCS_LOG_SLT_ENABLED=false
+export _KCS_LOG_DBG_ENABLED=false
+export _KCS_LOG_INF_ENABLED=false
+export _KCS_LOG_WRN_ENABLED=false
+export _KCS_LOG_ERR_ENABLED=false
 
 ## Printf debug message with log format
 ## see more on __kcs_log()
 kcs_log_debug() {
-  __kcs_log "$KCS_LOG_DBG" "$@"
+  __kcs_log "$_KCS_LOG_DBG" "$@"
 }
 ## Printf info message with log format
 ## see more on __kcs_log()
 kcs_log_info() {
-  __kcs_log "$KCS_LOG_INF" "$@"
+  __kcs_log "$_KCS_LOG_INF" "$@"
 }
 ## Printf warning message with log format
 ## see more on __kcs_log()
 kcs_log_warn() {
-  __kcs_log "$KCS_LOG_WRN" "$@"
+  __kcs_log "$_KCS_LOG_WRN" "$@"
 }
 ## Printf error message with log format
 ## see more on __kcs_log()
 kcs_log_error() {
-  __kcs_log "$KCS_LOG_ERR" "$@"
+  __kcs_log "$_KCS_LOG_ERR" "$@"
 }
 ## Printf normal message with log format
 ## see more on __kcs_log()
 kcs_log_printf() {
-  __kcs_log "$KCS_LOG_PRT" "$@"
+  __kcs_log "$_KCS_LOG_PRT" "$@"
 }
 
 _kcs_log_init() {
   local ns="init.logger"
-  test -n "$_KCS_LOG_INITIATE" &&
+  $_KCS_LOG_INITIATE &&
     kcs_log_debug "$ns" "logger already initiated, skipped" &&
     return 0
 
@@ -64,21 +64,13 @@ _kcs_log_init() {
     __kcs_log_is_debug "$lvl" && _KCS_LOG_DBG_ENABLED=true
   done
 
-  test -n "$DEBUG" && [[ "$DEBUG" =~ ^$KCS_LOG_NAME ]] &&
+  test -n "$DEBUG" && [[ "$DEBUG" =~ ^$_KCS_LOG_NAME ]] &&
     _KCS_LOG_DBG_ENABLED=true
-  test -n "$SILENT" && [[ "$SILENT" =~ ^$KCS_LOG_NAME ]] &&
+  test -n "$SILENT" && [[ "$SILENT" =~ ^$_KCS_LOG_NAME ]] &&
     _KCS_LOG_SLT_ENABLED=true
 
   kcs_log_debug "$ns" "initiated logger settings"
   _KCS_LOG_INITIATE=true
-}
-_kcs_log_clean() {
-  unset KCS_LOG_NAME
-  unset KCS_LOG_DBG _KCS_LOG_DBG_ENABLED
-  unset KCS_LOG_INFO _KCS_LOG_INF_ENABLED
-  unset KCS_LOG_WRN _KCS_LOG_WRN_ENABLED
-  unset KCS_LOG_ERR _KCS_LOG_ERR_ENABLED
-  unset KCS_LOG_PRT _KCS_LOG_SLT_ENABLED
 }
 
 ## logging message to console
@@ -99,10 +91,10 @@ __kcs_log() {
   local format="$3"
   shift 3
 
-  if test -n "$_KCS_LOG_SLT_ENABLED"; then
+  if $_KCS_LOG_SLT_ENABLED; then
     return 0
-  elif [[ "$lvl" == "$KCS_LOG_DBG" ]]; then
-    test -z "$_KCS_LOG_DBG_ENABLED" && return 0
+  elif [[ "$lvl" == "$_KCS_LOG_DBG" ]]; then
+    $_KCS_LOG_DBG_ENABLED || return 0
     if test -n "$DEBUG"; then
       local dbg_key="${DEBUG%%:*}"
       local dbg_value="${DEBUG#*:}" value
@@ -117,14 +109,11 @@ __kcs_log() {
         "$dbg_disable" && return 0
       fi
     fi
-  elif [[ "$lvl" == "$KCS_LOG_INF" ]] &&
-    test -z "$_KCS_LOG_INF_ENABLED"; then
+  elif [[ "$lvl" == "$_KCS_LOG_INF" ]] && ! $_KCS_LOG_INF_ENABLED; then
     return 0
-  elif [[ "$lvl" == "$KCS_LOG_WRN" ]] &&
-    test -z "$_KCS_LOG_WRN_ENABLED"; then
+  elif [[ "$lvl" == "$_KCS_LOG_WRN" ]] && ! $_KCS_LOG_WRN_ENABLED; then
     return 0
-  elif [[ "$lvl" == "$KCS_LOG_ERR" ]] &&
-    test -z "$_KCS_LOG_ERR_ENABLED"; then
+  elif [[ "$lvl" == "$_KCS_LOG_ERR" ]] && ! $_KCS_LOG_ERR_ENABLED; then
     return 0
   fi
 
@@ -166,8 +155,8 @@ __kcs_log() {
 __kcs_log_normalize() {
   local input="$1"
   input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
-  input="${input//$KCS_PATH_DIR_SRC/\$KCS_PATH_DIR_SRC}"
-  input="${input//$KCS_PATH_DIR_ROOT/\$KCS_PATH_DIR_ROOT}"
+  input="${input//$_KCS_PATH_SRC/\$KCS_PATH_SRC}"
+  input="${input//$_KCS_PATH_ROOT/\$KCS_PATH_ROOT}"
   input="${input//$HOME/\$HOME}"
 
   printf '%s' "$input"
@@ -212,4 +201,13 @@ __kcs_log_is_silent() {
     [[ "$1" == "SLT" ]] ||
     [[ "$1" == "s" ]] ||
     [[ "$1" == "S" ]]
+}
+
+__kcs_log_hook_clean() {
+  unset _KCS_LOG_NAME
+  unset _KCS_LOG_DBG _KCS_LOG_DBG_ENABLED
+  unset _KCS_LOG_INFO _KCS_LOG_INF_ENABLED
+  unset _KCS_LOG_WRN _KCS_LOG_WRN_ENABLED
+  unset _KCS_LOG_ERR _KCS_LOG_ERR_ENABLED
+  unset _KCS_LOG_PRT _KCS_LOG_SLT_ENABLED
 }

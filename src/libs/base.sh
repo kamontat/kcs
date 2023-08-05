@@ -5,14 +5,14 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-KCS_PATH_DIR_LIB="${KCS_PATH_DIR_SRC:?}/libs"
-export KCS_PATH_DIR_LIB
+_KCS_PATH_DIR_LIB="${_KCS_PATH_SRC:?}/libs"
+export _KCS_PATH_DIR_LIB
 
 # shellcheck source=/dev/null
-source "$KCS_PATH_DIR_LIB/__base.sh" || exit 1
+source "$_KCS_PATH_DIR_LIB/__base.sh" || exit 1
 # shellcheck source=/dev/null
-source "$KCS_PATH_DIR_LIB/__loader.sh" || exit 1
+source "$_KCS_PATH_DIR_LIB/__loader.sh" || exit 1
 # shellcheck source=/dev/null
-source "$KCS_PATH_DIR_LIB/__logger.sh" || exit 1
+source "$_KCS_PATH_DIR_LIB/__logger.sh" || exit 1
 
 _kcs_log_init
