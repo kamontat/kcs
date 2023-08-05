@@ -5,14 +5,13 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_loggings_hook_main() {
+__kcs_newsep_hook_main() {
   local ns="$1"
   shift
 
-  kcs_log_debug "$ns" "hello %s message" "debug"
-  kcs_log_info "$ns" "hello %s message" "info"
-  kcs_log_warn "$ns" "hello %s message" "warn"
-  kcs_log_error "$ns" "hello %s message" "error"
+  echo "name  : $KCS_CMD_NAME"
+  echo "ns    : $ns"
+  echo "args  : $# [$*]"
 }
 
 if test -z "$_KCS_MAIN_MODE"; then
@@ -28,4 +27,4 @@ source "$_KCS_PATH_SRC/libs/base.sh" || exit 1
 # shellcheck source=/dev/null
 source "$_KCS_PATH_SRC/libs/command.sh" || exit 1
 
-kcs_command_start loggings "$@"
+kcs_command_start newsep "$@"

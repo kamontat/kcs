@@ -40,6 +40,13 @@ main() {
     arguments a b c '<>' hello -- extra argument
   kct_case args_with_extra_and_raw \
     arguments a b c -- hello '<>' raw argument
+
+  KCS_CMDSEP='-' \
+    kct_case new_cmd_sep \
+    newsep test
+  KCS_CMDDEF='_empty' \
+    kct_case new_cmd_default \
+    invalid
 }
 
 kct_case() {
