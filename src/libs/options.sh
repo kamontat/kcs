@@ -14,7 +14,6 @@ __kcs_options_lc_init() {
   fi
 
   kcs_ld_lib information
-
   kcs_hooks_add post_init options @raw
 }
 
@@ -22,3 +21,6 @@ __kcs_options_hook_init() {
   # echo "$*"
   return 0
 }
+
+# TODO: Add --version and --help as default options
+# TODO: find way to customize extra arguments

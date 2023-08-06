@@ -146,7 +146,14 @@ _kcs_ld_do() {
     local fn="$1"
     shift
 
-    kcs_log_debug "$ns" "checking '%s' function" "$name"
+    kcs_log_debug "$ns" "checking function name '%s'" "$name"
+    if test -z "$fn"; then
+      kcs_log_error "$ns" \
+        "function '%s' is not defined callback (%s)" "$name" "$fn"
+      "$error_cb" "$key" "$name" "$fn" "$@"
+      return $?
+    fi
+
     if command -v "$fn" >/dev/null; then
       if ! "$action_cb" "$key" "$name" "$fn" "$@"; then
         "$error_cb" "$key" "$name" "$fn" "$@"

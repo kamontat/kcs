@@ -5,10 +5,6 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_hello_hook_init() {
-  kcs_ld_lib options
-}
-
 __kcs_hello_hook_main() {
   return 0
 }

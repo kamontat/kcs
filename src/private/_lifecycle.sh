@@ -26,6 +26,8 @@ __kcs_lifecycle_lc_init() {
   kcs_hooks_add clean environment
   ## Cleanup logging variables
   kcs_hooks_add post_clean log
+  ## Cleanup colors variables
+  kcs_hooks_add post_clean color
 }
 __kcs_lifecycle_lc_start() {
   local name="$1"

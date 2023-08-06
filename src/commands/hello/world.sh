@@ -5,9 +5,15 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+__kcs_world_hook_init() {
+  kcs_ld_lib options
+}
+
 __kcs_world_hook_main() {
   local ns="$1"
   shift
+
+  kcs_func_must version kcs_info_full_version
 }
 
 #####################################################

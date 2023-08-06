@@ -123,6 +123,15 @@ __kcs_log() {
   # shellcheck disable=SC2059
   msg="$(printf "$format" "${args[@]}")"
 
+  local clvl
+  case "$lvl" in
+  "$_KCS_LOG_DBG") clvl="$(kcs_color "$lvl" BLACK)" ;;
+  "$_KCS_LOG_INF") clvl="$(kcs_color "$lvl" CYAN)" ;;
+  "$_KCS_LOG_WRN") clvl="$(kcs_color "$lvl" YELLOW)" ;;
+  "$_KCS_LOG_ERR") clvl="$(kcs_color "$lvl" RED)" ;;
+  "$_KCS_LOG_PRT") clvl="$(kcs_color "$lvl" DEFAULT)" ;;
+  esac
+
   local variables=()
   variables+=(
     "dt=$(date +"%Y/%m/%d %H:%M:%S")"
@@ -130,8 +139,11 @@ __kcs_log() {
     "t=$(date +"%H:%M:%S")"
   )
   variables+=(
-    "lvl=$lvl" "ns=$(printf '%-20s' "$ns")"
-    "msg=$msg" "fmt=$format" "args=${args[*]}"
+    "lvl=$clvl"
+    "ns=$(printf '%-20s' "$ns")"
+    "msg=$msg"
+    "fmt=$format"
+    "args=${args[*]}"
   )
 
   local output

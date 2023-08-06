@@ -17,11 +17,11 @@
 [DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/functions.sh'
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/libs/functions.sh'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/libs/functions.sh'
-[DBG] do.loader            checking '__kcs_echo_hook_init' function
-[DBG] do.loader            checking '__kcs_echo_hook_main' function
-[DBG] do.loader            checking '__kcs_echo_hook_clean' function
-[DBG] do.loader            checking '__kcs_environment_hook_clean' function
+[DBG] do.loader            checking function name '__kcs_echo_hook_init'
+[DBG] do.loader            checking function name '__kcs_echo_hook_main'
+[DBG] do.loader            checking function name '__kcs_echo_hook_clean'
+[DBG] do.loader            checking function name '__kcs_environment_hook_clean'
 [DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/configs/.env'
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/configs/.env'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/configs/.env'
-[DBG] do.loader            checking '__kcs_log_hook_clean' function
+[DBG] do.loader            checking function name '__kcs_log_hook_clean'

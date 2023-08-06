@@ -42,31 +42,32 @@
 [DBG] add.hooks            adding '__kcs_echo_hook_clean' with '@optional' to hook name 'pre_clean'
 [DBG] add.hooks            adding '__kcs_environment_hook_clean' to hook name 'clean'
 [DBG] add.hooks            adding '__kcs_log_hook_clean' to hook name 'post_clean'
+[DBG] add.hooks            adding '__kcs_color_hook_clean' to hook name 'post_clean'
 [DBG] success-cb.loader    found start function of 'private:lifecycle' with [echo]
 [DBG] runner.hooks         found 1 callbacks on 'pre_init' hook
 [DBG] runner.hooks         using 'kcs_func_optional' for '__kcs_echo_hook_init' callback
-[DBG] do.loader            checking '__kcs_echo_hook_init' function
+[DBG] do.loader            checking function name '__kcs_echo_hook_init'
 [DBG] miss-cb.loader       missing 'func:__kcs_echo_hook_init'
 [DBG] runner.hooks         found 0 callbacks on 'init' hook
 [DBG] runner.hooks         found 0 callbacks on 'post_init' hook
 [DBG] runner.hooks         found 0 callbacks on 'pre_main' hook
 [DBG] runner.hooks         found 1 callbacks on 'main' hook
 [DBG] runner.hooks         using 'kcs_func_must' for '__kcs_echo_hook_main' callback
-[DBG] do.loader            checking '__kcs_echo_hook_main' function
+[DBG] do.loader            checking function name '__kcs_echo_hook_main'
 [DBG] function.loader      run '__kcs_echo_hook_main' function with 1 args [echo.command]
 [DBG] runner.hooks         found 0 callbacks on 'post_main' hook
 [DBG] runner.hooks         found 1 callbacks on 'pre_clean' hook
 [DBG] runner.hooks         using 'kcs_func_optional' for '__kcs_echo_hook_clean' callback
-[DBG] do.loader            checking '__kcs_echo_hook_clean' function
+[DBG] do.loader            checking function name '__kcs_echo_hook_clean'
 [DBG] miss-cb.loader       missing 'func:__kcs_echo_hook_clean'
 [DBG] runner.hooks         found 1 callbacks on 'clean' hook
 [DBG] runner.hooks         using 'kcs_func_must' for '__kcs_environment_hook_clean' callback
-[DBG] do.loader            checking '__kcs_environment_hook_clean' function
+[DBG] do.loader            checking function name '__kcs_environment_hook_clean'
 [DBG] function.loader      run '__kcs_environment_hook_clean' function with 0 args []
 [DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/configs/.env'
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/configs/.env'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/configs/.env'
-[DBG] runner.hooks         found 1 callbacks on 'post_clean' hook
+[DBG] runner.hooks         found 2 callbacks on 'post_clean' hook
 [DBG] runner.hooks         using 'kcs_func_must' for '__kcs_log_hook_clean' callback
-[DBG] do.loader            checking '__kcs_log_hook_clean' function
+[DBG] do.loader            checking function name '__kcs_log_hook_clean'
 [DBG] function.loader      run '__kcs_log_hook_clean' function with 0 args []
