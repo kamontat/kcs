@@ -12,8 +12,8 @@ cd ".." || exit 1
 export _KCS_PATH_ROOT="$PWD"
 
 # shellcheck source=/dev/null
-source "$_KCS_PATH_SRC/libs/base.sh" || exit 1
+source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
-source "$_KCS_PATH_SRC/libs/main.sh" || exit 1
+source "$_KCS_PATH_SRC/private/main.sh" || exit 1
 
 kcs_main_start "$@"

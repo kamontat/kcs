@@ -24,8 +24,8 @@ if test -z "$_KCS_MAIN_MODE"; then
 fi
 
 # shellcheck source=/dev/null
-source "$_KCS_PATH_SRC/libs/base.sh" || exit 1
+source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
-source "$_KCS_PATH_SRC/libs/command.sh" || exit 1
+source "$_KCS_PATH_SRC/private/command.sh" || exit 1
 
 kcs_command_start loggings "$@"

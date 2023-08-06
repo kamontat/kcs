@@ -14,11 +14,17 @@ __kcs_lifecycle_lc_init() {
   ## Hooks APIs
   kcs_ld_lib hooks
 
-  export KCS_CMD_NAME="$name"
+  export _KCS_CMD_NAME="$name"
+  # shellcheck disable=SC2016
+  kcs_log_debug "$ns" "initiate %s variable to '%s'" '$_KCS_CMD_NAME' "$name"
 
-  kcs_hooks_add main "$name" \
-    @raw "@varargs=$name.command"
+  kcs_hooks_add pre_init "$name" @optional
+  kcs_hooks_add main "$name" @raw "@varargs=$name.command"
+  kcs_hooks_add pre_clean "$name" @optional
 
+  ## Cleanup environment configuration
+  kcs_hooks_add clean environment
+  ## Cleanup logging variables
   kcs_hooks_add post_clean log
 }
 __kcs_lifecycle_lc_start() {
@@ -28,5 +34,5 @@ __kcs_lifecycle_lc_start() {
   kcs_hooks_start "$@"
   kcs_hooks_stop
 
-  unset KCS_CMD_NAME
+  unset _KCS_CMD_NAME
 }

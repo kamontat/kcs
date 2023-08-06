@@ -8,7 +8,7 @@
 ## Using loader APIs to execute command using shell
 ## usage: `kcs_commands_load <arguments...>`
 ## variables:
-##   - KCS_CMDSEP='__' override command separator
+##   - KCS_CMDSEP='/' override command separator
 ##   - KCS_CMDDEF='_default' override default command name
 kcs_commands_load() {
   kcs_argument __kcs_commands_load "$@"
@@ -16,7 +16,7 @@ kcs_commands_load() {
 
 __kcs_commands_load() {
   local ns="load.commands"
-  local sep="${KCS_CMDSEP:-__}"
+  local sep="${KCS_CMDSEP:-/}"
   local default="${KCS_CMDDEF:-_default}"
   local extra="$1" raw="$2"
   shift 2

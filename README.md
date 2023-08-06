@@ -29,7 +29,7 @@ run `./scripts/setup.sh <output>` to install script on output
 4. `KCS_LOGOUT=/tmp/test.out` - Write logs to file instead
     - By default all logs will write on **STDERR**
 5. `KCS_PATH=/tmp` - Customize resolving base directory
-6. `KCS_CMDSEP='__'` - Customize commands seperator in **commands** directory
-    - By default it fallback to `__` if no string provided
+6. `KCS_CMDSEP='/'` - Customize commands seperator in **commands** directory
+    - By default it fallback to `/` if no string provided
 7. `KCS_CMDDEF='_default'` - Customize default command name (if command is missing)
     - By default it will use `_default` if no string provided

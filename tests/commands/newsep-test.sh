@@ -9,7 +9,7 @@ __kcs_newsep_hook_main() {
   local ns="$1"
   shift
 
-  echo "name  : $KCS_CMD_NAME"
+  echo "name  : $_KCS_CMD_NAME"
   echo "ns    : $ns"
   echo "args  : $# [$*]"
 }
@@ -23,8 +23,8 @@ if test -z "$_KCS_MAIN_MODE"; then
 fi
 
 # shellcheck source=/dev/null
-source "$_KCS_PATH_SRC/libs/base.sh" || exit 1
+source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
-source "$_KCS_PATH_SRC/libs/command.sh" || exit 1
+source "$_KCS_PATH_SRC/private/command.sh" || exit 1
 
 kcs_command_start newsep "$@"

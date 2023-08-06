@@ -13,6 +13,12 @@ __kcs_options_lc_init() {
     return 1
   fi
 
-  kcs_log_debug "$ns" "initiate options library"
+  kcs_ld_lib information
+
+  kcs_hooks_add post_init options @raw
+}
+
+__kcs_options_hook_init() {
+  # echo "$*"
   return 0
 }

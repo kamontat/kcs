@@ -23,6 +23,24 @@ kcs_ld_utils() {
   _kcs_ld_do source lifecycle throw throw utils "$@"
 }
 
+## Load config file
+## usage: `kcs_ld_config <name...>`
+kcs_ld_config() {
+  local name
+  for name in "$@"; do
+    _kcs_ld_do config nothing warn throw config "$name"
+  done
+}
+
+## Unload config file
+## usage: `kcs_ld_unconfig <name...>`
+kcs_ld_unconfig() {
+  local name
+  for name in "$@"; do
+    _kcs_ld_do unconfig nothing warn throw config "$name"
+  done
+}
+
 ## Check is input utils is loaded
 ## usage: `kcs_ld_utils_is_loaded 'example' && echo 'loaded'`
 kcs_ld_utils_is_loaded() {
@@ -33,6 +51,16 @@ kcs_ld_utils_is_loaded() {
 ## usage: `kcs_ld_cmd <name> <args...>`
 kcs_ld_cmd() {
   _kcs_ld_do shell nothing silent throw cmd "$@"
+}
+
+## Call private libraries file
+## usage: `kcs_ld_priv <name> <args...>`
+_kcs_ld_priv() {
+  _kcs_ld_do source lifecycle throw throw private "$@"
+}
+
+_kcs_ld_priv_is_loaded() {
+  __kcs_ld_is_loaded private "$1"
 }
 
 _kcs_ld_do() {
@@ -47,9 +75,14 @@ _kcs_ld_do() {
   local fs=true saved=true
   local key prefix suffix
   case "$_key" in
+  private | priv | p)
+    key="private"
+    prefix="_"
+    suffix=".sh"
+    ;;
   libraries | libs | lib | l)
     key="libs"
-    prefix="_"
+    prefix=""
     suffix=".sh"
     ;;
   utilities | utils | util | u)
@@ -62,6 +95,12 @@ _kcs_ld_do() {
     key="commands"
     prefix=""
     suffix=".sh"
+    ;;
+  configuration | configs | config | conf | cfg)
+    saved=false
+    key='configs'
+    prefix="."
+    suffix=''
     ;;
   functions | func | fn | f)
     key="func"
@@ -128,6 +167,7 @@ __kcs_ld_acb_source() {
 
   kcs_log_debug "$ns" \
     "run '%s' with %d args [%s]" "$filepath" "$#" "$*"
+
   # shellcheck source=/dev/null
   source "$filepath" "$@"
 }
@@ -153,6 +193,28 @@ __kcs_ld_acb_function() {
   kcs_log_debug "$ns" \
     "run '%s' function with %d args [%s]" "$fn" "$#" "$*"
   "$fn" "$@"
+}
+__kcs_ld_acb_config() {
+  local ns="config.loader"
+  local key="$1" name="$2" filepath="$3"
+  shift 3
+  local line key value
+  while read -r line; do
+    key="${line%%=*}"
+    value="${line#*=}"
+    export "$key"="$value"
+  done <"$filepath"
+}
+__kcs_ld_acb_unconfig() {
+  local ns="unconfig.loader"
+  local key="$1" name="$2" filepath="$3"
+  shift 3
+  local line key value
+  while read -r line; do
+    key="${line%%=*}"
+    value="${line#*=}"
+    unset "$key"
+  done <"$filepath"
 }
 
 __kcs_ld_scb_nothing() {
