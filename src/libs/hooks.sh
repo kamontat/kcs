@@ -40,9 +40,12 @@ _KCS_HOOKS_TAGS=(
 ##   - callback: `__kcs_<callback>_hook_<name>` = `__kcs_logger_hook_pre_init`
 kcs_hooks_add() {
   local ns="add.hooks"
-  local name="$1" callback="$2"
+  local name="$1" cb="$2"
   shift 2
   local tags=("$@")
+
+  local key="${name##*_}"
+  local callback="__kcs_${cb}_hook_${key}"
 
   if ! [[ "${_KCS_HOOKS_NAMES[*]}" =~ $name ]]; then
     kcs_log_error "$ns" "'%s' hook is not a valid hook name" "$name"
@@ -52,9 +55,9 @@ kcs_hooks_add() {
 
   local prev=()
   eval "prev=(\"\${${_KCS_HOOKS_DB_ALL}_${name}[@]}\")"
-  if [[ "${prev[*]}" =~ $callback ]]; then
-    kcs_log_debug "$ns" "skipped '%s' duplicated callback on '%s' hook" \
-      "$callback" "$name"
+  if [[ "${prev[*]}" =~ $callback: ]]; then
+    kcs_log_debug "$ns" \
+      "skipped '%s' duplicated callback on '%s' hook" "$cb" "$name"
     return 0
   fi
 
@@ -86,14 +89,9 @@ kcs_hooks_add() {
   local tag_msg=""
   test -n "$tag_keys_str" && tag_msg="with '$tag_keys_str' "
 
-  local key="${name##*_}"
-  callback="__kcs_${callback}_hook_${key}"
-
-  kcs_log_debug "$ns" "adding '%s' %sto hook name '%s'" \
-    "$callback" "$tag_msg" "$name"
-
-  local raw="$callback:$tags_str"
-  eval "${_KCS_HOOKS_DB_ALL}_${name}+=(\"$raw\")"
+  kcs_log_debug "$ns" \
+    "adding '%s' %sto hook name '%s'" "$callback" "$tag_msg" "$name"
+  eval "${_KCS_HOOKS_DB_ALL}_${name}+=(\"$callback:$tags_str\")"
 }
 
 ## Disabled callback on hook name or

@@ -142,6 +142,7 @@ _kcs_ld_do() {
         return $?
       fi
     done
+    "$miss_cb" "$key" "$name" "${paths[*]}" "$@"
   else
     local fn="$1"
     shift
@@ -162,9 +163,8 @@ _kcs_ld_do() {
       "$success_cb" "$key" "$name" "$@"
       return $?
     fi
+    "$miss_cb" "$key" "$name" "$fn" "$@"
   fi
-
-  "$miss_cb" "$key" "$name" "${paths[*]}" "$@"
 }
 
 __kcs_ld_acb_source() {
@@ -264,69 +264,94 @@ __kcs_ld_scb_lifecycle() {
 __kcs_ld_mcb_mute() {
   local ns="miss-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_debug "$ns" "missing '%s:%s'" \
-    "$key" "$name"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_debug "$ns" "missing '%s:%s'%s" "$key" "$name" "$suffix"
   return 0
 }
 __kcs_ld_mcb_silent() {
   local ns="miss-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_debug "$ns" "missing '%s:%s'" \
-    "$key" "$name"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_debug "$ns" "missing '%s:%s'%s" "$key" "$name" "$suffix"
   return 1
 }
 __kcs_ld_mcb_warn() {
   local ns="miss-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_warn "$ns" "missing '%s:%s'" \
-    "$key" "$name"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_warn "$ns" "missing '%s:%s'%s" "$key" "$name" "$suffix"
   return 1
 }
 __kcs_ld_mcb_error() {
   local ns="miss-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_error "$ns" "missing '%s:%s'" \
-    "$key" "$name"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_error "$ns" "missing '%s:%s'%s" "$key" "$name" "$suffix"
   return 1
 }
 __kcs_ld_mcb_throw() {
   local key="$1" name="$2" filepath="$3"
-  kcs_exit 1 "missing '%s:%s'" \
-    "$key" "$name"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_exit 1 "missing '%s:%s'%s" "$key" "$name" "$suffix"
 }
 
 __kcs_ld_ecb_mute() {
   local ns="error-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_debug "$ns" "loading '%s:%s' failed (%s)" \
-    "$key" "$name" "$filepath"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_debug "$ns" "loading '%s:%s' failed%s" \
+    "$key" "$name" "$suffix"
   return 0
 }
 __kcs_ld_ecb_silent() {
   local ns="error-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_debug "$ns" "loading '%s:%s' failed (%s)" \
-    "$key" "$name" "$filepath"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_debug "$ns" "loading '%s:%s' failed%s" \
+    "$key" "$name" "$suffix"
   return 1
 }
 __kcs_ld_ecb_warn() {
   local ns="error-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_warn "$ns" "loading '%s:%s' failed (%s)" \
-    "$key" "$name" "$filepath"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_warn "$ns" "loading '%s:%s' failed%s" \
+    "$key" "$name" "$suffix"
   return 1
 }
 __kcs_ld_ecb_error() {
   local ns="error-cb.loader"
   local key="$1" name="$2" filepath="$3"
-  kcs_log_error "$ns" "loading '%s:%s' failed (%s)" \
-    "$key" "$name" "$filepath"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_log_error "$ns" "loading '%s:%s' failed%s" \
+    "$key" "$name" "$suffix"
   return 1
 }
 __kcs_ld_ecb_throw() {
   local key="$1" name="$2" filepath="$3"
-  kcs_exit 1 "loading '%s:%s' failed (%s)" \
-    "$key" "$name" "$filepath"
+  local suffix
+  test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
+    suffix=" ($filepath)"
+  kcs_exit 1 "loading '%s:%s' failed%s" \
+    "$key" "$name" "$suffix"
 }
 
 __kcs_ld_is_loaded() {

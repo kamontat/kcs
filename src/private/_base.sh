@@ -76,7 +76,6 @@ kcs_exit() {
     exit "$code"
   fi
 
-  kcs_log_debug "$ns" "register exit hooks for grateful exit"
   kcs_log_error "$ns" "$@"
   kcs_hooks_add finish exit "@varargs=$code"
 }
