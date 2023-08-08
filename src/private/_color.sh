@@ -59,9 +59,12 @@ _kcs_color_init() {
     kcs_color_disable
   elif test -n "$KCS_LOGOUT"; then
     kcs_color_disable
-  elif test -n "$KCS_CLR"; then
-    kcs_color_enabled
+  # elif test -n "$KCS_CLR"; then
+  #   kcs_color_enabled
   fi
+
+  ## Enabled color by default
+  kcs_color_enabled
 }
 
 __kcs_color_hook_clean() {
