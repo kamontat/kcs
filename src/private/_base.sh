@@ -13,7 +13,7 @@ kcs_template() {
   shift
   for kv in "$@"; do
     key="${kv%%=*}"
-    value="${kv##*=}"
+    value="${kv#*=}"
     template="${template//\{$key\}/$value}"
   done
   printf "%s" "$template"
