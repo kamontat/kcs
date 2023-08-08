@@ -15,7 +15,7 @@ kcs_command_start() {
 
 __kcs_command_start() {
   local ns="command.lib"
-  local extra="$1" raw="$2" name="$3"
+  local raw="$1" extra="$2" name="$3"
   shift 3
 
   test -n "$extra" && KCS_CMD_ARGS_EXTRA="$extra"

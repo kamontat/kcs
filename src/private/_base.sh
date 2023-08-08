@@ -22,7 +22,7 @@ kcs_template() {
 ## Parse argument
 ## usage: `kcs_argument <callback> <args...>`
 ## signature:
-##   - callback: $cb '$extra' '$raw' '<args...>'
+##   - callback: $cb '$raw' '$extra' '<args...>'
 kcs_argument() {
   local ns="argument.base"
   local raw_sep='<>' extra_sep='--'
@@ -56,7 +56,7 @@ kcs_argument() {
   done
 
   if command -v "$callback" >/dev/null; then
-    "$callback" "${extra_args[*]}" "${raw_args[*]}" "${args[@]}"
+    "$callback" "${raw_args[*]}" "${extra_args[*]}" "${args[@]}"
   else
     kcs_log_warn "$ns" "callback(%s) function is missing" "$callback"
     return 1

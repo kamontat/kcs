@@ -18,7 +18,7 @@ __kcs_commands_load() {
   local ns="load.commands"
   local sep="${KCS_CMDSEP:-/}"
   local default="${KCS_CMDDEF:-_default}"
-  local extra="$1" raw="$2"
+  local raw="$1" extra="$2"
   shift 2
 
   local commands=("$@") args=()
