@@ -6,7 +6,7 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 main() {
-  kct_autodiscovery 'disable' "$KCT_PATH_TESTDIR"
+  kct_autodiscovery 'enabled' "$KCT_PATH_TESTDIR"
 
   kct_case echo_without_debug \
     echo
@@ -20,38 +20,57 @@ main() {
     kct_case echo_with_namespaces_debug \
     echo
 
+  DEBUG=kcs \
+    kct_case empty_ignore_option \
+    empty hello --help --example -t
+
   KCS_LOGLVL=error \
-    kct_case log_only_error \
+    kct_case loggings_only_error \
     loggings
   KCS_LOGLVL=warn,i \
-    kct_case log_multiple_levels \
+    kct_case loggings_multiple_levels \
     loggings
   KCS_LOGLVL=silent \
-    kct_case log_silent \
+    kct_case loggings_silent \
     loggings
 
-  kct_case args_default \
+  kct_case arguments_default \
     arguments a b c
-  kct_case args_with_extra \
+  kct_case arguments_with_extra \
     arguments a b c -- hello world
-  kct_case args_with_raw \
+  kct_case arguments_with_raw \
     arguments a b c '<>' hello world
-  kct_case args_with_raw_and_extra \
+  kct_case arguments_with_raw_and_extra \
     arguments a b c '<>' hello -- extra argument
-  kct_case args_with_extra_and_raw \
+  kct_case arguments_with_extra_and_raw \
     arguments a b c -- hello '<>' raw argument
 
   KCS_CMDSEP='-' \
     kct_case new_cmd_sep \
-    newsep test
+    _newsep test
   KCS_CMDDEF='_empty' \
     kct_case new_cmd_default \
     invalid
+
+  DEBUG=kcs kct_case nested_cmd_name \
+    _nested
+
+  DEBUG=kcs kct_case option_single_long \
+    _options --land
+  DEBUG=kcs kct_case option_single_short \
+    _options -l
+  DEBUG=kcs kct_case option_with_cmd \
+    _options hello -l world
 }
 
 kct_case() {
   local name="$1"
   shift
+
+  if test -n "$_KCT_CASES" && ! [[ "$_KCT_CASES" =~ $name ]]; then
+    _kct_run_ignore "$name" "$@"
+    return
+  fi
 
   if _kct_mode_snap; then
     _kct_run_snapshot "$name" "" "$@"
@@ -168,6 +187,10 @@ _kct_run_invalid() {
   printf '%s\n' "$err" >&2
   exit 1
 }
+_kct_run_ignore() {
+  local err='filtered out cases'
+  _kct_result_save "$1" "$KCT_STATUS_IGNORED" "$err"
+}
 
 _kct_mode_snap() {
   [[ "$KCT_MODE" == "snapshot" ]] ||
@@ -262,6 +285,7 @@ __internal() {
 
   export KCT_STATUS_COMPLETED='COMPLETED'
   export KCT_STATUS_PASSED='PASSED'
+  export KCT_STATUS_IGNORED='IGNORED'
   export KCT_STATUS_FAILED='FAILED'
   export KCT_STATUS_INVALID='INVALID'
 
@@ -269,14 +293,16 @@ __internal() {
   export KCT_SNAPSHOT_STDERR='snapshot.stderr'
   export KCT_SNAPSHOT_STDLOG='snapshot.stdlog'
 
-  "$@"
+  local cmd="$1"
+  shift
+  _KCT_CASES="${KCT_CASES:-$*}" "$cmd"
 
   local code="$KCT_ERROR_COUNT"
 
   unset KCT_ID KCT_RUN_ID KCT_INDEX KCT_ERROR_COUNT
   unset KCT_PATH_TESTDIR KCT_PATH_TMPDIR KCT_PATH_SNAPDIR KCT_PATH_REPORTDIR
   unset KCT_PATH_ROOTDIR KCT_CMD_KCS
-  unset KCT_STATUS_COMPLETED KCT_STATUS_PASSED
+  unset KCT_STATUS_COMPLETED KCT_STATUS_PASSED KCT_STATUS_IGNORED
   unset KCT_STATUS_FAILED KCT_STATUS_INVALID
   unset KCT_SNAPSHOT_STDOUT KCT_SNAPSHOT_STDERR KCT_SNAPSHOT_STDLOG
 
@@ -293,4 +319,4 @@ __prepare() {
   test -d "$KCT_PATH_SNAPDIR" || mkdir -p "$KCT_PATH_SNAPDIR"
 }
 
-__internal main
+__internal main "$@"
