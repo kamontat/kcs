@@ -22,7 +22,7 @@ __kcs_commands_load() {
   shift 2
 
   local commands=("$@") args=()
-  local index="${#commands[@]}"
+  local index="${#commands[@]}" current
   local filename="${commands[*]}"
   filename="${filename// /$sep}"
   while true; do
@@ -31,15 +31,22 @@ __kcs_commands_load() {
     fi
 
     args=("${commands[@]:$index}")
-    if KCS_CMD_ARGS_RAW="$raw" \
-      KCS_CMD_ARGS_EXTRA="$extra" \
-      kcs_ld_cmd "$filename" "${args[@]}"; then
-      return 0
+    current="${filename##*"$sep"}"
+
+    kcs_log_debug "$ns" "current filename is '%s'" "$current"
+    if [[ "$current" =~ ^- ]]; then
+      kcs_log_debug "$ns" \
+        "skipped because options cannot be filename (%s)" "$current"
+    else
+      if KCS_CMD_ARGS_RAW="$raw" \
+        KCS_CMD_ARGS_EXTRA="$extra" \
+        kcs_ld_cmd "$filename" "${args[@]}"; then
+        return 0
+      fi
     fi
 
     filename="${commands[*]:0:$((index - 1))}"
     filename="${filename// /$sep}"
-
     ((index--))
   done
 
