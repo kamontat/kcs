@@ -23,14 +23,17 @@ export KCS_HOOKS_TAG_OPTIONAL="@optional"
 export KCS_HOOKS_TAG_SILENT="@silent"
 ## raw will send raw user argument to callback
 export KCS_HOOKS_TAG_RAW="@raw"
-## add arguments from input variable name
+## add arguments before any args from input variable name
 export KCS_HOOKS_TAG_VARARGS="@varargs"
+export KCS_HOOKS_TAG_RAWARGS="@rawargs"
+## Arguments: <callback> <varargs> <raw> '<>' <rawargs>
 _KCS_HOOKS_TAGS=(
   "$KCS_HOOKS_TAG_CALLBACK"
   "$KCS_HOOKS_TAG_OPTIONAL"
   "$KCS_HOOKS_TAG_SILENT"
   "$KCS_HOOKS_TAG_RAW"
   "$KCS_HOOKS_TAG_VARARGS"
+  "$KCS_HOOKS_TAG_RAWARGS"
 )
 
 ## Adding callback on hook name
@@ -154,7 +157,7 @@ kcs_hooks_run() {
     fi
 
     local executor=kcs_func_must
-    local args=() is_tag_raw=false tag_cb tag_vararg
+    local args=() is_tag_raw=false tag_cb tag_vararg tag_rawargs
     while read -r tag_raw; do
       tag_key="${tag_raw%%=*}"
       tag_value="${tag_raw#*=}"
@@ -165,6 +168,7 @@ kcs_hooks_run() {
       "$KCS_HOOKS_TAG_RAW") is_tag_raw=true ;;
       "$KCS_HOOKS_TAG_CALLBACK") tag_cb="$tag_value" ;;
       "$KCS_HOOKS_TAG_VARARGS") tag_vararg="$tag_value" ;;
+      "$KCS_HOOKS_TAG_RAWARGS") tag_rawargs="$tag_value" ;;
       esac
     done <<<"$(echo "$tags" | tr ',' '\n')"
 
@@ -172,6 +176,7 @@ kcs_hooks_run() {
     # shellcheck disable=SC2206
     test -n "$tag_vararg" && args+=($tag_vararg)
     "$is_tag_raw" && args+=("${raw_args[@]}")
+    test -n "$tag_rawargs" && args+=('<>' "$tag_rawargs")
 
     kcs_log_debug "$ns" "using '%s' for '%s' callback" "$executor" "$callback"
     "$executor" "$callback" "$callback" "${args[@]}"
@@ -190,7 +195,7 @@ kcs_hooks_start() {
 kcs_hooks_stop() {
   unset KCS_HOOKS_TAG_CALLBACK KCS_HOOKS_TAG_OPTIONAL
   unset KCS_HOOKS_TAG_SILENT KCS_HOOKS_TAG_RAW
-  unset KCS_HOOKS_TAG_VARARGS
+  unset KCS_HOOKS_TAG_VARARGS KCS_HOOKS_TAG_RAWARGS
 
   unset _KCS_HOOKS_DB_ALL _KCS_HOOKS_DB_DISABLE
   unset _KCS_HOOKS_TAGS _KCS_HOOKS_NAMES
