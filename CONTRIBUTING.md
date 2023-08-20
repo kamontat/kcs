@@ -50,3 +50,27 @@ Both libraries and utilities contains several lifecycle callback for setup
     - Use for adding hooks (`kcs_hooks_add`)
 2. `__kcs_<name>_lc_start <args...>` - This will called after init completed
     - Use for start libs/utils if it need to
+
+## Commands
+
+On commands script, we expose several variables to use
+
+1. `$_KCS_CMD_NAME` - command name (usually this will matches with script name)
+2. `$_KCS_CMD_VERSION` - command version (developer will add `KCS_CMD_VERSION=<0.0.0>` on config environment)
+3. `$_KCS_CMD_ARGS` - a parsed arguments array
+4. `$_KCS_CMD_ARGS_RAW` - a space separated string of raw arguments
+5. `$_KCS_CMD_ARGS_EXTRA` - a space separated string of extra arguments
+6. `$_KCS_OPT_<NAME>_VALUE` - a option value from user
+
+## Arguments
+
+The argument is string input from someone each pass to function. We specific argument to 4 types.
+
+1. Direct Arguments (DA) - This is a argument send directly to function.
+    - You can access by `$@` (array)
+2. Parsed Arguments (PA) - This is a parsed argument that commands doesn't know what to do with it
+    - You can access by `${_KCS_CMD_ARGS[@]}` (array)
+3. Extra Arguments (EA) - This is a extra argument for extra command (arguments after '--' will consider as extra)
+    - You can access by `$_KCS_CMD_ARGS_EXTRA` (string)
+4. Raw Arguments (RA) - This is a raw argument as is from input (ALL arguments after '<>' will consider as raw)
+    - You can access by `$_KCS_CMD_ARGS_RAW` (string)
