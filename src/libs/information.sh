@@ -7,8 +7,8 @@
 
 ## Show --version
 kcs_info_version() {
-  if test -n "$KCS_CMD_VERSION"; then
-    printf '%s\n' "$KCS_CMD_VERSION"
+  if test -n "$_KCS_CMD_VERSION"; then
+    printf '%s\n' "$_KCS_CMD_VERSION"
     return 0
   fi
 
@@ -20,15 +20,26 @@ kcs_info_version() {
 }
 
 kcs_info_full_version() {
-  if test -n "$_KCS_CMD_NAME" && test -n "$KCS_CMD_VERSION"; then
-    printf '%s: %s\n' "$_KCS_CMD_NAME" "$KCS_CMD_VERSION"
+  local kcs_version=dev
+
+  if test -n "$_KCS_PATH_SRC" && test -f "$_KCS_PATH_SRC/version.txt"; then
+    kcs_log_debug "$ns" "found kcs version from '%s'" "\$_KCS_PATH_SRC"
+    kcs_version="$(cat "$_KCS_PATH_SRC/version.txt")"
+  elif test -n "$_KCS_PATH_ROOT" && test -f "$_KCS_PATH_ROOT/version.txt"; then
+    kcs_log_debug "$ns" "found kcs version from '%s'" "\$_KCS_PATH_ROOT"
+    kcs_version="$(cat "$_KCS_PATH_ROOT/version.txt")"
+  fi
+
+  if test -n "$_KCS_CMD_NAME" && test -n "$_KCS_CMD_VERSION"; then
+    printf '%s: %s\n' "$_KCS_CMD_NAME" "$_KCS_CMD_VERSION"
+    printf '%s: %s\n' "kcs" "$kcs_version"
     return 0
   fi
 
   kcs_log_debug "$ns" \
     "information is missing either '%s' or '%s'" \
     "KCS_CMD_NAME $_KCS_CMD_NAME" \
-    "KCS_CMD_VERSION $KCS_CMD_VERSION"
+    "KCS_CMD_VERSION $_KCS_CMD_VERSION"
   return 1
 }
 
@@ -42,4 +53,14 @@ __kcs_information_lc_init() {
     kcs_log_warn "$ns" "missing %s variable, information might not completed" \
       '$_KCS_CMD_NAME'
   fi
+
+  export _KCS_CMD_VERSION="${KCS_CMD_VERSION:-dev}"
+}
+
+__kcs_information_lc_start() {
+  kcs_hooks_add pre_clean information
+}
+
+__kcs_information_hook_clean() {
+  unset _KCS_CMD_VERSION
 }
