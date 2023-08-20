@@ -115,7 +115,8 @@ _kcs_ld_do() {
   esac
 
   if "$saved" && __kcs_ld_is_loaded "$key" "$name"; then
-    kcs_log_debug "$ns" "skipped loaded '%s:%s'" "$key" "$name"
+    kcs_log_warn "$ns" \
+      "skipping '%s:%s' because it has been loaded" "$key" "$name"
     return 0
   fi
 
