@@ -128,60 +128,61 @@ __kcs_options_hook_init_internal() {
   kcs_log_debug "$ns" "options definition: %s" "$definitions"
 
   local raw next inputs=("$@") output=()
-  local def selected_defs=() opt option arg
+  local def opt option arg
   for ((i = 0; i < ${#inputs[@]}; i++)); do
     raw="${inputs[$i]}"
-    next="${inputs[$((i + 1))]}"
     if _kcs_options_is_arg "$raw"; then
       kcs_log_debug "$ns" "move '%s' to final list as args" "$raw"
       output+=("$raw")
       continue
     fi
 
+    ## inline mode is when argument inline in long option using equal sign (=)
+    local inline=false
+    next="${inputs[$((i + 1))]}"
     if _kcs_options_is_short_opt "$raw"; then
       opt="${raw:1}"
       local short_option_size="${#opt}"
       for ((j = 0; j < short_option_size; j++)); do
         option="-${opt:$j:1}"
+        ## Only parse next argument on last option in short options list
+        [ "$((j + 1))" -eq "$short_option_size" ] &&
+          _kcs_options_is_arg "$next" && arg="$next"
+
         kcs_log_debug "$ns" "parsing short options '%s'" "$option"
 
         def="$(__kcs_options_def_find "$definitions" "$option")"
-        if test -z "$def"; then
-          kcs_log_warn "$ns" "unknown option (%s)" "$option"
+        ! __kcs_options_check_warn "$def" "$option" "$arg" && continue
+        ! __kcs_options_check_error "$def" "$option" "$arg" &&
+          ((code++)) &&
           continue
-        else
-          kcs_log_debug "$ns" "found '%s' definition: '%s'" "$option" "$def"
-        fi
-        if _kcs_options_is_arg "$next"; then
-          arg="$next"
-        fi
-
-        ## Error already log inside function
-        if ! __kcs_options_check_requirement "$def" "$arg"; then
-          ((code++))
+        __kcs_options_check_arg "$def" "$option" "$arg" "$inline" && ((i++))
+        ! __kcs_options_export "$def" "$option" "$arg" &&
+          ((code++)) &&
           continue
-        fi
-
-        if __kcs_options_use_arg "$def" "$arg"; then
-          if [ "$((j + 1))" -ne "$short_option_size" ]; then
-            kcs_log_error "$ns" "option '%s' require argument, but not place last (%s)" \
-              "$option" "$raw"
-            ((code++))
-            continue
-          fi
-
-          kcs_log_debug "$ns" "skipping new input as option argument"
-          ((i++))
-        fi
-
-        selected_defs+=("$def;$arg")
       done
       continue
     fi
 
     if _kcs_options_is_long_opt "$raw"; then
-      option="${raw:2}"
-      kcs_log_debug "$ns" "parsing long options '--%s'" "$option"
+      option="${raw%%=*}"
+      ## Parse inline argument
+      local raw_arg="${raw#*=}"
+      [[ "$raw_arg" != "$option" ]] && arg="$raw_arg" && inline=true
+      ## Parse next argument
+      _kcs_options_is_arg "$next" && test -z "$arg" && arg="$next"
+
+      kcs_log_debug "$ns" "parsing long options '%s'" "$option"
+
+      def="$(__kcs_options_def_find "$definitions" "$option")"
+      ! __kcs_options_check_warn "$def" "$option" "$arg" && continue
+      ! __kcs_options_check_error "$def" "$option" "$arg" &&
+        ((code++)) &&
+        continue
+      __kcs_options_check_arg "$def" "$option" "$arg" "$inline" && ((i++))
+      ! __kcs_options_export "$def" "$option" "$arg" &&
+        ((code++)) &&
+        continue
       continue
     fi
 
@@ -205,37 +206,93 @@ __kcs_options_def_find() {
   echo "$definitions" | grep -Eo "\|$key\|[^;]+"
 }
 
-__kcs_options_check_requirement() {
+## verify definitions with option and next value (warn mode)
+## usage: `__kcs_options_def_check_warn '|h|help|:HELP:NV' [option] [arg]`
+__kcs_options_check_warn() {
   local ns="checker.options"
-  local def="$1" arg="$2"
-  local atype
+  local def="$1" option="$2" arg="$3"
+
+  test -z "$def" &&
+    kcs_log_warn "$ns" "unknown option '%s'" "$option" &&
+    return 1
+
+  return 0
+}
+## verify definitions with current and next value (error mode)
+## usage: `__kcs_options_def_check_error '|h|help|:HELP:NV' [option] [arg]`
+__kcs_options_check_error() {
+  local ns="checker.options"
+  local def="$1" option="$2" arg="$3" atype
   atype="$(__kcs_options_def_atype "$def")"
 
   ## Option must contains argument
-  if [[ "${atype:0:1}" == "R" ]] && test -z "$arg"; then
-    kcs_log_error "$ns" "option '%s' is required argument" \
-      "$(__kcs_options_def_options "$def")"
+  [[ "${atype:0:1}" == "R" ]] && test -z "$arg" &&
+    kcs_log_error "$ns" "option '%s' requires argument" \
+      "$(__kcs_options_def_options "$def")" &&
     return 1
-  fi
   ## Option must NOT contains argument
-  # if [[ "${atype:0:1}" == "N" ]] && test -n "$arg"; then
-  #   kcs_log_error "$ns" "option '%s' required NO argument" \
-  #     "$(__kcs_options_def_options "$def")"
+  # [[ "${atype:0:1}" == "N" ]] && test -n "$arg" &&
+  #   kcs_log_error "$ns" "option '%s' requires NO argument" \
+  #     "$(__kcs_options_def_options "$def")" &&
   #   return 1
-  # fi
+
   return 0
 }
 
-__kcs_options_use_arg() {
-  local def="$1" arg="$2"
-  local atype
+## check is option consume argument or not
+__kcs_options_check_arg() {
+  local ns="checker.options"
+  local def="$1" option="$2" arg="$3" inline="$4" atype
   atype="$(__kcs_options_def_atype "$def")"
+
+  if "$inline"; then
+    kcs_log_debug "$ns" "inline mode; never parse argument for '%s'" "$option"
+    return 1
+  fi
   if [[ "${atype:0:1}" == "N" ]]; then
+    kcs_log_debug "$ns" "option '%s' is no argument type" "$option"
+    return 1
+  fi
+  if test -z "$arg"; then
+    kcs_log_debug "$ns" "option '%s' not provide any argument" "$option"
     return 1
   fi
 
-  ## Use argument
-  test -n "$arg"
+  kcs_log_debug "$ns" "convert next input to option argument (%s)" "$arg"
+  return 0
+}
+
+## export option value
+__kcs_options_export() {
+  local ns="export.options"
+  local def="$1" option="$2" arg="$3"
+
+  local name atype
+  name="$(__kcs_options_def_name "$def")"
+  atype="$(__kcs_options_def_atype "$def")"
+
+  test -z "$name" &&
+    kcs_log_error "$ns" "option '%s' is missing variable name (%s)" \
+      "$option" "$def" &&
+    return 1
+
+  local var="_KCS_OPT_${name}_VALUE"
+
+  if [[ "${atype:0:1}" == "N" ]]; then
+    kcs_log_debug "$ns" "assign argument of NV to 'true'"
+    arg="true"
+  fi
+
+  if [[ "${atype:0:1}" == "O" ]] && test -z "$arg"; then
+    local default
+    default="$(__kcs_options_def_default "$def")"
+    kcs_log_debug "$ns" "assign '%s' as default argument to option '%s'" \
+      "$default" "$option"
+    arg="$default"
+  fi
+
+  kcs_log_debug "$ns" "export '%s'='%s'" "$var" "$arg"
+  export "$var"="$arg"
 }
 
 ## get definition possible options
@@ -264,14 +321,23 @@ __kcs_options_def_desc() {
   __kcs_options_def_get "$1" 4
 }
 __kcs_options_def_get() {
+  local ns="parser.def.options"
   # shellcheck disable=SC2207
   local array=($(echo "$1" | tr ':' '\n')) index="$2"
+  if [ ${#array[@]} -lt 3 ] || [ ${#array[@]} -gt 5 ]; then
+    kcs_log_warn "$ns" "cannot parse definition '%s' (expected 3 <= %d <= 5)" \
+      "$1" "${#array[@]}"
+    return 1
+  fi
+
   if [ ${#array[@]} -eq 3 ] ||
-    [ ${#array[@]} -eq 4 ]; then
+    [ ${#array[@]} -eq 4 ] ||
+    [ ${#array[@]} -eq 5 ]; then
     local value="${array[$index]}"
     printf "%s" "$(__kcs_options_unescape "$value")"
     return 0
   fi
+
   return 1
 }
 
