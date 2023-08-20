@@ -38,8 +38,8 @@ __kcs_commands_load() {
       kcs_log_debug "$ns" \
         "skipped because options cannot be filename (%s)" "$current"
     else
-      if KCS_CMD_ARGS_RAW="$raw" \
-        KCS_CMD_ARGS_EXTRA="$extra" \
+      if _KCS_CMD_ARGS_RAW="$raw" \
+        _KCS_CMD_ARGS_EXTRA="$extra" \
         kcs_ld_cmd "$filename" "${args[@]}"; then
         return 0
       fi
@@ -52,8 +52,8 @@ __kcs_commands_load() {
 
   kcs_log_debug "$ns" \
     "cannot found command, fallback to %s command" "$default"
-  KCS_CMD_ARGS_RAW="$raw" \
-    KCS_CMD_ARGS_EXTRA="$extra" \
+  _KCS_CMD_ARGS_RAW="$raw" \
+    _KCS_CMD_ARGS_EXTRA="$extra" \
     __kcs_commands_default "$default" "${commands[@]}"
 }
 

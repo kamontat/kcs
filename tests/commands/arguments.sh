@@ -12,8 +12,8 @@ __kcs_arguments_hook_main() {
   echo "name  : $_KCS_CMD_NAME"
   echo "ns    : $ns"
   echo "args  : $# [$*]"
-  echo "raw   : ${KCS_CMD_ARGS_RAW:-<missing>}"
-  echo "extra : ${KCS_CMD_ARGS_EXTRA:-<missing>}"
+  echo "raw   : ${_KCS_CMD_ARGS_RAW:-<missing>}"
+  echo "extra : ${_KCS_CMD_ARGS_EXTRA:-<missing>}"
 }
 
 if test -z "$_KCS_MAIN_MODE"; then

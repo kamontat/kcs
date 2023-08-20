@@ -18,8 +18,8 @@ __kcs_command_start() {
   local raw="$1" extra="$2" name="$3"
   shift 3
 
-  test -n "$extra" && KCS_CMD_ARGS_EXTRA="$extra"
-  test -n "$raw" && KCS_CMD_ARGS_RAW="$raw"
+  test -n "$extra" && _KCS_CMD_ARGS_EXTRA="$extra"
+  test -n "$raw" && _KCS_CMD_ARGS_RAW="$raw"
 
   local message="start '$name' command"
   if [ "$#" -gt 0 ]; then
@@ -27,10 +27,10 @@ __kcs_command_start() {
   else
     message="$message without args"
   fi
-  test -n "${KCS_CMD_ARGS_RAW:-}" &&
-    message="$message with raw args [$KCS_CMD_ARGS_RAW]"
-  test -n "${KCS_CMD_ARGS_EXTRA:-}" &&
-    message="$message with extra args [$KCS_CMD_ARGS_EXTRA]"
+  test -n "${_KCS_CMD_ARGS_RAW:-}" &&
+    message="$message with raw args [$_KCS_CMD_ARGS_RAW]"
+  test -n "${_KCS_CMD_ARGS_EXTRA:-}" &&
+    message="$message with extra args [$_KCS_CMD_ARGS_EXTRA]"
 
   kcs_log_debug "$ns" "$message"
   _kcs_ld_priv environment
