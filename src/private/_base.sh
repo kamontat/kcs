@@ -82,3 +82,17 @@ kcs_exit() {
 __kcs_exit_hook_finish() {
   exit "${1:-1}"
 }
+
+## Enabled dev mode and initiate variable
+## This will call only once per environment
+if test -n "$KCS_DEV" && test -z "$__KCS_DEV_INIT"; then
+  test -z "$DEBUG" && export DEBUG=kcs
+  test -z "$KCS_TMPBFR" && export KCS_TMPBFR=true
+  test -z "$KCS_TMPDIR" && export KCS_TMPDIR=/tmp/kcs
+
+  echo "#################################"
+  echo "#      You are on DEV mode      #"
+  echo "#################################"
+
+  export __KCS_DEV_INIT=true
+fi
