@@ -1,3 +1,3 @@
-[ERR] checker.options      option '|--rock|' contained default argument and no custom argument provided
+[ERR] checker.options      option '|-w|--water|' contained default argument and no custom argument provided
 [ERR] exit.base            loading 'func:__kcs_options_hook_init' failed
 [ERR] exit.base            loading 'commands:_options' failed ($KCT_PATH_TESTDIR/commands/_options.sh)

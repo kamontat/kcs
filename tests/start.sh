@@ -67,8 +67,10 @@ main() {
     _options --sky 'blue'
   DEBUG=kcs:options kct_case option_long_with_equal_arg \
     _options --rock=water
+  DEBUG=kcs:options kct_case option_short_with_optional_arg \
+    _options -w
   DEBUG=kcs:options kct_case option_long_with_default_arg \
-    _options -r
+    _options --rock
   DEBUG=kcs:options kct_case option_short_require_arg \
     _options -s
 }
