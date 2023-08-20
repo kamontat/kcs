@@ -167,10 +167,14 @@ __kcs_log() {
 
 __kcs_log_normalize() {
   local input="$1"
-  input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
-  input="${input//$_KCS_PATH_SRC/\$KCS_PATH_SRC}"
-  input="${input//$_KCS_PATH_ROOT/\$KCS_PATH_ROOT}"
-  input="${input//$HOME/\$HOME}"
+  if test -n "$KCS_TEST"; then
+    input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
+    input="${input//$_KCS_PATH_SRC/\$KCS_PATH_SRC}"
+    input="${input//$_KCS_PATH_ROOT/\$KCS_PATH_ROOT}"
+    input="${input//$TMPDIR/\$TMPDIR}"
+    input="${input//$_KCS_PATH_TMP/\$KCS_PATH_TMP}"
+    input="${input//$HOME/\$HOME}"
+  fi
 
   printf '%s' "$input"
 }
