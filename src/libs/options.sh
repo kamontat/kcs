@@ -243,9 +243,15 @@ __kcs_options_check_error() {
   local def="$1" option="$2" arg="$3" atype
   atype="$(__kcs_options_def_atype "$def")"
 
-  ## Option must contains argument
+  ## Require option must contains argument
   [[ "${atype:0:1}" == "R" ]] && test -z "$arg" &&
     kcs_log_error "$ns" "option '%s' requires argument" \
+      "$(__kcs_options_def_options "$def")" &&
+    return 1
+  ## Optional option must contains argument
+  [[ "${atype:0:1}" == "O" ]] && test -z "$arg" &&
+    kcs_log_error "$ns" \
+      "option '%s' contained default argument and no custom argument provided" \
       "$(__kcs_options_def_options "$def")" &&
     return 1
   ## Option must NOT contains argument

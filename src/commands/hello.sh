@@ -5,8 +5,37 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+__kcs_hello_hook_init() {
+  kcs_ld_lib options \
+    '-h|--help; HELP show help; message' \
+    '-v|--version <str>; VERSION' \
+    '-e|--exp|--example [str:hello(=space=)world]; EXAMPLE show example:message'
+}
+
 __kcs_hello_hook_main() {
-  return 0
+  local ns="$1"
+  shift
+
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "name" "$_KCS_CMD_NAME"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "version" "$_KCS_CMD_VERSION"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "namespace" "$ns"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "direct-args" "$# [$*]"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "parsed-args" "${#_KCS_CMD_ARGS[@]} [${_KCS_CMD_ARGS[*]}]"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "raw-args" "${_KCS_CMD_ARGS_RAW:-<missing>}"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "extra-args" "${_KCS_CMD_ARGS_EXTRA:-<missing>}"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "opt-help" "$_KCS_OPT_HELP_VALUE"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "opt-version" "$_KCS_OPT_VERSION_VALUE"
+  kcs_log_printf "$ns" "%-15s : %s" \
+    "opt-example" "$_KCS_OPT_EXAMPLE_VALUE"
 }
 
 #####################################################
