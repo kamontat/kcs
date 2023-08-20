@@ -101,7 +101,8 @@ __kcs_log() {
       if [[ "$dbg_key" != "$dbg_value" ]]; then
         local dbg_disable=true
         for value in ${dbg_value//,/ }; do
-          if [[ "$value" == "$ns" ]]; then
+          # if [[ "$ns" == "$value" ]]; then
+          if [[ "$ns" =~ $value$ ]]; then
             dbg_disable=false
             break
           fi
