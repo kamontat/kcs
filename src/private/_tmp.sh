@@ -67,25 +67,30 @@ __kcs_tmp_hook_init() {
     current="$(date +"%Y%m%d%H%M")"
     diff="$((current - previous))"
     if [ -d "$basedir" ] && [ "$diff" -gt "${KCS_TMPCLE:-10000}" ]; then
-      kcs_log_debug "$ns" \
-        "cleanup directory '%s' because it created at '%s' (diff=%s)" \
-        "$basedir" "$previous" "$diff"
+      test -z "$KCS_TEST" &&
+        kcs_log_debug "$ns" \
+          "cleanup directory '%s' because it created at '%s' (diff=%s)" \
+          "$basedir" "$previous" "$diff"
       rm -r "$basedir"
     elif test -n "$KCS_TMPBFR"; then
-      kcs_log_debug "$ns" "cleanup directory '%s' because dev mode is enabled" \
-        "$basedir"
+      test -z "$KCS_TEST" &&
+        kcs_log_debug "$ns" "cleanup directory '%s' because dev mode is enabled" \
+          "$basedir"
       rm -r "$basedir"
     fi
   fi
 
   if ! test -d "$basedir"; then
-    kcs_log_debug "$ns" "create directory at '%s'" "$basedir"
+    test -z "$KCS_TEST" &&
+      kcs_log_debug "$ns" "create directory at '%s'" "$basedir"
     mkdir "$basedir" || return 1
   else
-    kcs_log_debug "$ns" "reuse directory at '%s'" "$basedir"
+    test -z "$KCS_TEST" &&
+      kcs_log_debug "$ns" "reuse directory at '%s'" "$basedir"
   fi
 
-  kcs_log_debug "$ns" "create \$_KCS_PATH_TMP variable to '%s'" "$basedir"
+  test -z "$KCS_TEST" &&
+    kcs_log_debug "$ns" "create \$_KCS_PATH_TMP variable to '%s'" "$basedir"
   export _KCS_PATH_TMP="$basedir"
 }
 
