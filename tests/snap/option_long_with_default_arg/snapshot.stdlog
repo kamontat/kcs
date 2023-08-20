@@ -1,6 +1,71 @@
-[DBG] init.options         reuse definitions from cache file '$TMPDIR/kcs/libs-options/options-definitions.txt'
-[DBG] hook-init.options    options definition: |-l|:LAND:NV::;|-f|--flower|:FLOWER:NV::;|-s|--sky|:SKY:RS::;|-w|--water|:WATER:OS::;|-r|--rock|:ROCK:OS:paper:;|-e|--ex|--extra|:EXTRA:NV:paper:;|--q|:QUE:NV:paper:;
+[DBG] init.options         parsing input '-l; LAND'
+[DBG] init.options         parsing input option string '-l; LAND'
+[DBG] init.options         possible option list: -l
+[DBG] init.options         variable name: LAND
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: NV
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |-l|:LAND:NV::;
+[DBG] init.options         parsing input '-f|--flower; FLOWER'
+[DBG] init.options         parsing input option string '-f|--flower; FLOWER'
+[DBG] init.options         possible option list: -f|--flower
+[DBG] init.options         variable name: FLOWER
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: NV
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |-f|--flower|:FLOWER:NV::;
+[DBG] init.options         parsing input '-s|--sky <str>; SKY'
+[DBG] init.options         parsing input option string '-s|--sky <str>; SKY'
+[DBG] init.options         possible option list: -s|--sky
+[DBG] init.options         variable name: SKY
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: RS
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |-s|--sky|:SKY:RS::;
+[DBG] init.options         parsing input '-w|--water [str]; WATER'
+[DBG] init.options         parsing input option string '-w|--water [str]; WATER'
+[DBG] init.options         possible option list: -w|--water
+[DBG] init.options         variable name: WATER
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: OS
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |-w|--water|:WATER:OS::;
+[DBG] init.options         parsing input '-r|--rock [str:paper]; ROCK'
+[DBG] init.options         parsing input option string '-r|--rock [str:paper]; ROCK'
+[DBG] init.options         possible option list: -r|--rock
+[DBG] init.options         variable name: ROCK
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: OS
+[DBG] init.options         argument default value: paper
+[DBG] init.options         create option definition: |-r|--rock|:ROCK:OS:paper:;
+[DBG] init.options         parsing input '-e|--ex|--extra; EXTRA'
+[DBG] init.options         parsing input option string '-e|--ex|--extra; EXTRA'
+[DBG] init.options         possible option list: -e|--ex|--extra
+[DBG] init.options         variable name: EXTRA
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: NV
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |-e|--ex|--extra|:EXTRA:NV::;
+[DBG] init.options         parsing input '--q; QUE'
+[DBG] init.options         parsing input option string '--q; QUE'
+[DBG] init.options         possible option list: --q
+[DBG] init.options         variable name: QUE
+[DBG] init.options         option description: 
+[DBG] init.options         argument type: NV
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |--q|:QUE:NV::;
+[DBG] init.options         parsing input '-a|--animal [str]; ANIMAL show all animal in the earth'
+[DBG] init.options         parsing input option string '-a|--animal [str]; ANIMAL show all animal in the earth'
+[DBG] init.options         possible option list: -a|--animal
+[DBG] init.options         variable name: ANIMAL
+[DBG] init.options         option description: show all animal in the earth
+[DBG] init.options         argument type: OS
+[DBG] init.options         argument default value: 
+[DBG] init.options         create option definition: |-a|--animal|:ANIMAL:OS::show(=space=)all(=space=)animal(=space=)in(=space=)the(=space=)earth;
+[DBG] init.options         caching definitions output at '$TMPDIR/kcs/libs-options/options-definitions.txt'
+[DBG] hook-init.options    options definition: |-l|:LAND:NV::;|-f|--flower|:FLOWER:NV::;|-s|--sky|:SKY:RS::;|-w|--water|:WATER:OS::;|-r|--rock|:ROCK:OS:paper:;|-e|--ex|--extra|:EXTRA:NV::;|--q|:QUE:NV::;|-a|--animal|:ANIMAL:OS::show(=space=)all(=space=)animal(=space=)in(=space=)the(=space=)earth;
+[DBG] hook-init.options    initiate 'paper' as default value of '|-r|--rock|' (|-r|--rock|:ROCK:OS:paper:)
+[DBG] export.options       export '_KCS_OPT_ROCK_VALUE'='paper'
 [DBG] hook-init.options    parsing short options '-r'
 [DBG] checker.options      option '-r' not provide any argument
-[DBG] export.options       assign 'paper' as default argument to option '-r'
-[DBG] export.options       export '_KCS_OPT_ROCK_VALUE'='paper'
+[DBG] export.options       skipping export variable '$_KCS_OPT_ROCK_VALUE' because no argument
