@@ -34,3 +34,68 @@
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/private/_environment.sh'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/private/_environment.sh'
 [DBG] source.loader        run '$KCS_PATH_SRC/private/_environment.sh' with 0 args []
+[DBG] status.loader        saving 'private:environment' as loaded module
+[DBG] success-cb.loader    found init function of 'private:environment' with []
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/configs/.env'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/configs/.env'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/configs/.env'
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/private/_lifecycle.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/private/_lifecycle.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/private/_lifecycle.sh'
+[DBG] source.loader        run '$KCS_PATH_SRC/private/_lifecycle.sh' with 5 args [empty hello --help --example -t]
+[DBG] status.loader        saving 'private:lifecycle' as loaded module
+[DBG] success-cb.loader    found init function of 'private:lifecycle' with [empty hello --help --example -t]
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/hooks.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/libs/hooks.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/libs/hooks.sh'
+[DBG] source.loader        run '$KCS_PATH_SRC/libs/hooks.sh' with 0 args []
+[DBG] status.loader        saving 'libs:hooks' as loaded module
+[DBG] success-cb.loader    found init function of 'libs:hooks' with []
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/libs/functions.sh'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/libs/functions.sh'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/libs/functions.sh'
+[DBG] source.loader        run '$KCS_PATH_SRC/libs/functions.sh' with 0 args []
+[DBG] status.loader        saving 'libs:functions' as loaded module
+[DBG] init.lifecycle       initiate $_KCS_CMD_NAME variable to 'empty'
+[DBG] add.hooks            adding '__kcs_tmp_hook_init' to hook name 'pre_init'
+[DBG] add.hooks            adding '__kcs_empty_hook_init' with '@optional' to hook name 'pre_init'
+[DBG] add.hooks            adding '__kcs_empty_hook_main' with '@raw,@varargs' to hook name 'main'
+[DBG] add.hooks            adding '__kcs_empty_hook_clean' with '@optional' to hook name 'pre_clean'
+[DBG] add.hooks            adding '__kcs_environment_hook_clean' to hook name 'clean'
+[DBG] add.hooks            adding '__kcs_tmp_hook_clean' to hook name 'post_clean'
+[DBG] add.hooks            adding '__kcs_log_hook_clean' to hook name 'post_clean'
+[DBG] add.hooks            adding '__kcs_color_hook_clean' to hook name 'post_clean'
+[DBG] success-cb.loader    found start function of 'private:lifecycle' with [empty hello --help --example -t]
+[DBG] runner.hooks         found 2 callbacks on 'pre_init' hook
+[DBG] runner.hooks         using 'kcs_func_must' for '__kcs_tmp_hook_init' callback
+[DBG] do.loader            checking function name '__kcs_tmp_hook_init'
+[DBG] function.loader      run '__kcs_tmp_hook_init' function with 0 args []
+[DBG] runner.hooks         using 'kcs_func_optional' for '__kcs_empty_hook_init' callback
+[DBG] do.loader            checking function name '__kcs_empty_hook_init'
+[DBG] miss-cb.loader       missing 'func:__kcs_empty_hook_init'
+[DBG] runner.hooks         found 0 callbacks on 'init' hook
+[DBG] runner.hooks         found 0 callbacks on 'post_init' hook
+[DBG] runner.hooks         found 0 callbacks on 'pre_main' hook
+[DBG] runner.hooks         found 1 callbacks on 'main' hook
+[DBG] runner.hooks         using 'kcs_func_must' for '__kcs_empty_hook_main' callback
+[DBG] do.loader            checking function name '__kcs_empty_hook_main'
+[DBG] function.loader      run '__kcs_empty_hook_main' function with 5 args [empty.command hello --help --example -t]
+[DBG] runner.hooks         found 0 callbacks on 'post_main' hook
+[DBG] runner.hooks         found 1 callbacks on 'pre_clean' hook
+[DBG] runner.hooks         using 'kcs_func_optional' for '__kcs_empty_hook_clean' callback
+[DBG] do.loader            checking function name '__kcs_empty_hook_clean'
+[DBG] miss-cb.loader       missing 'func:__kcs_empty_hook_clean'
+[DBG] runner.hooks         found 1 callbacks on 'clean' hook
+[DBG] runner.hooks         using 'kcs_func_must' for '__kcs_environment_hook_clean' callback
+[DBG] do.loader            checking function name '__kcs_environment_hook_clean'
+[DBG] function.loader      run '__kcs_environment_hook_clean' function with 0 args []
+[DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/configs/.env'
+[DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/configs/.env'
+[DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/configs/.env'
+[DBG] runner.hooks         found 3 callbacks on 'post_clean' hook
+[DBG] runner.hooks         using 'kcs_func_must' for '__kcs_tmp_hook_clean' callback
+[DBG] do.loader            checking function name '__kcs_tmp_hook_clean'
+[DBG] function.loader      run '__kcs_tmp_hook_clean' function with 0 args []
+[DBG] runner.hooks         using 'kcs_func_must' for '__kcs_log_hook_clean' callback
+[DBG] do.loader            checking function name '__kcs_log_hook_clean'
+[DBG] function.loader      run '__kcs_log_hook_clean' function with 0 args []

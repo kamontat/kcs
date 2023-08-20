@@ -51,8 +51,6 @@
 [DBG] runner.hooks         using 'kcs_func_must' for '__kcs_tmp_hook_init' callback
 [DBG] do.loader            checking function name '__kcs_tmp_hook_init'
 [DBG] function.loader      run '__kcs_tmp_hook_init' function with 0 args []
-[DBG] hook-init.tmp        reuse directory at '$TMPDIR/kcs'
-[DBG] hook-init.tmp        create $_KCS_PATH_TMP variable to '$TMPDIR/kcs'
 [DBG] runner.hooks         using 'kcs_func_optional' for '__kcs_loggings_hook_init' callback
 [DBG] do.loader            checking function name '__kcs_loggings_hook_init'
 [DBG] miss-cb.loader       missing 'func:__kcs_loggings_hook_init'
