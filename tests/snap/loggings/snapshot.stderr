@@ -1,0 +1,2 @@
+[WRN] loggings.command     hello warn message
+[ERR] loggings.command     hello error message

@@ -1,6 +1,5 @@
 [DBG] init.options         reuse definitions from cache file '$TMPDIR/kcs/libs-options/options-definitions.txt'
 [DBG] hook-init.options    options definition: |-l|:LAND:NV::;|-f|--flower|:FLOWER:NV::;|-s|--sky|:SKY:RS::;|-w|--water|:WATER:OS::;|-r|--rock|:ROCK:OS:paper:;|-e|--ex|--extra|:EXTRA:NV:paper:;|--q|:QUE:NV:paper:;
-[DBG] hook-init.options    parsing long options '--flower'
-[DBG] checker.options      option '--flower' is no argument type
-[DBG] export.options       assign argument of NV to 'true'
-[DBG] export.options       export '_KCS_OPT_FLOWER_VALUE'='true'
+[DBG] hook-init.options    parsing long options '--rock'
+[DBG] checker.options      inline mode; never parse argument for '--rock'
+[DBG] export.options       export '_KCS_OPT_ROCK_VALUE'='water'

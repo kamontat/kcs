@@ -1,2 +1,3 @@
-0 
-Arguments: -l
+Direct Arguments: 1 [-l]
+Parsed Arguments: 0 []
+Land: true

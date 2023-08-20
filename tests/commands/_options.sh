@@ -7,19 +7,24 @@
 
 __kcs_options_hook_init() {
   kcs_ld_lib options \
-    'l|land; LAND' \
-    'f|flower; FLOWER' \
-    's|sky <str>; SKY' \
-    'w|water [str]; WATER' \
-    'r|rock [str:paper]; ROCK' \
-    'e|ex|extra; EXTRA'
+    '-l; LAND' \
+    '-f|--flower; FLOWER' \
+    '-s|--sky <str>; SKY' \
+    '-w|--water [str]; WATER' \
+    '-r|--rock [str:paper]; ROCK' \
+    '-e|--ex|--extra; EXTRA' \
+    '--q; QUE' \
+    '-a|--animal [str]; ANIMAL show all animal in the earth'
 }
 
 __kcs_options_hook_main() {
+  # shellcheck disable=SC2034
   local ns="$1"
   shift
 
-  echo "Arguments: $*"
+  echo "Direct Arguments: $# [$*]"
+  echo "Parsed Arguments: ${#_KCS_CMD_ARGS[@]} [${_KCS_CMD_ARGS[*]}]"
+
   test -n "$_KCS_OPT_LAND_VALUE" &&
     echo "Land: $_KCS_OPT_LAND_VALUE"
   test -n "$_KCS_OPT_FLOWER_VALUE" &&
@@ -28,8 +33,16 @@ __kcs_options_hook_main() {
     echo "Sky: $_KCS_OPT_SKY_VALUE"
   test -n "$_KCS_OPT_WATER_VALUE" &&
     echo "Water: $_KCS_OPT_WATER_VALUE"
+  test -n "$_KCS_OPT_ROCK_VALUE" &&
+    echo "Rock: $_KCS_OPT_ROCK_VALUE"
   test -n "$_KCS_OPT_EXTRA_VALUE" &&
     echo "Extra: $_KCS_OPT_EXTRA_VALUE"
+  test -n "$_KCS_OPT_QUE_VALUE" &&
+    echo "Que: $_KCS_OPT_QUE_VALUE"
+  test -n "$_KCS_OPT_ANIMAL_VALUE" &&
+    echo "Animal: $_KCS_OPT_ANIMAL_VALUE"
+
+  return 0
 }
 
 if test -z "$_KCS_MAIN_MODE"; then

@@ -1,2 +1,3 @@
-2 hello world
-Arguments: hello -l world
+Direct Arguments: 3 [hello -l world]
+Parsed Arguments: 2 [hello world]
+Land: true

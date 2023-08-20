@@ -55,12 +55,22 @@ main() {
   DEBUG=kcs kct_case nested_cmd_name \
     _nested
 
-  DEBUG=kcs kct_case option_single_long \
-    _options --land
-  DEBUG=kcs kct_case option_single_short \
+  DEBUG=kcs:options kct_case option_single_long \
+    _options --flower
+  DEBUG=kcs:options kct_case option_single_short \
     _options -l
-  DEBUG=kcs kct_case option_with_cmd \
+  DEBUG=kcs:options kct_case option_with_cmd \
     _options hello -l world
+  DEBUG=kcs:options kct_case option_merge_short_options \
+    _options -lf
+  DEBUG=kcs:options kct_case option_long_with_arg \
+    _options --sky 'blue'
+  DEBUG=kcs:options kct_case option_long_with_equal_arg \
+    _options --rock=water
+  DEBUG=kcs:options kct_case option_long_with_default_arg \
+    _options -r
+  DEBUG=kcs:options kct_case option_short_require_arg \
+    _options -s
 }
 
 kct_case() {
@@ -293,12 +303,15 @@ __internal() {
   export KCT_SNAPSHOT_STDERR='snapshot.stderr'
   export KCT_SNAPSHOT_STDLOG='snapshot.stdlog'
 
+  export KCS_TEST=1
+
   local cmd="$1"
   shift
   _KCT_CASES="${KCT_CASES:-$*}" "$cmd"
 
   local code="$KCT_ERROR_COUNT"
 
+  unset KCS_TEST
   unset KCT_ID KCT_RUN_ID KCT_INDEX KCT_ERROR_COUNT
   unset KCT_PATH_TESTDIR KCT_PATH_TMPDIR KCT_PATH_SNAPDIR KCT_PATH_REPORTDIR
   unset KCT_PATH_ROOTDIR KCT_CMD_KCS
