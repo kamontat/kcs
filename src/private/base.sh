@@ -18,6 +18,8 @@ source "$_KCS_PATH_DIR_PRIV/_loader.sh" || exit 1
 source "$_KCS_PATH_DIR_PRIV/_color.sh" || exit 1
 # shellcheck source=/dev/null
 source "$_KCS_PATH_DIR_PRIV/_logger.sh" || exit 1
+# shellcheck source=/dev/null
+source "$_KCS_PATH_DIR_PRIV/_tmp.sh" || exit 1
 
 _kcs_color_init
 _kcs_log_init
