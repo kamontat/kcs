@@ -45,7 +45,7 @@ __kcs_options_lc_init() {
 
   local cache
   cache="$(__kcs_options_def_cache "${_KCS_CMD_NAME:?}")"
-  if test -f "$cache"; then
+  if test -f "$cache" && test -z "$KCS_TEST"; then
     kcs_log_debug "$ns" "reuse definitions from cache file '%s'" "$cache"
     output="$(cat "$cache")"
   else
@@ -59,13 +59,18 @@ __kcs_options_lc_init() {
     local options atype default variable desc
     # local arg key raw options atype output
     for input in "$@"; do
+      kcs_log_debug "$ns" "parsing input '%s'" "$input"
+
       first="${input%%;*}"
       second="${input#*; }"
 
+      default=''
+      desc=''
       options="${first%% *}"
       atype="${first#* }"
       if [[ "$options" == "$atype" ]]; then
         atype="$_KCS_OPTIONS_ATYPE_NO_VALUE"
+
       else
         local optional_atype required_atype
         optional_atype="$(echo "$atype" | sed -En 's/.*\[(.*)\].*$/\1/p')"
@@ -102,12 +107,8 @@ __kcs_options_lc_init() {
       default_esc="$(__kcs_options_escape "$default")"
       desc_esc="$(__kcs_options_escape "$desc")"
       definition="|$options|:$variable:$atype:$default_esc:$desc_esc;"
-      kcs_log_debug "$ns" "create option definition: %s" "$definition"
 
-      if test -n "$default"; then
-        ## Force create variable using default value
-        __kcs_options_export "$definition" "$options" "$default"
-      fi
+      kcs_log_debug "$ns" "create option definition: %s" "$definition"
       output="$output$definition"
     done
 
@@ -130,6 +131,19 @@ __kcs_options_hook_init_internal() {
   shift 2
 
   kcs_log_debug "$ns" "options definition: %s" "$definitions"
+
+  ## Force create variable from default argument
+  local definition default options
+  for definition in ${definitions//;/ }; do
+    default="$(__kcs_options_def_default "$definition")"
+    if test -n "$default"; then
+      options="$(__kcs_options_def_options "$definition")"
+
+      kcs_log_debug "$ns" "initiate '%s' as default value of '%s' (%s)" \
+        "$default" "$options" "$definition"
+      __kcs_options_export "$definition" "$options" "$default"
+    fi
+  done
 
   local raw next inputs=("$@") output=()
   local def opt option arg
@@ -299,47 +313,32 @@ __kcs_options_export() {
 ## get definition possible options
 ## usage: `__kcs_options_def_options '|h|help|:HELP:NV'`
 __kcs_options_def_options() {
-  __kcs_options_def_get "$1" 0
+  IFS=: read -r opt _ _ _ _ <<<"$1"
+  __kcs_options_unescape "$opt"
 }
 ## get definition variable name
 ## usage: `__kcs_options_def_name '|h|help|:HELP:NV'`
 __kcs_options_def_name() {
-  __kcs_options_def_get "$1" 1
+  IFS=: read -r _ name _ _ _ <<<"$1"
+  __kcs_options_unescape "$name"
 }
 ## get definition value type
 ## usage: `__kcs_options_def_atype '|h|help|:HELP:NV'`
 __kcs_options_def_atype() {
-  __kcs_options_def_get "$1" 2
+  IFS=: read -r _ _ atype _ _ <<<"$1"
+  __kcs_options_unescape "$atype"
 }
 ## get definition default value
 ## usage: `__kcs_options_def_default '|h|help|:HELP:NV:null'`
 __kcs_options_def_default() {
-  __kcs_options_def_get "$1" 3
+  IFS=: read -r _ _ _ default _ <<<"$1"
+  __kcs_options_unescape "$default"
 }
 ## get definition description
 ## usage: `__kcs_options_def_desc '|h|help|:HELP:NV:null:show message'`
 __kcs_options_def_desc() {
-  __kcs_options_def_get "$1" 4
-}
-__kcs_options_def_get() {
-  local ns="parser.def.options"
-  # shellcheck disable=SC2207
-  local array=($(echo "$1" | tr ':' '\n')) index="$2"
-  if [ ${#array[@]} -lt 3 ] || [ ${#array[@]} -gt 5 ]; then
-    kcs_log_warn "$ns" "cannot parse definition '%s' (expected 3 <= %d <= 5)" \
-      "$1" "${#array[@]}"
-    return 1
-  fi
-
-  if [ ${#array[@]} -eq 3 ] ||
-    [ ${#array[@]} -eq 4 ] ||
-    [ ${#array[@]} -eq 5 ]; then
-    local value="${array[$index]}"
-    printf "%s" "$(__kcs_options_unescape "$value")"
-    return 0
-  fi
-
-  return 1
+  IFS=: read -r _ _ _ _ desc <<<"$1"
+  __kcs_options_unescape "$desc"
 }
 
 ## create and get definition cache filepath
