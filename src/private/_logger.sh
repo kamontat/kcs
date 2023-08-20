@@ -124,12 +124,12 @@ __kcs_log() {
   # shellcheck disable=SC2059
   msg="$(printf "$format" "${args[@]}")"
 
-  local clvl
+  local clvl is_err
   case "$lvl" in
   "$_KCS_LOG_DBG") clvl="$(kcs_color "$lvl" BLACK)" ;;
   "$_KCS_LOG_INF") clvl="$(kcs_color "$lvl" CYAN)" ;;
-  "$_KCS_LOG_WRN") clvl="$(kcs_color "$lvl" YELLOW)" ;;
-  "$_KCS_LOG_ERR") clvl="$(kcs_color "$lvl" RED)" ;;
+  "$_KCS_LOG_WRN") clvl="$(kcs_color "$lvl" YELLOW)" && is_err=true ;;
+  "$_KCS_LOG_ERR") clvl="$(kcs_color "$lvl" RED)" && is_err=true ;;
   "$_KCS_LOG_PRT") clvl="$(kcs_color "$lvl" DEFAULT)" ;;
   esac
 
@@ -151,7 +151,8 @@ __kcs_log() {
   output="$(kcs_template "${KCS_LOGFMT:-$template}" "${variables[@]}")"
   output="$(__kcs_log_normalize "$output")"
 
-  if test -n "$KCS_LOGOUT"; then
+  ## All error logs (warn, and error) always log to console
+  if test -n "$KCS_LOGOUT" && test -z "$is_err"; then
     local dir
     dir="$(dirname "$KCS_LOGOUT")"
     if ! test -d "$dir"; then
