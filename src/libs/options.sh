@@ -104,6 +104,10 @@ __kcs_options_lc_init() {
       definition="|$options|:$variable:$atype:$default_esc:$desc_esc;"
       kcs_log_debug "$ns" "create option definition: %s" "$definition"
 
+      if test -n "$default"; then
+        ## Force create variable using default value
+        __kcs_options_export "$definition" "$options" "$default"
+      fi
       output="$output$definition"
     done
 
@@ -283,16 +287,13 @@ __kcs_options_export() {
     arg="true"
   fi
 
-  if [[ "${atype:0:1}" == "O" ]] && test -z "$arg"; then
-    local default
-    default="$(__kcs_options_def_default "$def")"
-    kcs_log_debug "$ns" "assign '%s' as default argument to option '%s'" \
-      "$default" "$option"
-    arg="$default"
+  if test -n "$arg"; then
+    kcs_log_debug "$ns" "export '%s'='%s'" "$var" "$arg"
+    export "$var"="$arg"
+  else
+    kcs_log_debug "$ns" "skipping export variable '%s%s' because no argument" \
+      '$' "$var"
   fi
-
-  kcs_log_debug "$ns" "export '%s'='%s'" "$var" "$arg"
-  export "$var"="$arg"
 }
 
 ## get definition possible options

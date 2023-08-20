@@ -30,7 +30,7 @@ run `./scripts/setup.sh <output>` to install script on output
     - **{msg}** - Formatted message
     - **{fmt}** - Templated message
     - **{args}** - All message arguments (separated by space)
-5. `KCS_LOGOUT=/tmp/test.out` - Write logs to file instead
+5. `KCS_LOGOUT=/tmp/test.out` - Write logs (except **WARN** and **ERROR**) to file instead
     - By default all logs will write on **STDERR**
 6. `KCS_PATH=/home/kcs` - Customize resolving base directory
 7. `KCS_CMDSEP='/'` - Customize commands seperator in **commands** directory
@@ -45,3 +45,5 @@ run `./scripts/setup.sh <output>` to install script on output
     - **100** = 1 hour
     - **1** = 1 minute
 11. `KCS_TMPBFR=<str>` - Force clean temporary directory before start
+12. `KCS_TEST=true` - Enabled test mode to customize script for testing only
+    - This enabled automatically on **test script**
