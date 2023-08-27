@@ -120,6 +120,9 @@ _kct_run_snapshot() {
   test -d "$dirpath" && rm -r "$dirpath"
   mkdir -p "$dirpath"
 
+  local cmd="$dirpath/$KCT_COMMAND_FILE"
+  test -f "$cmd" || touch "$cmd"
+
   local stdout="$dirpath/$KCT_SNAPSHOT_STDOUT"
   test -f "$stdout" || touch "$stdout"
 
@@ -129,7 +132,7 @@ _kct_run_snapshot() {
   local stdlog="$dirpath/$KCT_SNAPSHOT_STDLOG"
   test -f "$stdlog" || touch "$stdlog"
 
-  KCS_LOGOUT="$stdlog" _kct_exec_kcs "$@" >"$stdout" 2>"$stderr"
+  KCS_LOGOUT="$stdlog" _kct_exec_kcs "$cmd" "$@" >"$stdout" 2>"$stderr"
   if [[ "$dirpath" =~ ^$KCT_PATH_SNAPDIR ]]; then
     _kct_result_save "$name" "$KCT_STATUS_COMPLETED" "updated snapshot"
   fi
@@ -266,6 +269,11 @@ _kct_tmp_new_dir() {
 }
 
 _kct_exec_kcs() {
+  local cmd="$1"
+  shift
+
+  printf 'KCS_PATH="%s" %s %s' \
+    "$KCT_PATH_TESTDIR" "$KCT_CMD_KCS" "$*" >"$cmd"
   KCS_PATH="$KCT_PATH_TESTDIR" \
     KCS_LOGFMT='[{lvl}] {ns} {msg}' \
     "$KCT_CMD_KCS" "$@"
@@ -301,6 +309,7 @@ __internal() {
   export KCT_STATUS_FAILED='FAILED'
   export KCT_STATUS_INVALID='INVALID'
 
+  export KCT_COMMAND_FILE='.current.cmd'
   export KCT_SNAPSHOT_STDOUT='snapshot.stdout'
   export KCT_SNAPSHOT_STDERR='snapshot.stderr'
   export KCT_SNAPSHOT_STDLOG='snapshot.stdlog'
@@ -319,6 +328,7 @@ __internal() {
   unset KCT_PATH_ROOTDIR KCT_CMD_KCS
   unset KCT_STATUS_COMPLETED KCT_STATUS_PASSED KCT_STATUS_IGNORED
   unset KCT_STATUS_FAILED KCT_STATUS_INVALID
+  unset KCT_COMMAND_FILE
   unset KCT_SNAPSHOT_STDOUT KCT_SNAPSHOT_STDERR KCT_SNAPSHOT_STDLOG
 
   cd "$old" || exit 1
