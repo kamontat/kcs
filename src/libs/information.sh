@@ -14,12 +14,12 @@ kcs_info_version() {
 
   kcs_log_debug "$ns" \
     "missing version, create '%s' file with '%s'" \
-    "configs/.env" \
+    "envs/.default" \
     "KCS_CMD_VERSION=0.0.0"
   return 1
 }
 
-kcs_info_full_version() {
+kcs_info_version_full() {
   local kcs_version=dev
 
   if test -n "$_KCS_PATH_SRC" && test -f "$_KCS_PATH_SRC/version.txt"; then
