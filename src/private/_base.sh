@@ -76,7 +76,10 @@ kcs_exit() {
     exit "$code"
   fi
 
-  kcs_log_error "$ns" "$@"
+  [ "$#" -gt 0 ] && kcs_log_error "$ns" "$@"
+
+  kcs_hooks_disable pre_main
+  kcs_hooks_disable main
   kcs_hooks_add finish exit "@varargs=$code"
 }
 __kcs_exit_hook_finish() {
