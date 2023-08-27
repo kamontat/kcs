@@ -6,9 +6,11 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 __kcs_environment_lc_init() {
-  kcs_ld_config env
+  kcs_ld_env default
+
+  kcs_hooks_add clean environment
 }
 
 __kcs_environment_hook_clean() {
-  kcs_ld_unconfig env
+  kcs_ld_unenv default
 }
