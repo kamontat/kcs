@@ -62,7 +62,7 @@
 [DBG] init.options         argument type: OS
 [DBG] init.options         argument default value: 
 [DBG] init.options         create option definition: |-a|--animal|:ANIMAL:OS::show(=space=)all(=space=)animal(=space=)in(=space=)the(=space=)earth;
-[DBG] init.options         caching definitions output at '$TMPDIR/kcs/libs-options/options-definitions.txt'
+[DBG] init.options         caching definitions output at '$TMPDIR/kcs/libs-options/opt-definitions.txt'
 [DBG] hook-init.options    options definition: |-l|:LAND:NV::;|-f|--flower|:FLOWER:NV::;|-s|--sky|:SKY:RS::;|-w|--water|:WATER:OS::;|-r|--rock|:ROCK:OS:paper:;|-e|--ex|--extra|:EXTRA:NV::;|--q|:QUE:NV::;|-a|--animal|:ANIMAL:OS::show(=space=)all(=space=)animal(=space=)in(=space=)the(=space=)earth;
 [DBG] hook-init.options    initiate 'paper' as default value of '|-r|--rock|' (|-r|--rock|:ROCK:OS:paper:)
 [DBG] export.options       export '_KCS_OPT_ROCK_VALUE'='paper'

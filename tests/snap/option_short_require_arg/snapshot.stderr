@@ -1,3 +1,3 @@
 [ERR] checker.options      option '|-s|--sky|' requires argument
-[ERR] exit.base            loading 'func:__kcs_options_hook_init' failed
+[ERR] exit.base            loading 'func:__kcs_options_hook_load' failed
 [ERR] exit.base            loading 'commands:_options' failed ($KCT_PATH_TESTDIR/commands/_options.sh)
