@@ -5,7 +5,7 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_options_hook_init() {
+__kcs_opt_hook_load() {
   kcs_ld_lib options \
     '-l; LAND' \
     '-f|--flower; FLOWER' \
@@ -17,7 +17,7 @@ __kcs_options_hook_init() {
     '-a|--animal [str]; ANIMAL show all animal in the earth'
 }
 
-__kcs_options_hook_main() {
+__kcs_opt_hook_main() {
   # shellcheck disable=SC2034
   local ns="$1"
   shift
@@ -58,4 +58,4 @@ source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
 source "$_KCS_PATH_SRC/private/command.sh" || exit 1
 
-kcs_command_start options "$@"
+kcs_command_start opt "$@"

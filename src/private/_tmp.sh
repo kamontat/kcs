@@ -57,8 +57,8 @@ __kcs_tmp_random_str() {
   cat </dev/urandom | LC_ALL=C tr -dc 'a-zA-Z' | head -c "$size"
 }
 
-__kcs_tmp_hook_init() {
-  local ns="hook-init.tmp"
+__kcs_tmp_hook_setup() {
+  local ns="hook-setup.tmp"
   local basedir="${KCS_TMPDIR:-${TMPDIR:-/tmp}/kcs}"
   local timestamp="$basedir/.timestamp"
   if test -f "$timestamp"; then

@@ -11,10 +11,10 @@
 ##   - KCS_CMDSEP='/' override command separator
 ##   - KCS_CMDDEF='_default' override default command name
 kcs_commands_load() {
-  kcs_argument __kcs_commands_load "$@"
+  kcs_argument _kcs_commands_load "$@"
 }
 
-__kcs_commands_load() {
+_kcs_commands_load() {
   local ns="load.commands"
   local sep="${KCS_CMDSEP:-/}"
   local default="${KCS_CMDDEF:-_default}"
@@ -54,9 +54,9 @@ __kcs_commands_load() {
     "cannot found command, fallback to %s command" "$default"
   _KCS_CMD_ARGS_RAW="$raw" \
     _KCS_CMD_ARGS_EXTRA="$extra" \
-    __kcs_commands_default "$default" "${commands[@]}"
+    _kcs_commands_default "$default" "${commands[@]}"
 }
 
-__kcs_commands_default() {
+_kcs_commands_default() {
   _kcs_ld_do shell nothing throw throw cmd "$@"
 }

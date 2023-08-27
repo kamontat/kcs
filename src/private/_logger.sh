@@ -21,29 +21,29 @@ export _KCS_LOG_WRN_ENABLED=false
 export _KCS_LOG_ERR_ENABLED=false
 
 ## Printf debug message with log format
-## see more on __kcs_log()
+## see more on _kcs_log_internal()
 kcs_log_debug() {
-  __kcs_log "$_KCS_LOG_DBG" "$@"
+  _kcs_log_internal "$_KCS_LOG_DBG" "$@"
 }
 ## Printf info message with log format
-## see more on __kcs_log()
+## see more on _kcs_log_internal()
 kcs_log_info() {
-  __kcs_log "$_KCS_LOG_INF" "$@"
+  _kcs_log_internal "$_KCS_LOG_INF" "$@"
 }
 ## Printf warning message with log format
-## see more on __kcs_log()
+## see more on _kcs_log_internal()
 kcs_log_warn() {
-  __kcs_log "$_KCS_LOG_WRN" "$@"
+  _kcs_log_internal "$_KCS_LOG_WRN" "$@"
 }
 ## Printf error message with log format
-## see more on __kcs_log()
+## see more on _kcs_log_internal()
 kcs_log_error() {
-  __kcs_log "$_KCS_LOG_ERR" "$@"
+  _kcs_log_internal "$_KCS_LOG_ERR" "$@"
 }
 ## Printf normal message with log format
-## see more on __kcs_log()
+## see more on _kcs_log_internal()
 kcs_log_printf() {
-  __kcs_log "$_KCS_LOG_PRT" "$@"
+  _kcs_log_internal "$_KCS_LOG_PRT" "$@"
 }
 
 _kcs_log_init() {
@@ -57,11 +57,11 @@ _kcs_log_init() {
 
   local lvl
   for lvl in ${KCS_LOGLVL//,/ }; do
-    __kcs_log_is_silent "$lvl" && _KCS_LOG_SLT_ENABLED=true
-    __kcs_log_is_error "$lvl" && _KCS_LOG_ERR_ENABLED=true
-    __kcs_log_is_warn "$lvl" && _KCS_LOG_WRN_ENABLED=true
-    __kcs_log_is_info "$lvl" && _KCS_LOG_INF_ENABLED=true
-    __kcs_log_is_debug "$lvl" && _KCS_LOG_DBG_ENABLED=true
+    _kcs_log_is_silent "$lvl" && _KCS_LOG_SLT_ENABLED=true
+    _kcs_log_is_error "$lvl" && _KCS_LOG_ERR_ENABLED=true
+    _kcs_log_is_warn "$lvl" && _KCS_LOG_WRN_ENABLED=true
+    _kcs_log_is_info "$lvl" && _KCS_LOG_INF_ENABLED=true
+    _kcs_log_is_debug "$lvl" && _KCS_LOG_DBG_ENABLED=true
   done
 
   test -n "$DEBUG" && [[ "$DEBUG" =~ ^$_KCS_LOG_NAME ]] &&
@@ -74,7 +74,7 @@ _kcs_log_init() {
 }
 
 ## logging message to console
-## usage: `__kcs_log "lvl" "ns" "format" args...`
+## usage: `_kcs_log_internal "lvl" "ns" "format" args...`
 ## variables:
 ##   $DEBUG='kcs[:<ns>,<ns>]'
 ##         - to enabled debug (omit ns to enabled all)
@@ -86,7 +86,7 @@ _kcs_log_init() {
 ##         - supported list: dt, d, t, ns, lvl, msg, fmt, args
 ##   $KCS_LOGOUT=/tmp/abc
 ##         - writing log message to input filepath
-__kcs_log() {
+_kcs_log_internal() {
   local lvl="$1" ns="${2// /-}"
   local format="$3"
   shift 3
@@ -149,7 +149,7 @@ __kcs_log() {
 
   local output
   output="$(kcs_template "${KCS_LOGFMT:-$template}" "${variables[@]}")"
-  output="$(__kcs_log_normalize "$output")"
+  output="$(_kcs_log_normalize "$output")"
 
   ## All error logs (warn, and error) always log to console
   if test -n "$KCS_LOGOUT" && test -z "$is_err"; then
@@ -166,7 +166,7 @@ __kcs_log() {
   fi
 }
 
-__kcs_log_normalize() {
+_kcs_log_normalize() {
   local input="$1"
   if test -n "$KCS_TEST"; then
     input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
@@ -180,7 +180,7 @@ __kcs_log_normalize() {
   printf '%s' "$input"
 }
 
-__kcs_log_is_debug() {
+_kcs_log_is_debug() {
   [[ "$1" == "debug" ]] ||
     [[ "$1" == "DEBUG" ]] ||
     [[ "$1" == "dbg" ]] ||
@@ -188,7 +188,7 @@ __kcs_log_is_debug() {
     [[ "$1" == "d" ]] ||
     [[ "$1" == "D" ]]
 }
-__kcs_log_is_info() {
+_kcs_log_is_info() {
   [[ "$1" == "info" ]] ||
     [[ "$1" == "INFO" ]] ||
     [[ "$1" == "inf" ]] ||
@@ -196,7 +196,7 @@ __kcs_log_is_info() {
     [[ "$1" == "i" ]] ||
     [[ "$1" == "I" ]]
 }
-__kcs_log_is_warn() {
+_kcs_log_is_warn() {
   [[ "$1" == "warn" ]] ||
     [[ "$1" == "WARN" ]] ||
     [[ "$1" == "wrn" ]] ||
@@ -204,7 +204,7 @@ __kcs_log_is_warn() {
     [[ "$1" == "w" ]] ||
     [[ "$1" == "W" ]]
 }
-__kcs_log_is_error() {
+_kcs_log_is_error() {
   [[ "$1" == "error" ]] ||
     [[ "$1" == "ERROR" ]] ||
     [[ "$1" == "err" ]] ||
@@ -212,7 +212,7 @@ __kcs_log_is_error() {
     [[ "$1" == "e" ]] ||
     [[ "$1" == "E" ]]
 }
-__kcs_log_is_silent() {
+_kcs_log_is_silent() {
   [[ "$1" == "silent" ]] ||
     [[ "$1" == "SILENT" ]] ||
     [[ "$1" == "slt" ]] ||
