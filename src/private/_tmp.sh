@@ -98,7 +98,6 @@ __kcs_tmp_hook_clean() {
   local ns="hook-clean.tmp"
   local timestamp="${_KCS_PATH_TMP:?}/.timestamp"
   if ! test -f "$timestamp"; then
-    kcs_log_debug "$ns" "stamp created date of temporary directory"
     date +"%Y%m%d%H%M" >"$timestamp"
   fi
   unset _KCS_PATH_TMP
