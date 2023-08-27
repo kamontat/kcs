@@ -23,13 +23,12 @@ For Testing all variables should be `KCT_<name>` template.
 - For public APIs, should be `kcs_<module>_<name>` template
     - This can be used on either place including commands
     - It has notice period before deprecate and remove
-- For internal APIs, should be `_kcs_<module>_<name>` template
-    - This should not been use in commands directory
-    - This might use in utils directory if you like to access some internal APIs
+- For private APIs, should be `_kcs_<module>_<name>` template
+    - This should not use on any directory except 'private' and 'internal' lib
     - It has notice period before deprecate and remove
-- For private APIs, should be `__kcs_<module>_<name>` template
-    - All hooks should defined using this template
-    - It will move change or remove without notice
+- For formatted APIs, should be `__kcs_<module>_<name>` template
+    - All formatted APIs function will automatically called by internal process
+    - This should not call directly
 
 ### Libraries and Utilities
 
