@@ -9,9 +9,15 @@ _KCS_HOOKS_DB_ALL="__kcs_hooks_db"
 _KCS_HOOKS_DB_DISABLE="__kcs_hooks_db_disable"
 ## supported hooks
 _KCS_HOOKS_NAMES=(
-  pre_init init post_init
-  pre_main main post_main
+  ## Configure libraries and functions
+  setup
+  ## Initiate libraries and requires functions
+  pre_load load
+  ## Start main function
+  pre_main main
+  ## Cleanup libraries and function including main
   pre_clean clean post_clean
+  ## Final summary
   finish
 )
 
@@ -51,8 +57,8 @@ kcs_hooks_add() {
   local callback="__kcs_${cb}_hook_${key}"
 
   if ! [[ "${_KCS_HOOKS_NAMES[*]}" =~ $name ]]; then
-    kcs_log_error "$ns" "'%s' hook is not a valid hook name" "$name"
-    kcs_log_error "$ns" "invalid '%s' hook name" "$name"
+    kcs_log_error "$ns" "fail to add '%s' because invalid hook name (%s)" \
+      "$cb" "$name"
     return 1
   fi
 
@@ -99,7 +105,7 @@ kcs_hooks_add() {
 
 ## Disabled callback on hook name or
 ## disabled all callback on hook name
-## usage `kcs_hooks_add <name> [<callback>]`
+## usage `kcs_hooks_disable <name> [<callback>]`
 kcs_hooks_disable() {
   local ns="disable.hooks" all='<all>'
   local name="$1" callback="$2"
@@ -139,13 +145,13 @@ kcs_hooks_run() {
     kcs_log_debug "$ns" "all callback on '%s' hook is disabled" "$name"
     return 0
   elif [[ "${callbacks[*]}" == '' ]]; then
-    kcs_log_debug "$ns" "found %d callbacks on '%s' hook" \
-      0 "$name"
+    kcs_log_debug "$ns" "running hook name: '%s' (%d callbacks)" \
+      "$name" 0
     return 0
   fi
 
-  kcs_log_debug "$ns" "found %d callbacks on '%s' hook" \
-    "${#callbacks[@]}" "$name"
+  kcs_log_debug "$ns" "running hook name: '%s' (%d callbacks)" \
+    "$name" "${#callbacks[@]}"
   for raw in "${callbacks[@]}"; do
     callback="${raw%%:*}"
     tags="${raw#*:}"

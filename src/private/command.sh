@@ -33,6 +33,6 @@ __kcs_command_start() {
     message="$message with extra args [$_KCS_CMD_ARGS_EXTRA]"
 
   kcs_log_debug "$ns" "$message"
-  _kcs_ld_priv environment
+
   _kcs_ld_priv lifecycle "$name" "$@"
 }
