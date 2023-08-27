@@ -14,7 +14,7 @@ kcs_ld_lib() {
 ## Check is input lib is loaded
 ## usage: `kcs_ld_lib_is_loaded 'logger' && echo 'loaded'`
 kcs_ld_lib_is_loaded() {
-  __kcs_ld_is_loaded libs "$1"
+  _kcs_ld_is_loaded libs "$1"
 }
 
 ## Call utilities file
@@ -23,28 +23,28 @@ kcs_ld_utils() {
   _kcs_ld_do source lifecycle throw throw utils "$@"
 }
 
-## Load config file
-## usage: `kcs_ld_config <name...>`
-kcs_ld_config() {
+## Load env file
+## usage: `kcs_ld_env <name...>`
+kcs_ld_env() {
   local name
   for name in "$@"; do
-    _kcs_ld_do config nothing warn throw config "$name"
+    _kcs_ld_do env nothing warn throw env "$name"
   done
 }
 
-## Unload config file
-## usage: `kcs_ld_unconfig <name...>`
-kcs_ld_unconfig() {
+## Unload env file
+## usage: `kcs_ld_unenv <name...>`
+kcs_ld_unenv() {
   local name
   for name in "$@"; do
-    _kcs_ld_do unconfig nothing warn throw config "$name"
+    _kcs_ld_do unenv nothing warn throw env "$name"
   done
 }
 
 ## Check is input utils is loaded
 ## usage: `kcs_ld_utils_is_loaded 'example' && echo 'loaded'`
 kcs_ld_utils_is_loaded() {
-  __kcs_ld_is_loaded utils "$1"
+  _kcs_ld_is_loaded utils "$1"
 }
 
 ## Call command file
@@ -60,7 +60,7 @@ _kcs_ld_priv() {
 }
 
 _kcs_ld_priv_is_loaded() {
-  __kcs_ld_is_loaded private "$1"
+  _kcs_ld_is_loaded private "$1"
 }
 
 _kcs_ld_do() {
@@ -96,9 +96,9 @@ _kcs_ld_do() {
     prefix=""
     suffix=".sh"
     ;;
-  configuration | configs | config | conf | cfg)
+  environment | env | e)
     saved=false
-    key='configs'
+    key='envs'
     prefix="."
     suffix=''
     ;;
@@ -114,8 +114,9 @@ _kcs_ld_do() {
     ;;
   esac
 
-  if "$saved" && __kcs_ld_is_loaded "$key" "$name"; then
-    kcs_log_warn "$ns" \
+  if "$saved" && _kcs_ld_is_loaded "$key" "$name"; then
+    ## This can handle when lib try to load its dependencies
+    kcs_log_debug "$ns" \
       "skipping '%s:%s' because it has been loaded" "$key" "$name"
     return 0
   fi
@@ -128,7 +129,7 @@ _kcs_ld_do() {
     local index=0 index_str=('1st' '2nd' '3rd')
     local basepath filepath
     for basepath in "${basepaths[@]}"; do
-      filepath="$(__kcs_ld_path_builder \
+      filepath="$(_kcs_ld_path_builder \
         "$basepath" "$key" "$prefix" "$name" "$suffix")"
       paths+=("$filepath")
       kcs_log_debug "$ns" "[%s] trying '%s'" "${index_str[$index]}" "$filepath"
@@ -138,7 +139,7 @@ _kcs_ld_do() {
           "$error_cb" "$key" "$name" "$filepath" "$@"
           return $?
         fi
-        "$saved" && __kcs_ld_loaded "$key" "$name"
+        "$saved" && _kcs_ld_loaded "$key" "$name"
         "$success_cb" "$key" "$name" "$@"
         return $?
       fi
@@ -202,27 +203,31 @@ __kcs_ld_acb_function() {
     "run '%s' function with %d args [%s]" "$fn" "$#" "$*"
   "$fn" "$@"
 }
-__kcs_ld_acb_config() {
-  local ns="config.loader"
+__kcs_ld_acb_env() {
+  local ns="env.loader"
   local key="$1" name="$2" filepath="$3"
   shift 3
-  local line key value
+  local line key value keys=()
   while read -r line; do
     key="${line%%=*}"
     value="${line#*=}"
+    keys+=("$key")
     export "$key"="$value"
   done <"$filepath"
+  kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
-__kcs_ld_acb_unconfig() {
-  local ns="unconfig.loader"
+__kcs_ld_acb_unenv() {
+  local ns="unenv.loader"
   local key="$1" name="$2" filepath="$3"
   shift 3
-  local line key value
+  local line key value keys=()
   while read -r line; do
     key="${line%%=*}"
     value="${line#*=}"
+    keys+=("$key")
     unset "$key"
   done <"$filepath"
+  kcs_log_debug "$ns" "unset '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
 
 __kcs_ld_scb_nothing() {
@@ -355,11 +360,11 @@ __kcs_ld_ecb_throw() {
     "$key" "$name" "$suffix"
 }
 
-__kcs_ld_is_loaded() {
+_kcs_ld_is_loaded() {
   local key="$1" name="$2"
   [[ "$_KCS_LOADED" =~ $key:$name ]]
 }
-__kcs_ld_loaded() {
+_kcs_ld_loaded() {
   local ns="status.loader"
   local key="$1" name="$2"
   kcs_log_debug "$ns" "saving '%s:%s' as loaded module" \
@@ -371,7 +376,7 @@ __kcs_ld_loaded() {
   fi
 }
 
-__kcs_ld_path_builder() {
+_kcs_ld_path_builder() {
   local filepath="${1:?}" dir="$2" prefix="$3" name="$4" suffix="$5"
   test -n "$dir" && filepath="$filepath/$dir"
   printf '%s/%s%s%s' "$filepath" "$prefix" "$name" "$suffix"
