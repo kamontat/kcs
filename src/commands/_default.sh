@@ -5,14 +5,24 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_default_hook_init() {
+## For setup config data
+__kcs_default_hook_setup() {
+  # kcs_conf_use '<key>' '<value>'
   return 0
 }
 
+## For loading libraries or functions
+__kcs_default_hook_load() {
+  # kcs_ld_lib '<key>' '[args...]'
+  return 0
+}
+
+## For main entry point
 __kcs_default_hook_main() {
   return 0
 }
 
+## For cleanup
 __kcs_default_hook_clean() {
   return 0
 }
