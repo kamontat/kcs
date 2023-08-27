@@ -73,3 +73,11 @@ The argument is string input from someone each pass to function. We specific arg
     - You can access by `$_KCS_CMD_ARGS_EXTRA` (string)
 4. Raw Arguments (RA) - This is a raw argument as is from input (ALL arguments after '<>' will consider as raw)
     - You can access by `$_KCS_CMD_ARGS_RAW` (string)
+
+## Tests
+
+To simulate tests on Linux:
+
+```bash
+docker run --rm --interactive --tty --entrypoint /bin/bash --workdir "/work" -v "$PWD:/work" debian:stable-slim
+```
