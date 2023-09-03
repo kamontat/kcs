@@ -219,15 +219,15 @@ __kcs_ld_acb_env_default() {
   shift 3
   local line key value keys=()
   while read -r line; do
-    if test -n "$line"; then
-      key="${line%%=*}"
-      value="${line#*=}"
-      keys+=("$key")
-      if ! declare -p "$key" >/dev/null 2>&1; then
-        export "$key"="$value"
-      else
-        kcs_log_debug "$ns" "variable '%s' is created, skipped" "$key"
-      fi
+    [[ "$line" =~ ^# ]] || [[ "$line" =~ ^// ]] || test -z "$line" &&
+      continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    keys+=("$key")
+    if ! declare -p "$key" >/dev/null 2>&1; then
+      export "$key"="$value"
+    else
+      kcs_log_debug "$ns" "variable '%s' was created, skipped" "$key"
     fi
   done <"$filepath"
   kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
@@ -238,12 +238,12 @@ __kcs_ld_acb_env() {
   shift 3
   local line key value keys=()
   while read -r line; do
-    if test -n "$line"; then
-      key="${line%%=*}"
-      value="${line#*=}"
-      keys+=("$key")
-      export "$key"="$value"
-    fi
+    [[ "$line" =~ ^# ]] || [[ "$line" =~ ^// ]] || test -z "$line" &&
+      continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    keys+=("$key")
+    export "$key"="$value"
   done <"$filepath"
   kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
@@ -253,12 +253,12 @@ __kcs_ld_acb_unenv() {
   shift 3
   local line key value keys=()
   while read -r line; do
-    if test -n "$line"; then
-      key="${line%%=*}"
-      value="${line#*=}"
-      keys+=("$key")
-      unset "$key"
-    fi
+    [[ "$line" =~ ^# ]] || [[ "$line" =~ ^// ]] || test -z "$line" &&
+      continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    keys+=("$key")
+    unset "$key"
   done <"$filepath"
   kcs_log_debug "$ns" "unset '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
