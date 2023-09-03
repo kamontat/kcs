@@ -23,12 +23,22 @@ kcs_ld_utils() {
   _kcs_ld_do source lifecycle throw throw utils "$@"
 }
 
+## Load env file (this env has priority lower than external environment)
+## This will skipped if environment is declared
+## usage: `kcs_ld_env_default <name...>`
+kcs_ld_env_default() {
+  local name
+  for name in "$@"; do
+    _kcs_ld_do env_default nothing warn throw env "$name"
+  done
+}
+
 ## Load env file
 ## usage: `kcs_ld_env <name...>`
 kcs_ld_env() {
   local name
   for name in "$@"; do
-    _kcs_ld_do env nothing warn throw env "$name"
+    _kcs_ld_do env nothing error throw env "$name"
   done
 }
 
@@ -37,7 +47,7 @@ kcs_ld_env() {
 kcs_ld_unenv() {
   local name
   for name in "$@"; do
-    _kcs_ld_do unenv nothing warn throw env "$name"
+    _kcs_ld_do unenv nothing mute throw env "$name"
   done
 }
 
@@ -149,7 +159,7 @@ _kcs_ld_do() {
     local fn="$1"
     shift
 
-    kcs_log_debug "$ns" "checking function name '%s'" "$name"
+    kcs_log_debug "$ns" "checking function '%s' (%s)" "$name" "$fn"
     if test -z "$fn"; then
       kcs_log_error "$ns" \
         "function '%s' is not defined callback (%s)" "$name" "$fn"
@@ -203,16 +213,37 @@ __kcs_ld_acb_function() {
     "run '%s' function with %d args [%s]" "$fn" "$#" "$*"
   "$fn" "$@"
 }
+__kcs_ld_acb_env_default() {
+  local ns="env-default.loader"
+  local key="$1" name="$2" filepath="$3"
+  shift 3
+  local line key value keys=()
+  while read -r line; do
+    if test -n "$line"; then
+      key="${line%%=*}"
+      value="${line#*=}"
+      keys+=("$key")
+      if ! declare -p "$key" >/dev/null 2>&1; then
+        export "$key"="$value"
+      else
+        kcs_log_debug "$ns" "variable '%s' is created, skipped" "$key"
+      fi
+    fi
+  done <"$filepath"
+  kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
+}
 __kcs_ld_acb_env() {
   local ns="env.loader"
   local key="$1" name="$2" filepath="$3"
   shift 3
   local line key value keys=()
   while read -r line; do
-    key="${line%%=*}"
-    value="${line#*=}"
-    keys+=("$key")
-    export "$key"="$value"
+    if test -n "$line"; then
+      key="${line%%=*}"
+      value="${line#*=}"
+      keys+=("$key")
+      export "$key"="$value"
+    fi
   done <"$filepath"
   kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
@@ -222,10 +253,12 @@ __kcs_ld_acb_unenv() {
   shift 3
   local line key value keys=()
   while read -r line; do
-    key="${line%%=*}"
-    value="${line#*=}"
-    keys+=("$key")
-    unset "$key"
+    if test -n "$line"; then
+      key="${line%%=*}"
+      value="${line#*=}"
+      keys+=("$key")
+      unset "$key"
+    fi
   done <"$filepath"
   kcs_log_debug "$ns" "unset '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
@@ -242,15 +275,13 @@ __kcs_ld_scb_lifecycle() {
   local key="$1" name="$2"
   shift 2
 
-  ## Alias is not useful as it should be
-  ## To reduce calculate time, I would comment this first
-  # local alias="__kcs_${name}_lc_alias"
-  # if command -v "$alias" >/dev/null; then
-  #   local old="$name"
-  #   name="$("$alias")"
-  #   unset -f "$alias"
-  #   kcs_log_debug "$ns" "found name alias of '%s:%s' as '%s'" "$key" "$old" "$name"
-  # fi
+  if command -v kcs_conf_load >/dev/null; then
+    if ! kcs_conf_load "$name"; then
+      return 1
+    fi
+  else
+    kcs_log_debug "$ns" "skipping config loading (%s)" "$name"
+  fi
 
   local init="__kcs_${name}_lc_init"
   if command -v "$init" >/dev/null; then
@@ -258,12 +289,14 @@ __kcs_ld_scb_lifecycle() {
       "found init function of '%s:%s' with [%s]" "$key" "$name" "$*"
     "$init" "$@" && unset -f "$init" || return 1
   fi
+
   local start="__kcs_${name}_lc_start"
   if command -v "$start" >/dev/null; then
     kcs_log_debug "$ns" \
       "found start function of '%s:%s' with [%s]" "$key" "$name" "$*"
     "$start" "$@" && unset -f "$start" || return 1
   fi
+
   return 0
 }
 
