@@ -18,7 +18,7 @@ kcs_conf_use() {
     return 0
   fi
 
-  kcs_log_debug "$ns" "using config '%s' (%s)" "$value" "$key"
+  kcs_log_debug "$ns" "export %s" "${_KCS_CONFIGS_DB_ALL}_${key}=${value}"
   export "${_KCS_CONFIGS_DB_ALL}_${key}=${value}"
 }
 
@@ -26,16 +26,21 @@ kcs_conf_load() {
   local ns="load.config"
   local key="$1"
 
-  local value
+  local value name fn
   eval "value=\"\${${_KCS_CONFIGS_DB_ALL}_${key}}\""
 
+  kcs_log_debug "$ns" "reading config value: %s" \
+    "\${${_KCS_CONFIGS_DB_ALL}_${key}}"
   if test -n "$value"; then
     name="${key}_use_conf"
     fn="__kcs_${key}_conf_use_${value}"
-    kcs_func_optional "$name" "$fn" || return 1
+    if ! kcs_func_optional "$name" "$fn"; then
+      kcs_log_warn "$ns" "loading config return error (%s)" "$fn"
+    fi
+  else
+    kcs_log_debug "$ns" "cannot found config of '%s'" "$key"
   fi
 
-  kcs_log_debug "$ns" "cannot found config of '%s'" "$key"
   return 0
 }
 
