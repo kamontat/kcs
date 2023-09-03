@@ -43,7 +43,10 @@ kcs_info_version_full() {
   return 1
 }
 
-# TODO: Add help command
+kcs_info_help() {
+  printf '%s\n' "$_KCS_CMD_DESCRIPTION"
+  return 0
+}
 
 __kcs_information_lc_init() {
   local ns="init.information"
@@ -55,6 +58,7 @@ __kcs_information_lc_init() {
   fi
 
   export _KCS_CMD_VERSION="${KCS_CMD_VERSION:-dev}"
+  export _KCS_CMD_DESCRIPTION="${KCS_CMD_DESCRIPTION:-}"
 }
 
 __kcs_information_lc_start() {
