@@ -5,6 +5,12 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## Environments:
+##   1. KCT_MODE=s   -- update snapshots instead of verify them
+##   2. KCT_RESET=1  -- clean up snapshot for fresh generated
+##                   -- you should run this if you changes command name
+##   3. KCT_CLEAN=1  -- clean up report directory
+
 main() {
   kct_autodiscovery 'enabled' "$KCT_PATH_TESTDIR"
 
@@ -52,27 +58,29 @@ main() {
     kct_case new_cmd_default \
     invalid
 
-  DEBUG=kcs kct_case nested_cmd_name \
-    _nested
-
-  DEBUG=kcs:options kct_case option_single_long \
+  kct_case option_single_long \
     _options --flower
-  DEBUG=kcs:options kct_case option_single_short \
+  kct_case option_single_short \
     _options -l
-  DEBUG=kcs:options kct_case option_with_cmd \
+  kct_case option_with_cmd \
     _options hello -l world
-  DEBUG=kcs:options kct_case option_merge_short_options \
+  kct_case option_merge_short_options \
     _options -lf
-  DEBUG=kcs:options kct_case option_long_with_arg \
+  kct_case option_long_with_arg \
     _options --sky 'blue'
-  DEBUG=kcs:options kct_case option_long_with_equal_arg \
+  kct_case option_long_with_equal_arg \
     _options --rock=water
-  DEBUG=kcs:options kct_case option_short_with_optional_arg \
+  kct_case option_short_with_optional_arg \
     _options -w
-  DEBUG=kcs:options kct_case option_long_with_default_arg \
+  kct_case option_long_with_default_arg \
     _options --rock
-  DEBUG=kcs:options kct_case option_short_require_arg \
+  kct_case option_short_require_arg \
     _options -s
+
+  kct_case option_default_description \
+    _options with-desc --help
+  kct_case option_custom_description \
+    _options without-desc --help
 }
 
 kct_case() {
@@ -100,16 +108,22 @@ kct_autodiscovery() {
     return 0
   fi
 
-  local path name args=()
+  local path
   for path in "$dirpath/commands"/*.sh; do
-    name="$(basename "$path")"
-    [[ "$name" =~ ^_ ]] && continue
-    name="${name//\.sh/}"
-    # shellcheck disable=SC2206
-    args=(${name//__/})
-
-    DEBUG=kcs kct_case "$name" "${args[@]}"
+    __kct_autodiscovery "${path//$dirpath\/commands\//}"
   done
+  for path in "$dirpath/commands"/**/*.sh; do
+    __kct_autodiscovery "${path//$dirpath\/commands\//}"
+  done
+}
+__kct_autodiscovery() {
+  local name="${1//\.sh/}"
+
+  ## Skipped command with _ prefix
+  [[ "$name" =~ ^_ ]] && return 0
+
+  ## Disabled DEBUG mode by default on test mode
+  kct_case "${name//\//_}" "$name"
 }
 
 _kct_run_snapshot() {
@@ -272,7 +286,7 @@ _kct_exec_kcs() {
   local cmd="$1"
   shift
 
-  printf 'KCS_PATH="%s" %s %s' \
+  printf 'KCS_DEV=true KCS_TEST=true KCS_PATH="%s" %s %s' \
     "$KCT_PATH_TESTDIR" "$KCT_CMD_KCS" "$*" >"$cmd"
   KCS_PATH="$KCT_PATH_TESTDIR" \
     KCS_LOGFMT='[{lvl}] {ns} {msg}' \
@@ -339,8 +353,10 @@ __prepare() {
   test -d "$KCT_PATH_TMPDIR" && rm -r "$KCT_PATH_TMPDIR"
   mkdir -p "$KCT_PATH_TMPDIR"
 
+  test -n "$KCT_CLEAN" && rm -r "$KCT_PATH_TESTDIR/reports"
   test -d "$KCT_PATH_REPORTDIR" || mkdir -p "$KCT_PATH_REPORTDIR"
 
+  test -n "$KCT_RESET" && rm -r "$KCT_PATH_SNAPDIR"
   test -d "$KCT_PATH_SNAPDIR" || mkdir -p "$KCT_PATH_SNAPDIR"
 }
 

@@ -21,15 +21,15 @@
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/libs/configs.sh'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/libs/configs.sh'
 [DBG] do.loader            skipping 'libs:functions' because it has been loaded
-[DBG] do.loader            checking function name '__kcs_tmp_hook_setup'
-[DBG] do.loader            checking function name '__kcs_echo_hook_setup'
-[DBG] do.loader            checking function name '__kcs_echo_hook_load'
-[DBG] do.loader            checking function name '__kcs_echo_hook_main'
-[DBG] do.loader            checking function name '__kcs_echo_hook_clean'
-[DBG] do.loader            checking function name '__kcs_environment_hook_clean'
+[DBG] do.loader            checking function '__kcs_tmp_hook_setup' (__kcs_tmp_hook_setup)
+[DBG] do.loader            checking function '__kcs_echo_hook_setup' (__kcs_echo_hook_setup)
+[DBG] do.loader            checking function '__kcs_echo_hook_load' (__kcs_echo_hook_load)
+[DBG] do.loader            checking function '__kcs_echo_hook_main' (__kcs_echo_hook_main)
+[DBG] do.loader            checking function '__kcs_echo_hook_clean' (__kcs_echo_hook_clean)
+[DBG] do.loader            checking function '__kcs_environment_hook_clean' (__kcs_environment_hook_clean)
 [DBG] do.loader            [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 [DBG] do.loader            [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 [DBG] do.loader            [3rd] trying '$KCS_PATH_SRC/envs/.default'
-[DBG] do.loader            checking function name '__kcs_configs_hook_clean'
-[DBG] do.loader            checking function name '__kcs_tmp_hook_clean'
-[DBG] do.loader            checking function name '__kcs_log_hook_clean'
+[DBG] do.loader            checking function '__kcs_configs_hook_clean' (__kcs_configs_hook_clean)
+[DBG] do.loader            checking function '__kcs_tmp_hook_clean' (__kcs_tmp_hook_clean)
+[DBG] do.loader            checking function '__kcs_log_hook_clean' (__kcs_log_hook_clean)

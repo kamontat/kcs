@@ -5,12 +5,14 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_nested_hook_main() {
-  kcs_ld_lib commands
+__kcs_opt_hook_load() {
+  kcs_ld_lib options \
+    '-l|--land; LAND' \
+    '-L|--lander; LAND'
+}
 
-  echo "nested == $_KCS_CMD_NAME"
-  kcs_commands_load nested a
-  echo "nested == $_KCS_CMD_NAME"
+__kcs_opt_hook_main() {
+  return 0
 }
 
 if test -z "$_KCS_MAIN_MODE"; then
@@ -26,4 +28,4 @@ source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
 source "$_KCS_PATH_SRC/private/command.sh" || exit 1
 
-kcs_command_start nested "$@"
+kcs_command_start opt "$@"

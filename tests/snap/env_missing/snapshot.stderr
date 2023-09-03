@@ -1,0 +1,3 @@
+[ERR] miss-cb.loader       missing 'envs:missing_file' ($KCT_PATH_TESTDIR/envs/.missing_file $KCS_PATH_ROOT/envs/.missing_file $KCS_PATH_SRC/envs/.missing_file)
+[ERR] exit.base            loading 'func:__kcs_env_missing_file_hook_setup' failed
+[ERR] exit.base            loading 'commands:env/missing' failed ($KCT_PATH_TESTDIR/commands/env/missing.sh)
