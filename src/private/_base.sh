@@ -70,13 +70,18 @@ kcs_exit() {
   local code="$1"
   shift
 
-  if ! kcs_ld_lib_is_loaded 'hooks'; then
-    kcs_log_debug "$ns" "exit instantly because missing hooks"
-    [ "$#" -gt 0 ] && kcs_log_error "$ns" "$@"
-    exit "$code"
+  if [ "$#" -gt 0 ]; then
+    if [ "$code" -gt 0 ]; then
+      kcs_log_error "$ns" "$@"
+    else
+      kcs_log_info "$ns" "$@"
+    fi
   fi
 
-  [ "$#" -gt 0 ] && kcs_log_error "$ns" "$@"
+  if ! kcs_ld_lib_is_loaded 'hooks'; then
+    kcs_log_debug "$ns" "exit instantly because missing hooks"
+    exit "$code"
+  fi
 
   kcs_hooks_disable pre_main
   kcs_hooks_disable main
