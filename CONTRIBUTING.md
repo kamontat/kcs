@@ -55,11 +55,12 @@ Both libraries and utilities contains several lifecycle callback for setup
 On commands script, we expose several variables to use
 
 1. `$_KCS_CMD_NAME` - command name (usually this will matches with script name)
-2. `$_KCS_CMD_VERSION` - command version (developer will add `KCS_CMD_VERSION=<0.0.0>` on config environment)
-3. `$_KCS_CMD_ARGS` - a parsed arguments array
-4. `$_KCS_CMD_ARGS_RAW` - a space separated string of raw arguments
-5. `$_KCS_CMD_ARGS_EXTRA` - a space separated string of extra arguments
-6. `$_KCS_OPT_<NAME>_VALUE` - a option value from user
+2. `$_KCS_CMD_DESCRIPTION` - command description (received from `KCS_CMD_DESCRIPTION=<desc>` on default environment)
+3. `$_KCS_CMD_VERSION` - command version (received from `KCS_CMD_VERSION=<0.0.0>` on default environment)
+4. `$_KCS_CMD_ARGS` - a parsed arguments array
+5. `$_KCS_CMD_ARGS_RAW` - a space separated string of raw arguments
+6. `$_KCS_CMD_ARGS_EXTRA` - a space separated string of extra arguments
+7. `$_KCS_OPT_<NAME>_VALUE` - a option value from user
 
 ## Arguments
 

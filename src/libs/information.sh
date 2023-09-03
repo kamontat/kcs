@@ -44,6 +44,7 @@ kcs_info_version_full() {
 }
 
 kcs_info_help() {
+  ## TODO: Add options help from options apis as well
   printf '%s\n' "$_KCS_CMD_DESCRIPTION"
   return 0
 }
