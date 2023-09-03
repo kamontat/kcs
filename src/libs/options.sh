@@ -245,7 +245,7 @@ __kcs_options_lc_init() {
       else
         local optional_atype required_atype
         optional_atype="$(echo "$atype" | sed -En 's/.*\[(.*)\].*$/\1/p')"
-        required_atype="$(echo "$atype" | sed -En 's/.*\<(.*)\>.*$/\1/p')"
+        required_atype="$(echo "$atype" | sed -En 's/.*<(.*)>.*$/\1/p')"
         if test -z "$optional_atype" && test -z "$required_atype"; then
           kcs_log_error "$ns" "invalid option argument type ('%s')" "$atype"
           return 1
