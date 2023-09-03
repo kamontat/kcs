@@ -194,10 +194,11 @@ __kcs_options_lc_init() {
     kcs_log_error "$ns" "options is requires 'hooks' to be loaded"
     return 1
   fi
-  if [ "$#" -lt 1 ]; then
-    kcs_log_error "$ns" "options lib is required at least 1 argument"
-    return 1
-  fi
+  ## If developer enabled default config; we can load options without arguments
+  # if [ "$#" -lt 1 ]; then
+  #   kcs_log_error "$ns" "options lib is required at least 1 argument"
+  #   return 1
+  # fi
 
   local cache
   cache="$(_kcs_options_def_cache "${_KCS_CMD_NAME:?}")"
@@ -223,6 +224,17 @@ __kcs_options_lc_init() {
 
       first="${input%%;*}"
       second="${input#*; }"
+
+      variable="$(echo "${second%% *}" | tr '[:lower:]' '[:upper:]')"
+      desc="${second#* }"
+      [[ "$variable" == "$desc" ]] && desc=""
+
+      if [[ "$output" =~ :$variable: ]]; then
+        ## This is developer problem;
+        ## developer must not defined duplicated option
+        kcs_log_warn "$ns" "skipped duplicate option (%s)" "$input"
+        continue
+      fi
 
       default=''
       desc=''
@@ -250,10 +262,6 @@ __kcs_options_lc_init() {
         name="$(echo "${key:0:1}" | tr '[:lower:]' '[:upper:]')"
         atype="$prefix$name"
       fi
-
-      variable="${second%% *}"
-      desc="${second#* }"
-      [[ "$variable" == "$desc" ]] && desc=""
 
       kcs_log_debug "$ns" "parsing input option string '%s'" "$input"
       kcs_log_debug "$ns" "possible option list: %s" "$options"
@@ -373,18 +381,30 @@ __kcs_options_hook_load_internal() {
 }
 
 __kcs_options_hook_main() {
-  return 0
+  if [[ "$_KCS_OPT_HELP_VALUE" == "true" ]]; then
+    kcs_info_help
+    kcs_exit "$?"
+  elif [[ "$_KCS_OPT_VERSION_VALUE" == "true" ]]; then
+    kcs_info_version
+    kcs_exit "$?"
+  elif [[ "$_KCS_OPT_FULL_VERSION_VALUE" == "true" ]]; then
+    kcs_info_version_full
+    kcs_exit "$?"
+  fi
 }
 
 __kcs_options_hook_clean() {
   unset _KCS_OPTIONS_VTYPE_NO_VALUE
   unset _KCS_OPTIONS_VTYPE_REQ_STR _KCS_OPTIONS_VTYPE_OPT_STR
-  unset __KCS_OPTIONS_DEFAULT __KCS_OPTIONS_DEFAULT_LIST
+  unset __KCS_OPTIONS_DEFAULT_LIST
 }
 
-__KCS_OPTIONS_DEFAULT=false
 __KCS_OPTIONS_DEFAULT_LIST=()
 __kcs_options_conf_use_default() {
   local ns="conf.options"
-  kcs_log_debug "$ns" "use default configs"
+  __KCS_OPTIONS_DEFAULT_LIST=(
+    '-h|--help; HELP show help message'
+    '-v|--version; VERSION show compat version'
+    '-V|--full-version; FULL_VERSION show full version'
+  )
 }
