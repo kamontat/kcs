@@ -12,6 +12,17 @@
 ## [DEFAULT] - (optional) Default value if user didn't enter the options
 ## [DESC]    - (optional) Option description when user would like some help
 
+## "<options> [atype]; <VAR> [desc]" where
+## - options = array separated by '|'
+## - atype   = argument type; depends on below syntax
+##           = The outer symbol: <...> means required, and [...] means optional
+##           = The value inside: <type>:[default] where type is data type
+##           = e.g. '<str>'='require string value'
+##           =      '[str]'='optional string value'
+##           =      '[str:test]'='optional string value with "test" as default'
+## - VAR     = is upper variable string
+## - desc    = option description
+
 ## No argument
 export _KCS_OPTIONS_ATYPE_NO_VALUE='NV'
 ## Require string argument
@@ -207,12 +218,6 @@ __kcs_options_on_init() {
     kcs_log_debug "$ns" "reuse definitions from cache file '%s'" "$cache"
     output="$(cat "$cache")"
   else
-    ## "<options> [atype]; <VAR> [desc]" where
-    ## - options = array separated by '|'
-    ## - atype   = argument type; there are 3 options omit, [type], or <type>
-    ##           = where type is argument data type and [] is optional and <> is required
-    ## - VAR     = is upper variable string
-    ## - desc    = option description
     local input first second definition output
     local options atype default variable desc
     # local arg key raw options atype output
@@ -238,7 +243,6 @@ __kcs_options_on_init() {
       fi
 
       default=''
-      desc=''
       options="${first%% *}"
       atype="${first#* }"
       if [[ "$options" == "$atype" ]]; then
@@ -260,8 +264,22 @@ __kcs_options_on_init() {
 
         test -n "$optional_atype" && prefix="O"
         test -n "$required_atype" && prefix="R"
-        name="$(echo "${key:0:1}" | tr '[:lower:]' '[:upper:]')"
+        case "$key" in
+        "str") name="S" ;;
+        *)
+          kcs_log_warn "$ns" "unknown argument type (%s)" "$key"
+          continue
+          ;;
+        esac
         atype="$prefix$name"
+
+        if test -n "$default" && test -n "$required_atype"; then
+          kcs_log_warn "$ns" \
+            "options %s requires argument but default found (%s)" \
+            "$options" "$default"
+          ## force clean default value on required argument options
+          default=''
+        fi
       fi
 
       kcs_log_debug "$ns" "parsing input option string '%s'" "$input"
