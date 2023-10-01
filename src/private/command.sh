@@ -14,12 +14,16 @@ kcs_command_start() {
 }
 
 __kcs_command_start() {
-  local ns="command.lib"
+  local ns="private.command.start"
   local raw="$1" extra="$2" name="$3"
   shift 3
 
   test -n "$extra" && _KCS_CMD_ARGS_EXTRA="$extra"
   test -n "$raw" && _KCS_CMD_ARGS_RAW="$raw"
+
+  _KCS_CMD_PATH="$0"
+  _KCS_CMD_DIRPATH="$(dirname "$_KCS_CMD_PATH")"
+  _KCS_CMD_FILENAME="$(basename "$_KCS_CMD_PATH")"
 
   local message="start '$name' command"
   if [ "$#" -gt 0 ]; then
@@ -33,6 +37,5 @@ __kcs_command_start() {
     message="$message with extra args [$_KCS_CMD_ARGS_EXTRA]"
 
   kcs_log_debug "$ns" "$message"
-
   _kcs_ld_priv lifecycle "$name" "$@"
 }

@@ -34,7 +34,7 @@ _kcs_options_is_long_opt() {
 ## verify definitions with option and next value (warn mode)
 ## usage: `_kcs_options_check_warn '|h|help|:HELP:NV' [option] [arg]`
 _kcs_options_check_warn() {
-  local ns="checker.options"
+  local ns="libs.options.check"
   local def="$1" option="$2" arg="$3"
 
   test -z "$def" &&
@@ -46,7 +46,7 @@ _kcs_options_check_warn() {
 ## verify definitions with current and next value (error mode)
 ## usage: `_kcs_options_check_error '|h|help|:HELP:NV' [option] [arg]`
 _kcs_options_check_error() {
-  local ns="checker.options"
+  local ns="libs.options.check"
   local def="$1" option="$2" arg="$3" atype
   atype="$(_kcs_options_def_atype "$def")"
 
@@ -72,7 +72,7 @@ _kcs_options_check_error() {
 
 ## check is option consume argument or not
 _kcs_options_check_arg() {
-  local ns="checker.options"
+  local ns="libs.options.check"
   local def="$1" option="$2" arg="$3" inline="$4" atype
   atype="$(_kcs_options_def_atype "$def")"
 
@@ -95,7 +95,7 @@ _kcs_options_check_arg() {
 
 ## export option value
 _kcs_options_export() {
-  local ns="export.options"
+  local ns="libs.options.export"
   local def="$1" option="$2" arg="$3"
 
   local name atype
@@ -187,13 +187,14 @@ _kcs_options_unescape() {
   printf "%s" "$input"
 }
 
-__kcs_options_lc_init() {
-  local ns="init.options"
+__kcs_options_on_init() {
+  local ns="libs.options.on.init"
 
   if ! kcs_ld_lib_is_loaded 'hooks'; then
     kcs_log_error "$ns" "options is requires 'hooks' to be loaded"
     return 1
   fi
+
   ## If developer enabled default config; we can load options without arguments
   # if [ "$#" -lt 1 ]; then
   #   kcs_log_error "$ns" "options lib is required at least 1 argument"
@@ -201,7 +202,7 @@ __kcs_options_lc_init() {
   # fi
 
   local cache
-  cache="$(_kcs_options_def_cache "${_KCS_CMD_NAME:?}")"
+  cache="$(_kcs_options_def_cache "${_KCS_CMD_KEY:?}")"
   if test -f "$cache" && test -z "$KCS_TEST"; then
     kcs_log_debug "$ns" "reuse definitions from cache file '%s'" "$cache"
     output="$(cat "$cache")"
@@ -293,10 +294,9 @@ __kcs_options_hook_load() {
   kcs_argument __kcs_options_hook_load_internal "$@"
 }
 __kcs_options_hook_load_internal() {
-  local ns="hook-init.options"
-  # shellcheck disable=SC2206
+  local ns="libs.options.hook.load"
   local definitions="$1" code=0
-  shift 2
+  shift 3
 
   kcs_log_debug "$ns" "options definition: %s" "$definitions"
 
@@ -401,7 +401,6 @@ __kcs_options_hook_clean() {
 
 __KCS_OPTIONS_DEFAULT_LIST=()
 __kcs_options_conf_use_default() {
-  local ns="conf.options"
   __KCS_OPTIONS_DEFAULT_LIST=(
     '-h|--help; HELP show help message'
     '-v|--version; VERSION show compat version'

@@ -44,23 +44,25 @@ There are few convention for create new library or utility listed below
 
 Both libraries and utilities contains several lifecycle callback for setup
 
-1. `__kcs_<name>_lc_init <args...>` - This will called after loaded successfully
+1. `__kcs_<name>_on_init <args...>` - This will called after loaded successfully
     - Use for loading dependencies (`kcs_ld_lib`)
     - Use for adding hooks (`kcs_hooks_add`)
-2. `__kcs_<name>_lc_start <args...>` - This will called after init completed
-    - Use for start libs/utils if it need to
 
 ## Commands
 
 On commands script, we expose several variables to use
 
-1. `$_KCS_CMD_NAME` - command name (usually this will matches with script name)
-2. `$_KCS_CMD_DESCRIPTION` - command description (received from `KCS_CMD_DESCRIPTION=<desc>` on default environment)
-3. `$_KCS_CMD_VERSION` - command version (received from `KCS_CMD_VERSION=<0.0.0>` on default environment)
-4. `$_KCS_CMD_ARGS` - a parsed arguments array
-5. `$_KCS_CMD_ARGS_RAW` - a space separated string of raw arguments
-6. `$_KCS_CMD_ARGS_EXTRA` - a space separated string of extra arguments
-7. `$_KCS_OPT_<NAME>_VALUE` - a option value from user
+1. `$_KCS_CMD_NAME` - the command name (use for command callback and logging)
+2. `$_KCS_CMD_KEY` - the command key (normallize command name for function safe)
+3. `$_KCS_CMD_DESCRIPTION` - the command description (received from `KCS_CMD_DESCRIPTION=<desc>` on default environment)
+4. `$_KCS_CMD_VERSION` - the command version (received from `KCS_CMD_VERSION=<0.0.0>` on default environment)
+5. `$_KCS_CMD_PATH` - the full path of executing command
+6. `$_KCS_CMD_DIRPATH` - the directory contains command script
+7. `$_KCS_CMD_FILENAME` - the command filename
+8. `$_KCS_CMD_ARGS` - the parsed arguments array
+9. `$_KCS_CMD_ARGS_RAW` - the space separated string of raw arguments
+10. `$_KCS_CMD_ARGS_EXTRA` - the space separated string of extra arguments
+11. `$_KCS_OPT_<NAME>_VALUE` - the option value from user
 
 ## Arguments
 

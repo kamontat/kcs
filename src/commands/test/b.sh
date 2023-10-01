@@ -6,29 +6,23 @@
 # set -e #ERROR    - Force exit if error occurred.
 
 ## Allowed list: English character, spacebar, -, _, and .
-export KCS_CMD_NAME="default"
+export KCS_CMD_NAME="Test B"
 
 ## For setup config data
-__kcs_default_hook_setup() {
+__kcs_test_b_hook_setup() {
   # kcs_conf_use '<key>' '<value>'
   kcs_conf_use options default
   return 0
 }
 
 ## For loading libraries or functions
-__kcs_default_hook_load() {
+__kcs_test_b_hook_load() {
   # kcs_ld_lib '<key>' '[args...]'
   kcs_ld_lib options
   return 0
 }
 
-## For main entry point
-__kcs_default_hook_main() {
-  return 0
-}
-
-## For cleanup
-__kcs_default_hook_clean() {
+__kcs_test_b_hook_main() {
   return 0
 }
 

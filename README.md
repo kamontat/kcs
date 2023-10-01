@@ -32,18 +32,19 @@ run `./scripts/setup.sh <output>` to install script on output
     - **{args}** - All message arguments (separated by space)
 5. `KCS_LOGOUT=/tmp/test.out` - Write logs (except **WARN** and **ERROR**) to file instead
     - By default all logs will write on **STDERR**
-6. `KCS_PATH=/home/kcs` - Customize resolving base directory
-7. `KCS_CMDSEP='/'` - Customize commands seperator in **commands** directory
+6. `KCS_LOGDTL=true` - enabled logging detailed information without normalize
+7. `KCS_PATH=/home/kcs` - Customize resolving base directory
+8. `KCS_CMDSEP='/'` - Customize commands seperator in **commands** directory
     - By default it fallback to `/` if no string provided
-8. `KCS_CMDDEF='_default'` - Customize default command name (if command is missing)
+9. `KCS_CMDDEF='_default'` - Customize default command name (if command is missing)
     - By default it will use `_default` if no string provided
-9. `KCS_TMPDIR=/tmp/kcs` - Customize temporary directory
+10. `KCS_TMPDIR=/tmp/kcs` - Customize temporary directory
     - By default it will use `$TMPDIR/kcs` or fallback to **/tmp/kcs** directory
-10. `KCS_TMPCLE=10000` - Auto cleaning temporary directory
+11. `KCS_TMPCLE=10000` - Auto cleaning temporary directory
     - The number is represent different between now and created date on `%Y%m%d%H%M` format, e.g.
     - **10000** = 1 day (default)
     - **100** = 1 hour
     - **1** = 1 minute
-11. `KCS_TMPBFR=<str>` - Force clean temporary directory before start
-12. `KCS_TEST=true` - Enabled test mode to customize script for testing only
+12. `KCS_TMPBFR=<str>` - Force clean temporary directory before start
+13. `KCS_TEST=true` - Customize script for testing only
     - This enabled automatically on **test script**

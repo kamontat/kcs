@@ -10,7 +10,7 @@ __kcs_empty_hook_main() {
 }
 
 if test -z "$_KCS_MAIN_MODE"; then
-  export _KCS_PATH_DIR_ORIG="$PWD"
+  export _KCS_PATH_ORIG="$PWD"
   cd "$(dirname "$0")/.." || exit 1
   export _KCS_PATH_SRC="$PWD"
   cd ".." || exit 1

@@ -48,7 +48,7 @@ _KCS_HOOKS_TAGS=(
 ## signature:
 ##   - callback: `__kcs_<callback>_hook_<name>` = `__kcs_logger_hook_pre_init`
 kcs_hooks_add() {
-  local ns="add.hooks"
+  local ns="libs.hooks.add"
   local name="$1" cb="$2"
   shift 2
   local tags=("$@")
@@ -107,7 +107,7 @@ kcs_hooks_add() {
 ## disabled all callback on hook name
 ## usage `kcs_hooks_disable <name> [<callback>]`
 kcs_hooks_disable() {
-  local ns="disable.hooks" all='<all>'
+  local ns="libs.hooks.disable" all='<all>'
   local name="$1" callback="$2"
 
   local prev
@@ -130,7 +130,7 @@ kcs_hooks_disable() {
 ## Run all callback on input hook name
 ## usage `kcs_hooks_run <name> <raw_args...>`
 kcs_hooks_run() {
-  local ns="runner.hooks"
+  local ns="libs.hooks.run"
   local name="$1" all='<all>'
   shift
   local raw_args=("$@")
@@ -207,6 +207,6 @@ kcs_hooks_stop() {
   unset _KCS_HOOKS_TAGS _KCS_HOOKS_NAMES
 }
 
-__kcs_hooks_lc_init() {
+__kcs_hooks_on_init() {
   kcs_ld_lib functions
 }

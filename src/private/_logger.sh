@@ -101,8 +101,7 @@ _kcs_log_internal() {
       if [[ "$dbg_key" != "$dbg_value" ]]; then
         local dbg_disable=true
         for value in ${dbg_value//,/ }; do
-          # if [[ "$ns" == "$value" ]]; then
-          if [[ "$ns" =~ $value$ ]]; then
+          if [[ "$ns" =~ ^$value ]]; then
             dbg_disable=false
             break
           fi
@@ -118,7 +117,7 @@ _kcs_log_internal() {
     return 0
   fi
 
-  local template="{t} [{lvl}] {ns} {msg}"
+  local template="{t} [{lvl}] {ns} : {msg}"
   local args=("$@")
   local msg
   # shellcheck disable=SC2059
@@ -133,6 +132,9 @@ _kcs_log_internal() {
   "$_KCS_LOG_PRT") clvl="$(kcs_color "$lvl" DEFAULT)" ;;
   esac
 
+  local cns
+  cns="$(kcs_color "$ns" PINK)"
+
   local variables=()
   variables+=(
     "dt=$(date +"%Y/%m/%d %H:%M:%S")"
@@ -141,7 +143,7 @@ _kcs_log_internal() {
   )
   variables+=(
     "lvl=$clvl"
-    "ns=$(printf '%-20s' "$ns")"
+    "ns=$cns"
     "msg=$msg"
     "fmt=$format"
     "args=${args[*]}"
@@ -166,16 +168,19 @@ _kcs_log_internal() {
   fi
 }
 
+## variables:
+##   $KCS_LOGDTL=true
+##         - show detailed logs without normalize information first
 _kcs_log_normalize() {
+  test -n "${KCS_LOGDTL:-}" && printf '%s' "$1" && return 0
+
   local input="$1"
-  if test -n "$KCS_TEST"; then
-    input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
-    input="${input//$_KCS_PATH_SRC/\$KCS_PATH_SRC}"
-    input="${input//$_KCS_PATH_ROOT/\$KCS_PATH_ROOT}"
-    input="${input//$TMPDIR/\$TMPDIR}"
-    input="${input//$_KCS_PATH_TMP/\$KCS_PATH_TMP}"
-    input="${input//$HOME/\$HOME}"
-  fi
+  input="${input//$KCT_PATH_TESTDIR/\$KCT_PATH_TESTDIR}"
+  input="${input//$_KCS_PATH_SRC/\$KCS_PATH_SRC}"
+  input="${input//$_KCS_PATH_ROOT/\$KCS_PATH_ROOT}"
+  input="${input//$TMPDIR/\$TMPDIR}"
+  input="${input//$_KCS_PATH_TMP/\$KCS_PATH_TMP}"
+  input="${input//$HOME/\$HOME}"
 
   printf '%s' "$input"
 }

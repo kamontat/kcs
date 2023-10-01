@@ -5,6 +5,9 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## Allowed list: English character, spacebar, -, _, and .
+export KCS_CMD_NAME="hello"
+
 __kcs_hello_hook_setup() {
   kcs_conf_use options default
 }
@@ -20,6 +23,7 @@ __kcs_hello_hook_main() {
   local ns="$1"
   shift
 
+  # shellcheck disable=SC2153
   kcs_log_printf "$ns" "%-15s : %s" \
     "name" "$_KCS_CMD_NAME"
   kcs_log_printf "$ns" "%-15s : %s" \
@@ -65,4 +69,4 @@ source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
 source "$_KCS_PATH_SRC/private/command.sh" || exit 1
 
-kcs_command_start hello "$@"
+kcs_command_start "$KCS_CMD_NAME" "$@"

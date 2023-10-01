@@ -5,7 +5,7 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-__kcs_environment_lc_init() {
+__kcs_environment_on_init() {
   kcs_ld_env_default default
 
   kcs_hooks_add clean environment

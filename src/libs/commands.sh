@@ -15,7 +15,7 @@ kcs_commands_load() {
 }
 
 _kcs_commands_load() {
-  local ns="load.commands"
+  local ns="libs.commands.load"
   local sep="${KCS_CMDSEP:-/}"
   local default="${KCS_CMDDEF:-_default}"
   local raw="$1" extra="$2"
@@ -23,30 +23,30 @@ _kcs_commands_load() {
 
   local commands=("$@") args=()
   local index="${#commands[@]}" current
-  local filename="${commands[*]}"
-  filename="${filename// /$sep}"
+  local filepath="${commands[*]}"
+  filepath="${filepath// /$sep}"
   while true; do
     if [ "$index" -le 0 ]; then
       break
     fi
 
     args=("${commands[@]:$index}")
-    current="${filename##*"$sep"}"
+    current="${filepath##*"$sep"}"
 
-    kcs_log_debug "$ns" "current filename is '%s'" "$current"
+    kcs_log_debug "$ns" "current argument is '%s'" "$current"
+    kcs_log_debug "$ns" "current filepath is '%s'" "$filepath"
     if [[ "$current" =~ ^- ]]; then
-      kcs_log_debug "$ns" \
-        "skipped because options cannot be filename (%s)" "$current"
+      kcs_log_debug "$ns" "options cannot be path, skipped (%s)" "$current"
     else
       if _KCS_CMD_ARGS_RAW="$raw" \
         _KCS_CMD_ARGS_EXTRA="$extra" \
-        kcs_ld_cmd "$filename" "${args[@]}"; then
+        kcs_ld_cmd "$filepath" "${args[@]}"; then
         return 0
       fi
     fi
 
-    filename="${commands[*]:0:$((index - 1))}"
-    filename="${filename// /$sep}"
+    filepath="${commands[*]:0:$((index - 1))}"
+    filepath="${filepath// /$sep}"
     ((index--))
   done
 

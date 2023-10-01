@@ -30,7 +30,7 @@ kcs_tmp_create_udir() {
 ## Create temporary based on input
 ## usage: `_kcs_tmp_create <mkdir|touch> [name] [unique]`
 _kcs_tmp_create() {
-  local ns="create.tmp"
+  local ns="private.tmp.create"
   local cmd="$1" input="${2:-}" unique="${3:-}" base="${_KCS_PATH_TMP:?}"
   local name suffix output
 
@@ -58,7 +58,7 @@ __kcs_tmp_random_str() {
 }
 
 __kcs_tmp_hook_setup() {
-  local ns="hook-setup.tmp"
+  local ns="private.tmp.hook.setup"
   local basedir="${KCS_TMPDIR:-${TMPDIR:-/tmp}/kcs}"
   local timestamp="$basedir/.timestamp"
   if test -f "$timestamp"; then
@@ -95,7 +95,7 @@ __kcs_tmp_hook_setup() {
 }
 
 __kcs_tmp_hook_clean() {
-  local ns="hook-clean.tmp"
+  local ns="private.tmp.hook.clean"
   local timestamp="${_KCS_PATH_TMP:?}/.timestamp"
   if ! test -f "$timestamp"; then
     date +"%Y%m%d%H%M" >"$timestamp"

@@ -74,7 +74,7 @@ _kcs_ld_priv_is_loaded() {
 }
 
 _kcs_ld_do() {
-  local ns="do.loader"
+  local ns="private.loader.do"
   local action_cb="__kcs_ld_acb_${1:?}"
   local success_cb="__kcs_ld_scb_${2:?}"
   local miss_cb="__kcs_ld_mcb_${3:?}"
@@ -149,7 +149,7 @@ _kcs_ld_do() {
           "$error_cb" "$key" "$name" "$filepath" "$@"
           return $?
         fi
-        "$saved" && _kcs_ld_loaded "$key" "$name"
+        "$saved" && _kcs_ld_save "$key" "$name"
         "$success_cb" "$key" "$name" "$@"
         return $?
       fi
@@ -180,7 +180,7 @@ _kcs_ld_do() {
 }
 
 __kcs_ld_acb_source() {
-  local ns="source.loader"
+  local ns="private.loader.source"
   local key="$1" name="$2" filepath="$3"
   shift 3
 
@@ -191,7 +191,7 @@ __kcs_ld_acb_source() {
   source "$filepath" "$@"
 }
 __kcs_ld_acb_shell() {
-  local ns="shell.loader"
+  local ns="private.loader.shell"
   local key="$1" name="$2" filepath="$3"
   shift 3
 
@@ -205,7 +205,7 @@ __kcs_ld_acb_shell() {
   "$runner" "$filepath" "$@"
 }
 __kcs_ld_acb_function() {
-  local ns="function.loader"
+  local ns="private.loader.func"
   local key="$1" name="$2" fn="$3"
   shift 3
 
@@ -214,7 +214,7 @@ __kcs_ld_acb_function() {
   "$fn" "$@"
 }
 __kcs_ld_acb_env_default() {
-  local ns="env-default.loader"
+  local ns="private.loader.env.default"
   local key="$1" name="$2" filepath="$3"
   shift 3
   local line key value keys=()
@@ -233,7 +233,7 @@ __kcs_ld_acb_env_default() {
   kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
 __kcs_ld_acb_env() {
-  local ns="env.loader"
+  local ns="private.loader.env"
   local key="$1" name="$2" filepath="$3"
   shift 3
   local line key value keys=()
@@ -248,7 +248,7 @@ __kcs_ld_acb_env() {
   kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
 __kcs_ld_acb_unenv() {
-  local ns="unenv.loader"
+  local ns="private.loader.unenv"
   local key="$1" name="$2" filepath="$3"
   shift 3
   local line key value keys=()
@@ -264,14 +264,14 @@ __kcs_ld_acb_unenv() {
 }
 
 __kcs_ld_scb_nothing() {
-  local ns="success-cb.loader"
+  local ns="private.loader.cb.success"
   local key="$1" name="$2"
   shift 2
 
   return 0
 }
 __kcs_ld_scb_lifecycle() {
-  local ns="success-cb.loader"
+  local ns="private.loader.cb.success"
   local key="$1" name="$2"
   shift 2
 
@@ -283,25 +283,18 @@ __kcs_ld_scb_lifecycle() {
     kcs_log_debug "$ns" "skipping config loading (%s)" "$name"
   fi
 
-  local init="__kcs_${name}_lc_init"
+  local init="__kcs_${name}_on_init"
   if command -v "$init" >/dev/null; then
     kcs_log_debug "$ns" \
       "found init function of '%s:%s' with [%s]" "$key" "$name" "$*"
     "$init" "$@" && unset -f "$init" || return 1
   fi
 
-  local start="__kcs_${name}_lc_start"
-  if command -v "$start" >/dev/null; then
-    kcs_log_debug "$ns" \
-      "found start function of '%s:%s' with [%s]" "$key" "$name" "$*"
-    "$start" "$@" && unset -f "$start" || return 1
-  fi
-
   return 0
 }
 
 __kcs_ld_mcb_mute() {
-  local ns="miss-cb.loader"
+  local ns="private.loader.cb.miss"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -310,7 +303,7 @@ __kcs_ld_mcb_mute() {
   return 0
 }
 __kcs_ld_mcb_silent() {
-  local ns="miss-cb.loader"
+  local ns="private.loader.cb.miss"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -319,7 +312,7 @@ __kcs_ld_mcb_silent() {
   return 1
 }
 __kcs_ld_mcb_warn() {
-  local ns="miss-cb.loader"
+  local ns="private.loader.cb.miss"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -328,7 +321,7 @@ __kcs_ld_mcb_warn() {
   return 1
 }
 __kcs_ld_mcb_error() {
-  local ns="miss-cb.loader"
+  local ns="private.loader.cb.miss"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -345,7 +338,7 @@ __kcs_ld_mcb_throw() {
 }
 
 __kcs_ld_ecb_mute() {
-  local ns="error-cb.loader"
+  local ns="private.loader.cb.error"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -355,7 +348,7 @@ __kcs_ld_ecb_mute() {
   return 0
 }
 __kcs_ld_ecb_silent() {
-  local ns="error-cb.loader"
+  local ns="private.loader.cb.error"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -365,7 +358,7 @@ __kcs_ld_ecb_silent() {
   return 1
 }
 __kcs_ld_ecb_warn() {
-  local ns="error-cb.loader"
+  local ns="private.loader.cb.error"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -375,7 +368,7 @@ __kcs_ld_ecb_warn() {
   return 1
 }
 __kcs_ld_ecb_error() {
-  local ns="error-cb.loader"
+  local ns="private.loader.cb.error"
   local key="$1" name="$2" filepath="$3"
   local suffix
   test -n "$filepath" && [[ "$name" != "$filepath" ]] &&
@@ -397,8 +390,8 @@ _kcs_ld_is_loaded() {
   local key="$1" name="$2"
   [[ "$_KCS_LOADED" =~ $key:$name ]]
 }
-_kcs_ld_loaded() {
-  local ns="status.loader"
+_kcs_ld_save() {
+  local ns="private.loader.save"
   local key="$1" name="$2"
   kcs_log_debug "$ns" "saving '%s:%s' as loaded module" \
     "$key" "$name"

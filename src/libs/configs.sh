@@ -8,7 +8,7 @@
 _KCS_CONFIGS_DB_ALL="__kcs_configs_db"
 
 kcs_conf_use() {
-  local ns="use.config"
+  local ns="libs.configs.use"
   local key="$1" value="$2"
 
   local previous
@@ -23,7 +23,7 @@ kcs_conf_use() {
 }
 
 kcs_conf_load() {
-  local ns="load.config"
+  local ns="libs.configs.load"
   local key="$1"
 
   local value name fn
@@ -44,7 +44,7 @@ kcs_conf_load() {
   return 0
 }
 
-__kcs_configs_lc_init() {
+__kcs_configs_on_init() {
   kcs_ld_lib functions
 
   kcs_hooks_add clean configs

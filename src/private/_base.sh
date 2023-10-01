@@ -24,7 +24,7 @@ kcs_template() {
 ## signature:
 ##   - callback: $cb '$raw' '$extra' '<args...>'
 kcs_argument() {
-  local ns="argument.base"
+  local ns="private.base.argument"
   local raw_sep='<>' extra_sep='--'
   local callback="$1"
   shift
@@ -66,7 +66,7 @@ kcs_argument() {
 ## Save exit result for grateful exit
 ## usage: `kcs_exit <code> [<reason...>]`
 kcs_exit() {
-  local ns="exit.base"
+  local ns="private.base.exit"
   local code="$1"
   shift
 
