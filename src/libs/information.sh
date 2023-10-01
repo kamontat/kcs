@@ -53,10 +53,10 @@ kcs_info_help() {
 
   local output=() newline=$'\n'
 
-  output+=("# $_KCS_CMD_NAME ($_KCS_CMD_VERSION)" "$newline")
+  output+=("# $_KCS_CMD_NAME ($_KCS_CMD_VERSION)")
   test -n "$_KCS_CMD_DESCRIPTION" &&
-    output+=("$_KCS_CMD_DESCRIPTION" "$newline" "$newline") ||
-    output+=("$newline")
+    output+=("$_KCS_CMD_DESCRIPTION" "$newline") ||
+    output+=("")
 
   ## Should find commands only if cannot resolve current command file.
   local command_basepath="$_KCS_CMD_DIRPATH" command_paths=()
@@ -112,7 +112,7 @@ kcs_info_help() {
   fi
 
   if [ "${#command_paths[@]}" -gt 0 ]; then
-    output+=('## Commands' "$newline")
+    output+=('## Commands')
     local cmd="kcs" command_path cmd_name formatted
     for command_path in "${command_paths[@]}"; do
       cmd_name="${command_path//$command_basepath\//}"
@@ -120,9 +120,9 @@ kcs_info_help() {
       cmd_name="${cmd_name//$sep/ }"
 
       formatted="$(printf '%-20s - %s' "$cmd_name" "$command_path")"
-      output+=("$ $cmd $formatted" "$newline")
+      output+=("$ $cmd $formatted")
     done
-    output+=("$newline")
+    output+=("")
   else
     kcs_log_debug "$ns" "skipped listing possible commands"
   fi
@@ -131,10 +131,24 @@ kcs_info_help() {
     local opt_cache_path
     opt_cache_path="$(_kcs_options_def_cache "${_KCS_CMD_KEY:?}")"
     if test -f "$opt_cache_path"; then
-      output+=("## Options" "$newline")
+      output+=("## Options")
 
-      opt_definition="$(cat "$opt_cache_path")"
-      echo "$opt_definition"
+      local opt_definitions opt_definition
+      local opt_options opt_name opt_type opt_default opt_desc
+      local formatted
+      opt_definitions="$(cat "$opt_cache_path")"
+      for opt_definition in ${opt_definitions//;/ }; do
+        IFS=: read -r opt_options opt_name opt_type opt_default opt_desc <<<"$opt_definition"
+        opt_options="$(_kcs_options_unescape "$opt_options")"
+        opt_name="$(_kcs_options_unescape "$opt_name")"
+        opt_type="$(_kcs_options_unescape "$opt_type")"
+        opt_default="$(_kcs_options_unescape "$opt_default")"
+        opt_desc="$(_kcs_options_unescape "$opt_desc")"
+        test -n "$opt_default" && opt_default=":$opt_default"
+
+        formatted="$(printf '%s %-24s - [%s%s] %s' '-' "$opt_options" "$opt_type" "$opt_default" "$opt_desc")"
+        output+=("$formatted")
+      done
     else
       ## This should not happen because
       ## cache should always created once options initialize
@@ -145,7 +159,7 @@ kcs_info_help() {
   local out
   for out in "${output[@]}"; do
     # shellcheck disable=SC2059
-    printf "$out"
+    echo "$out"
   done
 }
 
