@@ -8,6 +8,7 @@
 __kcs_lifecycle_on_init() {
   local ns="private.lifecycle.on.init"
   local name="$1"
+  shift
 
   ## Hooks APIs
   kcs_ld_lib hooks
