@@ -81,7 +81,7 @@ _kcs_log_init() {
 ##   $KCS_LOGLVL='level,level,...'
 ##         - to enabled only specific level
 ##         - supported list: debug,info,warn,error,silent
-##   $KCS_LOGFMT='{dt} {ns} {lvl} {msg}'
+##   $KCS_LOGFMT='{t} [{lvl}] {ns} : {msg}'
 ##         - to custom log output style
 ##         - supported list: dt, d, t, ns, lvl, msg, fmt, args
 ##   $KCS_LOGOUT=/tmp/abc
@@ -136,11 +136,19 @@ _kcs_log_internal() {
   cns="$(kcs_color "$ns" PINK)"
 
   local variables=()
-  variables+=(
-    "dt=$(date +"%Y/%m/%d %H:%M:%S")"
-    "d=$(date +"%Y/%m/%d")"
-    "t=$(date +"%H:%M:%S")"
-  )
+  if test -z "$KCS_TEST"; then
+    variables+=(
+      "dt=$(date +"%Y/%m/%d %H:%M:%S")"
+      "d=$(date +"%Y/%m/%d")"
+      "t=$(date +"%H:%M:%S")"
+    )
+  else
+    variables+=(
+      "dt=2000/12/31 00:10:45"
+      "d=2000/12/31"
+      "t=00:10:45"
+    )
+  fi
   variables+=(
     "lvl=$clvl"
     "ns=$cns"
