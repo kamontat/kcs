@@ -303,7 +303,7 @@ __kcs_options_on_init() {
   fi
 
   kcs_ld_lib information
-  kcs_hooks_add load options @raw "@rawargs=$output"
+  kcs_hooks_add load options "@rawargs=$output" @raw
   kcs_hooks_add pre_main options
   kcs_hooks_add post_clean options
 }
@@ -314,8 +314,9 @@ __kcs_options_hook_load() {
 __kcs_options_hook_load_internal() {
   local ns="libs.options.hook.load"
   local definitions="$1" code=0
-  shift 3
+  shift 2
 
+  kcs_log_debug "$ns" "input: %s" "$@"
   kcs_log_debug "$ns" "options definition: %s" "$definitions"
 
   ## Force create variable from default argument
