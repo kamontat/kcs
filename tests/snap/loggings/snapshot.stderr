@@ -1,2 +1,2 @@
-[WRN] loggings.command     hello warn message
-[ERR] loggings.command     hello error message
+00:10:45 [WRN] cmd.loggings : hello warn message
+00:10:45 [ERR] cmd.loggings : hello error message

@@ -1,5 +1,5 @@
 name  : arguments
-ns    : arguments.command
+ns    : cmd.arguments
 args  : 0 []
 raw   : <missing>
 extra : <missing>

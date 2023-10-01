@@ -1,4 +1,8 @@
+00:10:45 [DBG] libs.commands.load : current argument is 'echo'
+00:10:45 [DBG] libs.commands.load : current filepath is 'echo'
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_environment_hook_clean' to hook name 'clean'
+00:10:45 [DBG] libs.configs.load : reading config value: ${__kcs_configs_db_configs}
+00:10:45 [DBG] libs.configs.load : cannot found config of 'configs'
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_configs_hook_clean' to hook name 'clean'
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_tmp_hook_setup' to hook name 'setup'
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_echo_hook_setup' with '@optional' to hook name 'setup'

@@ -19,10 +19,13 @@ main() {
   DEBUG=kcs \
     kct_case echo_with_debug \
     echo
-  DEBUG=kcs:do.loader \
+  DEBUG=kcs:libs \
+    kct_case echo_with_root_namespace_debug \
+    echo
+  DEBUG=kcs:private.loader.do \
     kct_case echo_with_namespace_debug \
     echo
-  DEBUG=kcs:add.hooks,runner.hooks \
+  DEBUG=kcs:libs.hooks.add,libs.hooks.run \
     kct_case echo_with_namespaces_debug \
     echo
 
@@ -187,23 +190,15 @@ _kct_run_verify() {
 
   local message_args=()
   ! "$is_match_err" &&
-    _kct_diff_create \
-      "$dirpath/$KCT_SNAPSHOT_STDERR" \
-      "$tmpdir/$KCT_SNAPSHOT_STDERR" \
-      "$diff_dir/$KCT_SNAPSHOT_STDERR.diff" &&
+    _kct_diff_create "$KCT_SNAPSHOT_STDERR" "$dirpath" "$tmpdir" "$diff_dir" &&
     message_args+=(STDERR)
   ! "$is_match_out" &&
-    _kct_diff_create \
-      "$dirpath/$KCT_SNAPSHOT_STDOUT" \
-      "$tmpdir/$KCT_SNAPSHOT_STDOUT" \
-      "$diff_dir/$KCT_SNAPSHOT_STDOUT.diff" &&
+    _kct_diff_create "$KCT_SNAPSHOT_STDOUT" "$dirpath" "$tmpdir" "$diff_dir" &&
     message_args+=(STDOUT)
   ! "$is_match_log" &&
-    _kct_diff_create \
-      "$dirpath/$KCT_SNAPSHOT_STDLOG" \
-      "$tmpdir/$KCT_SNAPSHOT_STDLOG" \
-      "$diff_dir/$KCT_SNAPSHOT_STDLOG.diff" &&
+    _kct_diff_create "$KCT_SNAPSHOT_STDLOG" "$dirpath" "$tmpdir" "$diff_dir" &&
     message_args+=(STDLOG)
+  cp "$dirpath/$KCT_COMMAND_FILE" "$diff_dir/$KCT_COMMAND_FILE"
   local message="[${message_args[*]}] is not matched"
 
   _kct_result_save "$name" "$KCT_STATUS_FAILED" "$message"
@@ -241,10 +236,12 @@ _kct_diff_check() {
   diff -q "$expected" "$actual" >/dev/null
 }
 _kct_diff_create() {
-  local expected="$1" actual="$2" output="$3"
+  local name="$1" expected="$2" actual="$3" output="$4"
   diff --new-file --suppress-common-lines \
     --ignore-space-change --ignore-case \
-    --unified "$expected" "$actual" >"$output"
+    --unified "$expected/$name" "$actual/$name" >"$output/$name.diff"
+  cp "$expected/$name" "$output/$name.expected"
+  cp "$actual/$name" "$output/$name.actual"
   return 0
 }
 
@@ -289,7 +286,6 @@ _kct_exec_kcs() {
   printf 'KCS_DEV=true KCS_TEST=true KCS_PATH="%s" %s %s' \
     "$KCT_PATH_TESTDIR" "$KCT_CMD_KCS" "$*" >"$cmd"
   KCS_PATH="$KCT_PATH_TESTDIR" \
-    KCS_LOGFMT='[{lvl}] {ns} {msg}' \
     "$KCT_CMD_KCS" "$@"
 }
 
