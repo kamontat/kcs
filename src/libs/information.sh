@@ -45,13 +45,14 @@ kcs_info_version_full() {
   return 1
 }
 
-## TODO: Add options help from options apis as well
+## Logic on listing commands highly depends on _loader.sh code
+## And logic to listing options highly depends on options.sh code
 kcs_info_help() {
   local ns="libs.information.help"
   local sep="${KCS_CMDSEP:-/}"
   local recusive_limit=4
 
-  local output=() newline=$'\n'
+  local output=()
 
   output+=("# $_KCS_CMD_NAME ($_KCS_CMD_VERSION)")
   test -n "$_KCS_CMD_DESCRIPTION" &&
@@ -59,72 +60,87 @@ kcs_info_help() {
     output+=("")
 
   ## Should find commands only if cannot resolve current command file.
-  local command_basepath="$_KCS_CMD_DIRPATH" command_paths=()
+  local command_basepaths=()
+  ## $_KCS_CMD_DIRPATH should always be one of below list
+  # command_basepaths+=("$_KCS_CMD_DIRPATH")
+  test -n "$KCS_PATH" && command_basepaths+=("$KCS_PATH/commands")
+  command_basepaths+=("$_KCS_PATH_ROOT/commands" "$_KCS_PATH_SRC/commands")
+
   if [[ "$_KCS_CMD_FILENAME" =~ ^_ ]]; then
-    if test -d "$command_basepath"; then
-      local cmd_path="$command_basepath"
-      local index="${#_KCS_CMD_ARGS[@]}"
+    local command_basepath has_commands=false
+    for command_basepath in "${command_basepaths[@]}"; do
+      local command_paths=()
+      if test -d "$command_basepath"; then
+        local cmd_path="$command_basepath"
+        local index="${#_KCS_CMD_ARGS[@]}"
+        kcs_log_debug "$ns" "use '%s' as basepath" "$cmd_path"
 
-      if [ "$index" -gt 0 ]; then
-        local dirpath="${_KCS_CMD_ARGS[*]}"
-        dirpath="${dirpath// /$sep}"
-        while true; do
-          if [ "$index" -le 0 ]; then
-            break
-          fi
-
-          kcs_log_debug "$ns" "searching from dirpath '%s'" "$dirpath"
-          if test -d "$command_basepath/$dirpath"; then
-            cmd_path="$command_basepath/$dirpath"
-            break
-          fi
-
-          dirpath="${_KCS_CMD_ARGS[*]:0:$((index - 1))}"
+        if [ "$index" -gt 0 ]; then
+          local dirpath="${_KCS_CMD_ARGS[*]}"
           dirpath="${dirpath// /$sep}"
-          ((index--))
-        done
-      fi
+          while true; do
+            if [ "$index" -le 0 ]; then
+              break
+            fi
 
-      find_script() {
-        local p f dp="$1" limit="$2"
-        if [ "$limit" -le 0 ]; then
-          kcs_log_warn "$ns" \
-            "ignore path because recusive limit reach (%s)" "$dp"
-          return 0
+            kcs_log_debug "$ns" "searching from dirpath '%s'" "$dirpath"
+            if test -d "$command_basepath/$dirpath"; then
+              cmd_path="$command_basepath/$dirpath"
+              break
+            fi
+
+            dirpath="${_KCS_CMD_ARGS[*]:0:$((index - 1))}"
+            dirpath="${dirpath// /$sep}"
+            ((index--))
+          done
         fi
 
-        for p in "$dp"/*; do
-          f="$(basename "$p")"
-          if test -d "$p"; then
-            find_script "$p" "$((limit - 1))"
-          elif test -f "$p" && ! [[ "$f" =~ ^_ ]]; then
-            command_paths+=("$p")
+        find_script() {
+          local p f dp="$1" limit="$2"
+          if [ "$limit" -le 0 ]; then
+            kcs_log_warn "$ns" \
+              "ignore path because recusive limit reach (%s)" "$dp"
+            return 0
           fi
+
+          for p in "$dp"/*; do
+            f="$(basename "$p")"
+            if test -d "$p"; then
+              find_script "$p" "$((limit - 1))"
+            elif test -f "$p" && ! [[ "$f" =~ ^_ ]]; then
+              command_paths+=("$p")
+            fi
+          done
+        }
+
+        find_script "$cmd_path" "$recusive_limit"
+      fi
+
+      if [ "${#command_paths[@]}" -gt 0 ]; then
+        if ! "$has_commands"; then
+          output+=('## Commands')
+          has_commands=true
+        fi
+        local cmd="kcs" command_path cmd_name formatted
+        for command_path in "${command_paths[@]}"; do
+          kcs_log_debug "$ns" "raw command path: %s" "$command_path"
+          cmd_name="${command_path//$command_basepath\//}"
+          cmd_name="${cmd_name//\.sh/}"
+          cmd_name="${cmd_name//$sep/ }"
+
+          formatted="$(printf '%-20s - %s' "$cmd_name" "$command_path")"
+          output+=("$ $cmd $formatted")
         done
-      }
-
-      find_script "$cmd_path" "$recusive_limit"
-    else
-      kcs_log_debug "$ns" \
-        "cannot found $%s variable to resolving path" "_KCS_CMD_DIRPATH"
-    fi
-  fi
-
-  if [ "${#command_paths[@]}" -gt 0 ]; then
-    output+=('## Commands')
-    local cmd="kcs" command_path cmd_name formatted
-    for command_path in "${command_paths[@]}"; do
-      kcs_log_debug "$ns" "raw command path: %s" "$command_path"
-      cmd_name="${command_path//$command_basepath\//}"
-      cmd_name="${cmd_name//\.sh/}"
-      cmd_name="${cmd_name//$sep/ }"
-
-      formatted="$(printf '%-20s - %s' "$cmd_name" "$command_path")"
-      output+=("$ $cmd $formatted")
+      else
+        kcs_log_debug "$ns" "no commands found from '%s'" "$command_basepath"
+      fi
     done
-    output+=("")
+
+    if "$has_commands"; then
+      output+=("")
+    fi
   else
-    kcs_log_debug "$ns" "skipped listing possible commands"
+    kcs_log_debug "$ns" "skipped listing commands because showing command help"
   fi
 
   if kcs_ld_lib_is_loaded 'options'; then
@@ -178,5 +194,5 @@ __kcs_information_on_init() {
 }
 
 __kcs_information_hook_clean() {
-  unset _KCS_CMD_VERSION
+  unset _KCS_CMD_NAME _KCS_CMD_VERSION _KCS_CMD_DESCRIPTION
 }
