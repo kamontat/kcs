@@ -35,6 +35,7 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/commands/empty.sh'
 00:10:45 [DBG] private.loader.shell : run '$KCT_PATH_TESTDIR/commands/empty.sh' using 'bash' with 4 args [hello --help --example -t]
 00:10:45 [DBG] init.logger : initiated logger settings
+00:10:45 [DBG] private.command.start : set command path to '$KCT_PATH_TESTDIR/commands/empty.sh'
 00:10:45 [DBG] private.command.start : start 'empty' command with 4 args [hello --help --example -t]
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/private/_lifecycle.sh'
