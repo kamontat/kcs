@@ -3,36 +3,41 @@
 set -e
 
 main() {
-  local source="$1" entrypoint="$2" target="$3"
+  local source="$1" output="$2"
+  local entrypoint="#!/usr/bin/env bash
+entrypoint=\"\$(dirname \"\$0\")/.kcs/main.sh\"
+[ -f \"\$entrypoint\" ] && \"\$entrypoint\" \"\$@\"
+"
 
-  test -d "${source:?}" ||
-    _error "source directory '%s' is missing" "$source"
-  test -d "${target:?}" ||
-    _error "target directory '%s' is missing" "$target"
-  command -v git >/dev/null ||
-    _error "command '%s' is missing" "git"
+  test -d "${source:?}" || _error "source directory '%s' is missing" "$source"
+  test -d "${output:?}" || _error "output directory '%s' is missing" "$output"
 
-  _info "%-15s %-18s | %s" "Installing..." "kcs" "$target"
+  local src="$source/src"
+  local scripts="$output/scripts"
+  local kcs="$scripts/.kcs"
 
-  local scripts="$target/scripts"
+  _create_dir "kcs" "$kcs"
+  _create_dir "custom commands" "$scripts/commands"
+  _create_dir "default commands" "$kcs/commands"
 
-  _delete "scripts" "$scripts"
-  _create_dir "scripts" "$scripts"
-
-  _move "source code" "$source/src" "$scripts/.kcs"
-  _move "kcs version" "$source/version.txt" "$scripts/.kcs/version.txt"
   _create_script "index.sh" "$scripts/index.sh" "$entrypoint"
-
-  _create_dir "commands" "$scripts/commands"
-  _move "default command" \
-    "$scripts/.kcs/commands/_default.sh" "$scripts/commands/_default.sh"
+  _move "version file" "$source/version.txt" "$kcs/version.txt"
+  _move "main script" "$src/main.sh" "$kcs/main.sh"
+  _move "default command" "$src/commands/_default.sh" "$kcs/commands/_default.sh"
+  _move "example command" "$src/commands/_example.sh" "$kcs/commands/_example.sh"
+  _delete "envs directory" "$kcs/envs"
+  _move "envs directory" "$src/envs" "$kcs/envs"
+  _delete "private directory" "$kcs/private"
+  _move "private directory" "$src/private" "$kcs/private"
+  _delete "lib directory" "$kcs/libs"
+  _move "lib directory" "$src/libs" "$kcs/libs"
 
   return 0
 }
 
 _create_script() {
   local name="$1" target="$2" content="$3"
-  _info "%-15s %-18s" "Creating..." "$name"
+  _step "Creating file" "$name" "$target"
   echo "$content" >"$target" ||
     _error "cannot create '%s' file" "$target"
   chmod +x "$target" ||
@@ -40,40 +45,35 @@ _create_script() {
 }
 _create_dir() {
   local name="$1" target="$2"
-  _info "%-15s %-18s" "Creating..." "$name"
-  mkdir -p "$target" ||
-    _error "cannot create '%s' directory" "$target"
+  if ! test -d "$target"; then
+    _step "Creating folder" "$name" "$target"
+    mkdir -p "$target" || _error "cannot create '%s' directory" "$target"
+  fi
 }
 _copy() {
   local name="$1" source="$2" target="$3"
-  _info "%-15s %-18s" "Copying..." "$name"
+  _step "Copying" "$name" "$target"
   cp -r "$source" "$target" ||
     _error "cannot move '%s' to '%s'" "$source" "$target"
 }
 _move() {
   local name="$1" source="$2" target="$3"
-  _info "%-15s %-18s" "Moving..." "$name"
+  _step "Moving" "$name" "$target"
   mv "$source" "$target" ||
     _error "cannot move '%s' to '%s'" "$source" "$target"
 }
 _delete() {
   local name="$1" target="$2"
   if test -d "$target" || test -f "$target"; then
-    _info "%-15s %-18s" "Deleting..." "$name"
+    _step "Deleting" "$name" "$target"
     rm -rf "$target" ||
       _error "cannot delete '%s'" "$target"
   fi
 }
 
-_debug() {
-  local format="$1"
-  shift
-  printf "[%s] $format\n" "DBG" "$@"
-}
-_info() {
-  local format="$1"
-  shift
-  printf "[%s] $format\n" "INF" "$@"
+_step() {
+  local action="$1" name="$2" data="$3"
+  printf "[STEP] %-18s %-20s | %s\n" "$action..." "$name" "$data"
 }
 _error() {
   local format="$1"
@@ -83,8 +83,7 @@ _error() {
 }
 
 __internal() {
-  local cmd="$1"
-  shift
+  local cmd="$1" output="$2"
 
   local current="$PWD"
   local https="https://github.com/kc-workspace/kcs.git"
@@ -103,13 +102,7 @@ __internal() {
     git clone "$https" --branch "main" --single-branch "$source"
   fi
 
-  local entrypoint="#!/usr/bin/env bash
-entrypoint=\"\$(dirname \"\$0\")/.kcs/main.sh\"
-[ -f \"\$entrypoint\" ] && \"\$entrypoint\" \"\$@\"
-"
-
-  "$cmd" "$source" "$entrypoint" "$@" &&
-    rm -fr "$source"
+  "$cmd" "$source" "$output" && rm -rf "$source"
 }
 
-__internal main "$@"
+__internal main "$1"
