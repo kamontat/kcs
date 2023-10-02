@@ -1,5 +1,101 @@
 # Changelog
 
+## [1.0.0-beta.5](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **libs:** change hook name and sequence of hooks running
+* **env:** move configs to envs instead and refer this as environment instead of config
+* **core:** change KCS_CMD_ARGS to _KCS_CMD_ARGS as read-only type
+
+### Features
+
+* add colors and initiate information&options libs ([723caf6](https://github.com/kc-workspace/kcs/commit/723caf69c2d23a4e1026be473e44aa2e4123bd78))
+* add kcs_tmp command as private library ([cd27b7a](https://github.com/kc-workspace/kcs/commit/cd27b7a2b759d0e2bb02a34d19423c3a099d2c22))
+* add several features ([aee950c](https://github.com/kc-workspace/kcs/commit/aee950c15d5834d7744e8382e97f06901a9064e0))
+* **core:** add new dev mode ([17a3940](https://github.com/kc-workspace/kcs/commit/17a39403ece73473942411c81ad68fe5f99c5b1f))
+* **env:** move configs to envs instead and refer this as environment instead of config ([dac9e5c](https://github.com/kc-workspace/kcs/commit/dac9e5c5b7a90724be7f2868bd6d1a1a9beb4294))
+* **libs:** add config as a libraries settings ([a5493bc](https://github.com/kc-workspace/kcs/commit/a5493bce6d37d9808b8733e11fe92735246f4eb3))
+* **libs:** add new hook tag [@rawargs](https://github.com/rawargs) for add raw argument ([9a91fab](https://github.com/kc-workspace/kcs/commit/9a91fabed3cb7da52c5c3c3ccac48b80a050df53))
+* **libs:** final design of option lib ([a05098c](https://github.com/kc-workspace/kcs/commit/a05098c8b9f3df0fd843c1bae155c2349aca89f1))
+* **libs:** update loader to support lifecycle function after loaded ([1cd97df](https://github.com/kc-workspace/kcs/commit/1cd97df515141cc69510ab789985d3e67a3203c7))
+* **private:** logging namespace are filter from left to right instead ([34b8600](https://github.com/kc-workspace/kcs/commit/34b860038132f023afd3424a79a2de4b3caa7a81))
+* separate internal lib to private directory ([356ea98](https://github.com/kc-workspace/kcs/commit/356ea98da8364afcd4c1cae60b2eefccc9d699b6))
+
+
+### Improvements
+
+* **config:** support window, linux and mac with 4 indent on markdown ([1071093](https://github.com/kc-workspace/kcs/commit/10710935b1e549dd8682f40ab2719a62fe11ae9e))
+* **core:** change KCS_CMD_ARGS to _KCS_CMD_ARGS as read-only type ([5cd4246](https://github.com/kc-workspace/kcs/commit/5cd4246b770105eceeb20e5c53b201daa0144a07))
+* **core:** improve kcs_exit to support no log and success exit ([a4c9ccb](https://github.com/kc-workspace/kcs/commit/a4c9ccb283c116dbade330a46be002966765d118))
+* enabled color by default ([42ab826](https://github.com/kc-workspace/kcs/commit/42ab8267d6821fc56f10c191c5d527eafb08e65b))
+* **env:** support load default env and custom env separately ([e7d8e98](https://github.com/kc-workspace/kcs/commit/e7d8e98b69a5dd9773656d278ee84da67ccd147e))
+* **libs:** add help function using cmd desc ([40e379f](https://github.com/kc-workspace/kcs/commit/40e379f1c3b0012bf0eb723d9518a73f05583350))
+* **libs:** change hook name and sequence of hooks running ([6f770ff](https://github.com/kc-workspace/kcs/commit/6f770ff0a78e2aaf872a3b83c8cbdd6c0db86d1e))
+* **libs:** commands resolver from args will ignore options arguments for resolving path ([d3d754b](https://github.com/kc-workspace/kcs/commit/d3d754bb5a9270b3bc1f8dd16d8bc69dcce5d640))
+* **libs:** move environment to lib instead of private ([c63057f](https://github.com/kc-workspace/kcs/commit/c63057fff1a1c521adf9af9452ca12df7c02fefe))
+* **libs:** remove argument requirement on option lib loader, add skip duplicate options, and add default --help, --version, and --full-version ([71087f0](https://github.com/kc-workspace/kcs/commit/71087f0bcdc0d77898c3bcc9b82b93649a6ea950))
+* **libs:** support commands and options in help options ([49c7fb2](https://github.com/kc-workspace/kcs/commit/49c7fb277d87ba81db0754488c7156ea3b098b6a))
+* **libs:** support error when user provide optional argument without argument ([10a8332](https://github.com/kc-workspace/kcs/commit/10a83321a869b2716b0b2ff22549e548c1335e1a))
+* **libs:** support grateful exit when loader fail ([b390906](https://github.com/kc-workspace/kcs/commit/b390906867649fca8645306ba91732d6d75a2302))
+* **libs:** support kcs version in full version info ([a4e5af1](https://github.com/kc-workspace/kcs/commit/a4e5af19d107ee1d53874e58d15f73e58ae1c525))
+* **libs:** update kcs_argument callback syntax ([0092d31](https://github.com/kc-workspace/kcs/commit/0092d316683949a24cdf233db005bfc009559d61))
+* **loader:** add warning message if loading loaded module ([4c15df9](https://github.com/kc-workspace/kcs/commit/4c15df963474e14a07c00f329e16b7da9f43a90a))
+* **loader:** separate env loader to default and non-default; ignore empty line ([a321817](https://github.com/kc-workspace/kcs/commit/a3218171bcc56c93e8e74051f930ce631538c606))
+* **logger:** enabled normalize mode only on test ([55fc543](https://github.com/kc-workspace/kcs/commit/55fc5433ea88d572532d2b100db5232b990f7a1a))
+* **logger:** filtering namespace now use glob resolver ([764290b](https://github.com/kc-workspace/kcs/commit/764290bf9e3a0b52fd7a13aa7205866ce7935745))
+* **logger:** improve logging message and typo ([4691836](https://github.com/kc-workspace/kcs/commit/4691836c0280135063712d135617877010950beb))
+* **logging:** remove logging about create timestamp file ([d28da28](https://github.com/kc-workspace/kcs/commit/d28da282e44015f51184a488cc29f418f0db49b7))
+* **private:** add new logs when initiate command ([aca1df4](https://github.com/kc-workspace/kcs/commit/aca1df4c5fd8dbb038f2877ad0698b23c68da4e6))
+* **private:** disable pre_main and main if exit as marked ([d5cdc0f](https://github.com/kc-workspace/kcs/commit/d5cdc0f0bc9d2091cd6119f2f62be8544021d5dd))
+* **scripts:** update setup with new design ([56de706](https://github.com/kc-workspace/kcs/commit/56de70603592e551175e23fe715563eee2928616))
+* **test:** add test on optional argument without default value ([3c34d0c](https://github.com/kc-workspace/kcs/commit/3c34d0c51043577f9e43a9a30ac1570d1dabf10d))
+* **tests:** add support wring command to file for debugging later ([040591f](https://github.com/kc-workspace/kcs/commit/040591f6007c00041e8fd60d52cb8dd5d12102a9))
+* **test:** test will summary the result on the end instead ([ea2a1db](https://github.com/kc-workspace/kcs/commit/ea2a1db387cc1de9884f3317e648d6d60bd51911))
+
+
+### Bugfixes
+
+* **color:** color should not always enable ([c98370e](https://github.com/kc-workspace/kcs/commit/c98370e49f290f50bffa5ca162b0f4229e08f6ed))
+* **lib:** info didn't parse command correctly ([1cfd41f](https://github.com/kc-workspace/kcs/commit/1cfd41fe16b5d3dbacd92c7a4bc817e258c3325d))
+* **lib:** no arg option might resolve definition wrong and default might use desc instead ([189ec73](https://github.com/kc-workspace/kcs/commit/189ec7350ea818a11788af922098e1f241e2e7c9))
+* **lib:** option accidently delete argument ([0b6e181](https://github.com/kc-workspace/kcs/commit/0b6e181e6970719f7931a13b9c3d3c11c304eadc))
+* **lib:** option parser didn't configure regex correctly ([b19438f](https://github.com/kc-workspace/kcs/commit/b19438f54eb4bc60f23ec03143eb6b1586397b1c))
+* **libs:** create default option value before parsing input to ensure variable always exist ([6ca148f](https://github.com/kc-workspace/kcs/commit/6ca148f8c73b778b2ca3761db3811cfef04a75fc))
+* **libs:** environment will use env default loader instead ([7aa3c24](https://github.com/kc-workspace/kcs/commit/7aa3c24b612345e8bd1806aed665da1afe2e7667))
+* **libs:** improve logging and fix config not found errors on lib:configs ([c84bed2](https://github.com/kc-workspace/kcs/commit/c84bed25dc2134fe1d4ebffcd6d99b6da3b0ac4f))
+* **libs:** options description is missing ([a43f11c](https://github.com/kc-workspace/kcs/commit/a43f11c18ed439c7d74958b2a2a5cf8c764dea35))
+* **logger:** now logging can contains '=' (equal sign) ([3b5dfde](https://github.com/kc-workspace/kcs/commit/3b5dfdebf3b42151f57743571216573737927816))
+* **logger:** warn and error log should always log to console even KCS_LOGOUT exist ([7a34d47](https://github.com/kc-workspace/kcs/commit/7a34d472f834c82ed001f3d7572a5273488d3ca1))
+* **private:** command argument should not include command name ([947105f](https://github.com/kc-workspace/kcs/commit/947105fc47013c0c6ede52f24807dc7397fad0bb))
+* **test:** update test snapshots ([f6a2e14](https://github.com/kc-workspace/kcs/commit/f6a2e14f79b682ec3b3478b6e5b65fd8fbc769ab))
+* tmp logs should not happen on testing ([45c3bcf](https://github.com/kc-workspace/kcs/commit/45c3bcf7efbb6e376feb3f12aa95d06c42cc5bf4))
+* **tmp:** all temp relate logs will be disabled on test ([9dba855](https://github.com/kc-workspace/kcs/commit/9dba855889356d1f6d3a20a17452990608822862))
+
+
+### Miscellaneous
+
+* **docs:** add how to simulate test on linux using docker ([fdeda13](https://github.com/kc-workspace/kcs/commit/fdeda13b723e612b689faad9df9f21c0fcd762aa))
+* **docs:** initiate contributing guide ([0159486](https://github.com/kc-workspace/kcs/commit/01594867d859bacda2a5cfb700734c1226fc0b91))
+* **docs:** update function syntax for private and auto resolver function ([f213588](https://github.com/kc-workspace/kcs/commit/f2135889e652cf217660a71bf59ff9cfcd11bd56))
+* refactor loader to follow new design of function name ([93406ce](https://github.com/kc-workspace/kcs/commit/93406ce5f494ac0a390bcac00774a7fd9e5fddf3))
+* release 1.0.0-beta.5 ([e19a980](https://github.com/kc-workspace/kcs/commit/e19a980240487b18d1a29b397dd758c7776e41b6))
+* remove test scripts on main src ([97ac072](https://github.com/kc-workspace/kcs/commit/97ac072b3760bcde2359026f99ca6c6c8353b413))
+* save progress ([6c3b801](https://github.com/kc-workspace/kcs/commit/6c3b80171ff0d5165c70383f8b23120e24534041))
+* save progress of options parser ([e642e77](https://github.com/kc-workspace/kcs/commit/e642e77ba1ebeb45e65719902dfdc76a294cfe24))
+* take tests snapshot ([ef03a51](https://github.com/kc-workspace/kcs/commit/ef03a518cf39190d6a1e86e4d8b676f13be8e485))
+* **test:** add more tests for new command override setting ([c0c1573](https://github.com/kc-workspace/kcs/commit/c0c1573aa11d24057065214ede7ae45f35c30cb5))
+* **test:** add new features tests and update test name ([de5ac59](https://github.com/kc-workspace/kcs/commit/de5ac597aa2ef1fb4cc743f291d2691162a52dc6))
+* **test:** add test cmd key transformer ([9f44168](https://github.com/kc-workspace/kcs/commit/9f44168af31b46494df0611236f0e24e8438a5ea))
+* **test:** remove custom log format and fix debug namespace ([3b3bde0](https://github.com/kc-workspace/kcs/commit/3b3bde0f2a33818aa85a28806aed5b8b1463213a))
+* **test:** save latest snapshot ([de7f787](https://github.com/kc-workspace/kcs/commit/de7f787a47deeeb0fed6bf2429a0eb6f56e28e94))
+* **test:** update snapshot ([7a74471](https://github.com/kc-workspace/kcs/commit/7a744715737228706b2424239cecad9534f69576))
+* **test:** update snapshot all options ([d6d3e97](https://github.com/kc-workspace/kcs/commit/d6d3e977d53e759ff471f3ec752e79e0987d0fa7))
+* **test:** update snapshot for new logs format ([46edf13](https://github.com/kc-workspace/kcs/commit/46edf13ec2ff963e1e927c191b3b4a4a3cbca5b2))
+* update commands for new hook name ([071bd7f](https://github.com/kc-workspace/kcs/commit/071bd7f31ac22829be62e8e5f2eab43de65f9941))
+* update other components to support new functions syntax and hook name ([d157f2b](https://github.com/kc-workspace/kcs/commit/d157f2b31c4b6bb3e15c133028c1196c7579f470))
+
 ## [1.0.0-beta.4](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-07-31)
 
 
