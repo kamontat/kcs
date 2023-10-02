@@ -14,8 +14,6 @@ __kcs_hello_hook_setup() {
 
 __kcs_hello_hook_load() {
   kcs_ld_lib options \
-    '-h|--help; HELP show help; message' \
-    '-v|--version <str>; VERSION' \
     '-e|--exp|--example [str:hello(=space=)world]; EXAMPLE show example:message'
 }
 
