@@ -55,7 +55,7 @@ kcs_info_help() {
 
   output+=("# $_KCS_CMD_NAME ($_KCS_CMD_VERSION)")
   test -n "$_KCS_CMD_DESCRIPTION" &&
-    output+=("$_KCS_CMD_DESCRIPTION" "$newline") ||
+    output+=("$_KCS_CMD_DESCRIPTION" "") ||
     output+=("")
 
   ## Should find commands only if cannot resolve current command file.
@@ -73,7 +73,7 @@ kcs_info_help() {
             break
           fi
 
-          kcs_log_debug "$ns" "current dirpath is '%s'" "$dirpath"
+          kcs_log_debug "$ns" "searching from dirpath '%s'" "$dirpath"
           if test -d "$command_basepath/$dirpath"; then
             cmd_path="$command_basepath/$dirpath"
             break
@@ -81,10 +81,9 @@ kcs_info_help() {
 
           dirpath="${_KCS_CMD_ARGS[*]:0:$((index - 1))}"
           dirpath="${dirpath// /$sep}"
+          ((index--))
         done
       fi
-
-      kcs_log_debug "$ns" "set command path to '%s'" "$cmd_path"
 
       find_script() {
         local p f dp="$1" limit="$2"
@@ -115,6 +114,7 @@ kcs_info_help() {
     output+=('## Commands')
     local cmd="kcs" command_path cmd_name formatted
     for command_path in "${command_paths[@]}"; do
+      kcs_log_debug "$ns" "raw command path: %s" "$command_path"
       cmd_name="${command_path//$command_basepath\//}"
       cmd_name="${cmd_name//\.sh/}"
       cmd_name="${cmd_name//$sep/ }"
