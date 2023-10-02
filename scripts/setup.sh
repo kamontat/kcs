@@ -97,11 +97,16 @@ __internal() {
   ## delete source because initiate will create source instead
   test -d "$source" && rm -r "$source"
 
-  local remote
-  remote="$(git -C "$current" remote get-url origin)"
-  if [[ "$remote" == "$ssh" ]] || [[ "$remote" == "$https" ]]; then
-    cp -r "$current" "$source"
-  else
+  if test -d "$current/.git"; then
+    local remote
+    remote="$(git -C "$current" remote get-url origin)"
+    if [[ "$remote" == "$ssh" ]] || [[ "$remote" == "$https" ]]; then
+      _copy "kcs" "$current" "$source"
+    fi
+  fi
+
+  if ! test -d "$source"; then
+    _step "Cloning" "kcs" "$https"
     git clone "$https" --branch "$version" --single-branch "$source"
   fi
 
