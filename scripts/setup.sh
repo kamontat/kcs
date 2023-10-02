@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+## setup.sh <output-directory> [version]
+
 set -e
 
 main() {
@@ -83,7 +85,8 @@ _error() {
 }
 
 __internal() {
-  local cmd="$1" output="$2"
+  local defaults_version="v1.0.0-beta.6"
+  local cmd="$1" output="$2" version="${3:-$defaults_version}"
 
   local current="$PWD"
   local https="https://github.com/kc-workspace/kcs.git"
@@ -99,10 +102,10 @@ __internal() {
   if [[ "$remote" == "$ssh" ]] || [[ "$remote" == "$https" ]]; then
     cp -r "$current" "$source"
   else
-    git clone "$https" --branch "main" --single-branch "$source"
+    git clone "$https" --branch "$version" --single-branch "$source"
   fi
 
   "$cmd" "$source" "$output" && rm -rf "$source"
 }
 
-__internal main "$1"
+__internal main "$1" "$2"
