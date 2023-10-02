@@ -413,8 +413,8 @@ __kcs_options_hook_main() {
 }
 
 __kcs_options_hook_clean() {
-  unset _KCS_OPTIONS_VTYPE_NO_VALUE
-  unset _KCS_OPTIONS_VTYPE_REQ_STR _KCS_OPTIONS_VTYPE_OPT_STR
+  unset _KCS_OPTIONS_ATYPE_NO_VALUE
+  unset _KCS_OPTIONS_ATYPE_STR_OPT _KCS_OPTIONS_ATYPE_STR_REQ
   unset __KCS_OPTIONS_DEFAULT_LIST
 }
 
