@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.0.0-beta.6](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-02)
+
+
+### Features
+
+* **script:** rewrite setup.sh script to support latest version ([0319efe](https://github.com/kc-workspace/kcs/commit/0319efeefb87e9847158aa06729ca132c9395df6))
+
+
+### Improvements
+
+* **command:** add new _example.sh command for showcase how to create command script ([b89cc09](https://github.com/kc-workspace/kcs/commit/b89cc093329783b3198288e4faaaf74c90d9fbaf))
+
+
+### Bugfixes
+
+* **command:** hello command should not print warning about duplicated options ([6396366](https://github.com/kc-workspace/kcs/commit/6396366e8a6d3b47a4b03513d193667d6a1abe05))
+* **env:** LOGFMT cannot set using default env file ([810bb27](https://github.com/kc-workspace/kcs/commit/810bb27ac445a4f3c3ce63877e9ba82e9a4d82b2))
+* **lib:** information didn't list command correctly from other command directory ([c5f7e20](https://github.com/kc-workspace/kcs/commit/c5f7e20572a68727e23cc7a3344c212e074a7f32))
+* **lib:** options didn't clean up variable correctly ([d6f47f9](https://github.com/kc-workspace/kcs/commit/d6f47f9da999dbd84e5053f2fc5a2150074cda2f))
+
+
+### Miscellaneous
+
+* clean up unused test commands ([12e8648](https://github.com/kc-workspace/kcs/commit/12e86487dd0fb2c8b72c28c9b03f8fadab90c252))
+* prepare for v1.0.0-beta.6 ([5cf7b5b](https://github.com/kc-workspace/kcs/commit/5cf7b5b0b6e7109a7fd25a9aa0d1e5125ce13a25))
+* **test:** update test snapshots ([dba305b](https://github.com/kc-workspace/kcs/commit/dba305b73fbfcc70508bfd38ca8bc4724586c458))
+
 ## [1.0.0-beta.5](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-02)
 
 
