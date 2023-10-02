@@ -1,4 +1,5 @@
-name  : arguments
+key   : arguments
+name  : Arguments
 ns    : cmd.arguments
 args  : 3 [a b c]
 raw   : <missing>

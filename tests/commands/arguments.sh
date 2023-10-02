@@ -5,10 +5,14 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+export KCS_CMD_NAME="Arguments"
+
 __kcs_arguments_hook_main() {
   local ns="$1"
   shift
 
+  echo "key   : $_KCS_CMD_KEY"
+  # shellcheck disable=SC2153
   echo "name  : $_KCS_CMD_NAME"
   echo "ns    : $ns"
   echo "args  : $# [$*]"
@@ -29,4 +33,4 @@ source "$_KCS_PATH_SRC/private/base.sh" || exit 1
 # shellcheck source=/dev/null
 source "$_KCS_PATH_SRC/private/command.sh" || exit 1
 
-kcs_command_start arguments "$@"
+kcs_command_start "$KCS_CMD_NAME" "$@"
