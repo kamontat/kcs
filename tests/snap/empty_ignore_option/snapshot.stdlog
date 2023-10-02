@@ -67,8 +67,7 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
-00:10:45 [DBG] private.loader.env.default : variable 'KCS_LOGLVL' was created, skipped
-00:10:45 [DBG] private.loader.env.default : export '2' variables [KCS_CMD_VERSION KCS_LOGLVL]
+00:10:45 [DBG] private.loader.env.default : export '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_environment_hook_clean' to hook name 'clean'
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/configs.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/configs.sh'
@@ -118,7 +117,7 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
-00:10:45 [DBG] private.loader.unenv : unset '2' variables [KCS_CMD_VERSION KCS_LOGLVL]
+00:10:45 [DBG] private.loader.unenv : unset '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_configs_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_configs_hook_clean' (__kcs_configs_hook_clean)
 00:10:45 [DBG] private.loader.func : run '__kcs_configs_hook_clean' function with 0 args []
