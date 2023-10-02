@@ -22,6 +22,7 @@ __kcs_command_start() {
   test -n "$raw" && _KCS_CMD_ARGS_RAW="$raw"
 
   _KCS_CMD_PATH="$0"
+  kcs_log_debug "$ns" "set command path to '%s'" "$_KCS_CMD_PATH"
   _KCS_CMD_DIRPATH="$(dirname "$_KCS_CMD_PATH")"
   _KCS_CMD_FILENAME="$(basename "$_KCS_CMD_PATH")"
 
