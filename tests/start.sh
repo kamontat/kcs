@@ -84,6 +84,8 @@ main() {
     _options with-desc --help
   kct_case option_custom_description \
     _options without-desc --help
+
+  kct_summary
 }
 
 kct_case() {
@@ -253,11 +255,13 @@ _kct_result_save() {
     [[ "$status" == "$KCT_STATUS_INVALID" ]] &&
     ((KCT_ERROR_COUNT++))
 
-  printf "C%03d: %s\n" \
-    "$KCT_INDEX" "$name"
-  printf "    > %s" "$status"
-  test -n "$message" && printf ' (%s)' "$message"
-  echo
+  case "$status" in
+  "$KCT_STATUS_COMPLETED") printf '\033[0;34mC\033[0m' ;;
+  "$KCT_STATUS_FAILED") printf '\033[0;31mF\033[0m' ;;
+  "$KCT_STATUS_IGNORED") printf '\033[0;33mI\033[0m' ;;
+  "$KCT_STATUS_INVALID") printf '\033[0;35mV\033[0m' ;;
+  "$KCT_STATUS_PASSED") printf '\033[0;32mP\033[0m' ;;
+  esac
 
   ! test -f "$filepath" &&
     printf '%s,%s,%s,%s,%s\n' \
@@ -268,6 +272,19 @@ _kct_result_save() {
 
   ((KCT_INDEX++))
   return 0
+}
+
+kct_summary() {
+  echo
+  echo
+
+  local filepath="$KCT_PATH_REPORTDIR/status.csv"
+  while IFS="," read -r index _ name status message; do
+    if [[ "$status" == "$KCT_STATUS_FAILED" ]] ||
+      [[ "$status" == "$KCT_STATUS_INVALID" ]]; then
+      printf 'C%03d: %-40s %s\n' "$index" "$name" "$message"
+    fi
+  done < <(cat "$filepath")
 }
 
 _kct_tmp_new_file() {
