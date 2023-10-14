@@ -4,7 +4,7 @@ A shell collection with highly customizable.
 
 ## Install
 
-run `./scripts/setup.sh <output>` to install script on output
+Use `curl -sSL https://github.com/kc-workspace/kcs/raw/main/scripts/setup.sh | bash -s "$PWD"` for install kcs on current directory.
 
 ## Variables
 
