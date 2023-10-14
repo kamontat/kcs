@@ -40,5 +40,5 @@ __kcs_lifecycle_on_init() {
   kcs_hooks_start "$@"
   kcs_hooks_stop
 
-  unset _KCS_CMD_NAME
+  unset _KCS_CMD_KEY _KCS_CMD_NAME
 }
