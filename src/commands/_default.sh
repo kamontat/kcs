@@ -26,21 +26,29 @@ __kcs_default_hook_main() {
 }
 
 #####################################################
-##                  Internal code                  ##
+##               Internal code v1.1                ##
 #####################################################
 
 if test -z "$_KCS_MAIN_MODE"; then
   export _KCS_PATH_ORIG="$PWD"
 
   cd "$(dirname "$0")" || exit 1
-  export _KCS_PATH_SRC="$PWD"
-  while [[ "$_KCS_PATH_SRC" != '/' ]]; do
-    test -f "$_KCS_PATH_SRC/main.sh" && break
-    _KCS_PATH_SRC="$(dirname "$_KCS_PATH_SRC")"
+
+  _KCS_PATH_CURRENT="$PWD"
+  while [[ "$_KCS_PATH_CURRENT" != '/' ]]; do
+    ## When deploying scripts
+    test -d "$_KCS_PATH_CURRENT/.kcs" &&
+      _KCS_PATH_SRC="$_KCS_PATH_CURRENT/.kcs" &&
+      break
+    ## When local development
+    test -f "$_KCS_PATH_CURRENT/main.sh" &&
+      _KCS_PATH_SRC="$_KCS_PATH_CURRENT" &&
+      break
+    _KCS_PATH_CURRENT="$(dirname "$_KCS_PATH_CURRENT")"
   done
 
-  cd "$_KCS_PATH_SRC/.." || exit 1
-  export _KCS_PATH_ROOT="$PWD"
+  cd "${_KCS_PATH_SRC:?}/.." || exit 1
+  export _KCS_PATH_SRC _KCS_PATH_ROOT="$PWD"
 fi
 
 # shellcheck source=/dev/null
