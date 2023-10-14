@@ -93,17 +93,22 @@ _error() {
 }
 
 __internal() {
+  local gh_repo="kc-workspace/kcs"
+  local https="https://github.com/$gh_repo.git"
+  local ssh="git@github.com:$gh_repo.git"
+  local release="https://github.com/$gh_repo/releases/latest"
+
   local defaults_version
   defaults_version="$(
-    curl -sSI https://github.com/kc-workspace/kcs/releases/latest |
-      grep -i location |
-      sed 's/.*tag\///'
+    curl \
+      --head --write-out "%{url_effective}" \
+      --output "/dev/null" --fail \
+      --silent --show-error --location "$release" |
+      sed 's|.*/tag/||'
   )"
   local cmd="$1" output="$2" version="${3:-$defaults_version}"
 
   local current="$PWD"
-  local https="https://github.com/kc-workspace/kcs.git"
-  local ssh="git@github.com:kc-workspace/kcs.git"
 
   local source
   source="$(mktemp -d)"
