@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.0.0](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.6...v1.0.0) (2023-10-14)
+
+
+### Features
+
+* update test to use internal v1.1 ([231b1ba](https://github.com/kc-workspace/kcs/commit/231b1bac9a963417fe21c679dbac165065588694))
+
+
+### Improvements
+
+* **cmd:** update all default commands with new internal code v1.1 ([0296da5](https://github.com/kc-workspace/kcs/commit/0296da550dc8f1b5a887c06f247c3ba9c379c972))
+* **script:** replace internal file if exist when setup same directory ([24455de](https://github.com/kc-workspace/kcs/commit/24455de2f302433cebcf7e24926b17c8432f621d))
+
+
+### Bugfixes
+
+* **private:** add missing clean up variable ([6ae41bb](https://github.com/kc-workspace/kcs/commit/6ae41bb573f6c1e4f6a94e88196d27ffcc9a6515))
+* **script:** update setup script when run without local git ([ac6abdf](https://github.com/kc-workspace/kcs/commit/ac6abdf909365eefc09b63362aff1f9741aee371))
+
+
+### Miscellaneous
+
+* **doc:** add how to setup script automatically ([0723363](https://github.com/kc-workspace/kcs/commit/0723363f3a03105ebd667d456d22278182084dea))
+* update version ([100b5e5](https://github.com/kc-workspace/kcs/commit/100b5e5824317dd3b6750c6b30665b96d784a55e))
+
 ## [1.0.0-beta.6](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-02)
 
 
