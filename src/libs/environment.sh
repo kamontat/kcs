@@ -5,6 +5,16 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+kcs_env_get() {
+  local namespace="$1" name="$2"
+  local key="${namespace}__${name}"
+  key="${key//[ .]/__}"
+  key="${key//-/_}"
+  key="${key//[\$\{\}]/}"
+
+  eval "printf '%s' \"\$$(printf '%s' "$key" | tr '[:lower:]' '[:upper:]')\""
+}
+
 __kcs_environment_on_init() {
   kcs_ld_env_default default
 
