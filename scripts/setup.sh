@@ -93,7 +93,12 @@ _error() {
 }
 
 __internal() {
-  local defaults_version="v1.0.0-beta.6"
+  local defaults_version
+  defaults_version="$(
+    curl -sSI https://github.com/kc-workspace/kcs/releases/latest |
+      grep -i location |
+      sed 's/.*tag\///'
+  )"
   local cmd="$1" output="$2" version="${3:-$defaults_version}"
 
   local current="$PWD"
@@ -114,7 +119,7 @@ __internal() {
   fi
 
   if ! test -d "$source"; then
-    _step "Cloning" "kcs" "$https"
+    _step "Cloning" "kcs ($version)" "$https"
     git --no-pager clone --quiet --depth 1 \
       --branch "$version" --single-branch "$https" "$source"
   fi
