@@ -1,0 +1,7 @@
+# opt_wo_desc (0.0.1)
+
+## Options
+- |-h|--help|              - [NV] show help message
+- |-v|--version|           - [NV] show compat version
+- |-V|--full-version|      - [NV] show full version
+- |-r|--require|           - [RS] show requirement

@@ -82,9 +82,13 @@ main() {
   kct_case option_missing_require_arg \
     _options
 
-  kct_case option_default_description \
+  kct_case option_default_desc \
+    _options without-desc --help
+  kct_case option_custom_desc \
     _options with-desc --help
-  kct_case option_custom_description \
+  kct_case option_require_fail \
+    _options without-desc
+  kct_case option_require_pass_on_help \
     _options without-desc --help
 
   kct_summary

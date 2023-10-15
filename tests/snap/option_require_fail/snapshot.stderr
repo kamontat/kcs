@@ -1,0 +1,3 @@
+00:10:45 [ERR] libs.options.hook.main : option |-r|--require| is required
+00:10:45 [ERR] private.base.exit : loading 'func:__kcs_options_hook_main' failed
+00:10:45 [ERR] private.base.exit : loading 'commands:_options/without-desc' failed ($KCT_PATH_TESTDIR/commands/_options/without-desc.sh)

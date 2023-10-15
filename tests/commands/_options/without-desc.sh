@@ -12,12 +12,12 @@ __kcs_opt_wo_desc_hook_setup() {
 }
 
 __kcs_opt_wo_desc_hook_load() {
-  kcs_ld_lib options
+  kcs_ld_lib options \
+    "-r|--require <str>; REQUIREMENT show requirement"
 }
 
 __kcs_opt_wo_desc_hook_main() {
-  ## If user pass -h|--help main will never run
-  return 1
+  return 0
 }
 
 #####################################################
