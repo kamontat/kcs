@@ -313,7 +313,7 @@ __kcs_options_on_init() {
 
   kcs_ld_lib information
   kcs_hooks_add load options "@rawargs=$output" @raw
-  kcs_hooks_add pre_main options
+  kcs_hooks_add pre_main options "@rawargs=$output"
   kcs_hooks_add post_clean options
 }
 
@@ -406,40 +406,52 @@ __kcs_options_hook_load_internal() {
     kcs_log_error "$ns" "unknown argument syntax (%s)" "$raw"
   done
 
-  ## Searching for requires options
-  local opt name atype full_text
-  full_text="${_KCS_OPTIONS_EXPORT_LIST[*]}"
-  full_text=":${full_text// /:}:"
-
-  if [ "$code" -lt 1 ]; then
-    for definition in ${definitions//;/ }; do
-      name="$(_kcs_options_def_name "$definition")"
-      atype="$(_kcs_options_def_atype "$definition")"
-
-      ## Require option, but didn't exported
-      [[ "${atype:0:1}" == "R" ]] && ! [[ "$full_text" =~ :$name: ]] &&
-        opt="$(_kcs_options_def_options "$definition")" &&
-        kcs_log_error "$ns" "option $opt is required" &&
-        ((code++))
-    done
-  fi
-
   export _KCS_CMD_ARGS
   _KCS_CMD_ARGS=("${output[@]}")
   return "$code"
 }
 
 __kcs_options_hook_main() {
+  kcs_argument __kcs_options_hook_main_internal "$@"
+}
+
+__kcs_options_hook_main_internal() {
+  local ns="libs.options.hook.main"
+  local definitions="$1" code=0
+  shift 2
+
   if [[ "$_KCS_OPT_HELP_VALUE" == "true" ]]; then
     kcs_info_help
     kcs_exit "$?"
+    return 0
   elif [[ "$_KCS_OPT_VERSION_VALUE" == "true" ]]; then
     kcs_info_version
     kcs_exit "$?"
+    return 0
   elif [[ "$_KCS_OPT_FULL_VERSION_VALUE" == "true" ]]; then
     kcs_info_version_full
     kcs_exit "$?"
+    return 0
   fi
+
+  ## Searching for requires options
+  local definition
+  local opt name atype full_text
+  full_text="${_KCS_OPTIONS_EXPORT_LIST[*]}"
+  full_text=":${full_text// /:}:"
+
+  for definition in ${definitions//;/ }; do
+    name="$(_kcs_options_def_name "$definition")"
+    atype="$(_kcs_options_def_atype "$definition")"
+
+    ## Require option, but didn't exported
+    if [[ "${atype:0:1}" == "R" ]] &&
+      ! [[ "$full_text" =~ :$name: ]]; then
+      opt="$(_kcs_options_def_options "$definition")"
+      kcs_log_error "$ns" "option $opt is required"
+      return 1
+    fi
+  done
 }
 
 __kcs_options_hook_clean() {
