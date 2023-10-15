@@ -8,7 +8,8 @@
 export KCS_CMD_NAME="env_missing_file"
 
 __kcs_env_missing_file_hook_setup() {
-  kcs_ld_env missing_file
+  kcs_ld_lib environment
+  kcs_env_load_upsert missing_file
 }
 
 __kcs_env_missing_file_hook_main() {
@@ -16,7 +17,7 @@ __kcs_env_missing_file_hook_main() {
 }
 
 __kcs_env_missing_file_hook_clean() {
-  kcs_ld_unenv missing_file
+  kcs_env_unload missing_file
 }
 
 #####################################################

@@ -8,7 +8,8 @@
 export KCS_CMD_NAME="env_no_value"
 
 __kcs_env_no_value_hook_setup() {
-  kcs_ld_env no_value
+  kcs_ld_lib environment
+  kcs_env_load_upsert no_value
 }
 
 __kcs_env_no_value_hook_main() {
@@ -16,7 +17,7 @@ __kcs_env_no_value_hook_main() {
 }
 
 __kcs_env_no_value_hook_clean() {
-  kcs_ld_unenv no_value
+  kcs_env_unload no_value
 }
 
 #####################################################

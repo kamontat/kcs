@@ -1,5 +1,6 @@
 00:10:45 [DBG] libs.commands.load : current argument is 'echo'
 00:10:45 [DBG] libs.commands.load : current filepath is 'echo'
+00:10:45 [DBG] libs.env.loader.insert : export '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_environment_hook_clean' to hook name 'clean'
 00:10:45 [DBG] libs.configs.load : reading config value: ${__kcs_configs_db_configs}
 00:10:45 [DBG] libs.configs.load : cannot found config of 'configs'
@@ -25,6 +26,7 @@
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_optional' for '__kcs_echo_hook_clean' callback
 00:10:45 [DBG] libs.hooks.run : running hook name: 'clean' (2 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_environment_hook_clean' callback
+00:10:45 [DBG] libs.env.loader.delete : unset '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_configs_hook_clean' callback
 00:10:45 [DBG] libs.hooks.run : running hook name: 'post_clean' (3 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_tmp_hook_clean' callback

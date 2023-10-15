@@ -8,7 +8,8 @@
 export KCS_CMD_NAME="env_empty_line"
 
 __kcs_env_empty_line_hook_setup() {
-  kcs_ld_env empty_line
+  kcs_ld_lib environment
+  kcs_env_load_upsert empty_line
 }
 
 __kcs_env_empty_line_hook_main() {
@@ -18,7 +19,7 @@ __kcs_env_empty_line_hook_main() {
 }
 
 __kcs_env_empty_line_hook_clean() {
-  kcs_ld_unenv empty_line
+  kcs_env_unload empty_line
 }
 
 #####################################################
