@@ -5,16 +5,38 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-## Using loader APIs to execute command using shell
-## usage: `kcs_commands_load <arguments...>`
+kcs_commands_load_required() {
+  _kcs_ld_do \
+    --module commands \
+    --key commands \
+    --suffix .sh \
+    --action shell \
+    --on-missing throw \
+    --on-error throw \
+    -- "$@"
+}
+
+kcs_commands_load_optional() {
+  _kcs_ld_do \
+    --module commands \
+    --key commands \
+    --suffix .sh \
+    --action shell \
+    --on-missing silent \
+    --on-error throw \
+    -- "$@"
+}
+
+## Finding commands based on input argument and execute using command_load
+## usage: `kcs_commands_find <arguments...>`
 ## variables:
 ##   - KCS_CMDSEP='/' override command separator
 ##   - KCS_CMDDEF='_default' override default command name
-kcs_commands_load() {
-  kcs_argument _kcs_commands_load "$@"
+kcs_commands_find() {
+  kcs_argument __kcs_commands_find "$@"
 }
 
-_kcs_commands_load() {
+__kcs_commands_find() {
   local ns="libs.commands.load"
   local sep="${KCS_CMDSEP:-/}"
   local default="${KCS_CMDDEF:-_default}"
@@ -40,7 +62,7 @@ _kcs_commands_load() {
     else
       if _KCS_CMD_ARGS_RAW="$raw" \
         _KCS_CMD_ARGS_EXTRA="$extra" \
-        kcs_ld_cmd "$filepath" "${args[@]}"; then
+        kcs_commands_load_optional "$filepath" "${args[@]}"; then
         return 0
       fi
     fi
@@ -54,9 +76,20 @@ _kcs_commands_load() {
     "cannot found command, fallback to %s command" "$default"
   _KCS_CMD_ARGS_RAW="$raw" \
     _KCS_CMD_ARGS_EXTRA="$extra" \
-    _kcs_commands_default "$default" "${commands[@]}"
+    kcs_commands_load_required "$default" "${commands[@]}"
 }
 
-_kcs_commands_default() {
-  _kcs_ld_do shell nothing throw throw cmd "$@"
+__kcs_commands_ld_acb_shell() {
+  local ns="libs.commands.loader.shell"
+  local key="$1" name="$2" filepath="$3"
+  shift 3
+
+  local runner
+  ## Prefer bash first. if missing, use default shell instead
+  runner="$(command -v bash)"
+  test -z "$runner" && runner="$SHELL"
+
+  kcs_log_debug "$ns" "run '%s' using '%s' with %d args [%s]" \
+    "$filepath" "$(basename "$runner")" "$#" "$*"
+  "$runner" "$filepath" "$@"
 }

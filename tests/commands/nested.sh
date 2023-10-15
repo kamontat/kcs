@@ -12,7 +12,7 @@ __kcs_nested_hook_main() {
 
   # shellcheck disable=SC2153
   echo "nested == $_KCS_CMD_NAME"
-  kcs_commands_load _nested a
+  kcs_commands_find _nested a
   echo "nested == $_KCS_CMD_NAME"
 }
 

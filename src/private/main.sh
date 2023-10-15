@@ -8,5 +8,5 @@
 kcs_main_start() {
   kcs_ld_lib commands
 
-  _KCS_MAIN_MODE=true kcs_commands_load "$@"
+  _KCS_MAIN_MODE=true kcs_commands_find "$@"
 }
