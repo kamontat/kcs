@@ -1,4 +1,5 @@
-Direct Arguments: 3 [hello -l world]
+Direct Arguments: 5 [hello -l world -s example]
 Parsed Arguments: 2 [hello world]
 Land: true
+Sky: example
 Rock: paper

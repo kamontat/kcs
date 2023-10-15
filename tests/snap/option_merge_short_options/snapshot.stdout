@@ -1,5 +1,6 @@
-Direct Arguments: 1 [-lf]
+Direct Arguments: 2 [-lfs example]
 Parsed Arguments: 0 []
 Land: true
 Flower: true
+Sky: example
 Rock: paper

@@ -62,23 +62,25 @@ main() {
     invalid
 
   kct_case option_single_long \
-    _options --flower
+    _options --flower --sky=example
   kct_case option_single_short \
-    _options -l
+    _options -s example -l
   kct_case option_with_cmd \
-    _options hello -l world
+    _options hello -l world -s example
   kct_case option_merge_short_options \
-    _options -lf
+    _options -lfs example
   kct_case option_long_with_arg \
     _options --sky 'blue'
   kct_case option_long_with_equal_arg \
-    _options --rock=water
+    _options --sky=example
   kct_case option_short_with_optional_arg \
-    _options -w
+    _options -w -s example
   kct_case option_long_with_default_arg \
-    _options --rock
+    _options -s example --rock
   kct_case option_short_require_arg \
     _options -s
+  kct_case option_missing_require_arg \
+    _options
 
   kct_case option_default_description \
     _options with-desc --help
