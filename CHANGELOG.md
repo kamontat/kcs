@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.2](https://github.com/kc-workspace/kcs/compare/v1.1.1...v1.1.2) (2023-10-15)
+
+
+### Bugfixes
+
+* **lib:** require option should not fail on get system info ([a01299a](https://github.com/kc-workspace/kcs/commit/a01299a4663a66dc243445147baf608da72fc62d))
+
+
+### Miscellaneous
+
+* **test:** add test if user pass --help on requires options should not fail ([b522135](https://github.com/kc-workspace/kcs/commit/b522135601d8a1337b5f9a47da052f3fc98b714f))
+* **test:** update old snapshots with correct name ([5d717cb](https://github.com/kc-workspace/kcs/commit/5d717cbed774ac7ae815690d41a67ca1e6508e60))
+
 ## [1.1.1](https://github.com/kc-workspace/kcs/compare/v1.1.0...v1.1.1) (2023-10-15)
 
 
