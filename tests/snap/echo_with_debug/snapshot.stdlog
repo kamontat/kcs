@@ -10,7 +10,7 @@
 00:10:45 [DBG] libs.commands.load : current argument is 'echo'
 00:10:45 [DBG] libs.commands.load : current filepath is 'echo'
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/commands/echo.sh'
-00:10:45 [DBG] private.loader.shell : run '$KCT_PATH_TESTDIR/commands/echo.sh' using 'bash' with 0 args []
+00:10:45 [DBG] libs.commands.loader.shell : run '$KCT_PATH_TESTDIR/commands/echo.sh' using 'bash' with 0 args []
 00:10:45 [DBG] init.logger : initiated logger settings
 00:10:45 [DBG] private.command.start : set command path to '$KCT_PATH_TESTDIR/commands/echo.sh'
 00:10:45 [DBG] private.command.start : start 'echo' command without args
@@ -69,7 +69,7 @@
 00:10:45 [DBG] libs.hooks.run : running hook name: 'setup' (2 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_tmp_hook_setup' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_tmp_hook_setup' (__kcs_tmp_hook_setup)
-00:10:45 [DBG] private.loader.func : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_optional' for '__kcs_echo_hook_setup' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_echo_hook_setup' (__kcs_echo_hook_setup)
 00:10:45 [DBG] private.loader.cb.miss : missing 'func:__kcs_echo_hook_setup'
@@ -82,7 +82,7 @@
 00:10:45 [DBG] libs.hooks.run : running hook name: 'main' (1 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_echo_hook_main' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_echo_hook_main' (__kcs_echo_hook_main)
-00:10:45 [DBG] private.loader.func : run '__kcs_echo_hook_main' function with 1 args [cmd.echo]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_echo_hook_main' function with 1 args [cmd.echo]
 00:10:45 [DBG] libs.hooks.run : running hook name: 'pre_clean' (1 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_optional' for '__kcs_echo_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_echo_hook_clean' (__kcs_echo_hook_clean)
@@ -90,18 +90,18 @@
 00:10:45 [DBG] libs.hooks.run : running hook name: 'clean' (2 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_environment_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_environment_hook_clean' (__kcs_environment_hook_clean)
-00:10:45 [DBG] private.loader.func : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
 00:10:45 [DBG] libs.env.loader.delete : unset '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_configs_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_configs_hook_clean' (__kcs_configs_hook_clean)
-00:10:45 [DBG] private.loader.func : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
 00:10:45 [DBG] libs.hooks.run : running hook name: 'post_clean' (3 callbacks)
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_tmp_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_tmp_hook_clean' (__kcs_tmp_hook_clean)
-00:10:45 [DBG] private.loader.func : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_log_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_log_hook_clean' (__kcs_log_hook_clean)
-00:10:45 [DBG] private.loader.func : run '__kcs_log_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []
