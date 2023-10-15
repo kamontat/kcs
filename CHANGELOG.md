@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/kc-workspace/kcs/compare/v1.1.0...v1.1.1) (2023-10-15)
+
+
+### Bugfixes
+
+* **lib:** missing require option should result error on runtime ([60a25cf](https://github.com/kc-workspace/kcs/commit/60a25cf0b92f6782e15436d31513d82c440369a9))
+* **lib:** option didn't clean variable after each argument, cause shared state ([79dec94](https://github.com/kc-workspace/kcs/commit/79dec94f209b2082cb6288e3c4074efbd6bfea0b))
+* **test:** update tests for new option require logic ([a5f4007](https://github.com/kc-workspace/kcs/commit/a5f4007b48a9eda7b268d8a5ba26a6c7f7492029))
+
 ## [1.1.0](https://github.com/kc-workspace/kcs/compare/v1.0.0...v1.1.0) (2023-10-15)
 
 
