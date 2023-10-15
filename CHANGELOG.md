@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.1.0](https://github.com/kc-workspace/kcs/compare/v1.0.0...v1.1.0) (2023-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lib:** migrate commands to use new APIs and change function kcs_commands_load to kcs_commands_find
+
+### Features
+
+* **lib:** add templates for parsing template directory using eval ([375a61e](https://github.com/kc-workspace/kcs/commit/375a61e94d486d8012798f3ec5d90374ad2d2b97))
+
+
+### Improvements
+
+* **lib:** add new kcs_env_get for getting environment from named ([d3b610a](https://github.com/kc-workspace/kcs/commit/d3b610a35097371ec3e18d9f7d12afcfb1f7d095))
+* **lib:** migrate commands to use new APIs and change function kcs_commands_load to kcs_commands_find ([f4795f9](https://github.com/kc-workspace/kcs/commit/f4795f905d3959e844ceb7efcd08eb658516e935))
+* **lib:** move environment loader from private loader to environment lib ([8242da7](https://github.com/kc-workspace/kcs/commit/8242da7d0247c135b16164aeb79b230fbe126ddb))
+* **private:** migrate loader to using new APIs ([28ebae4](https://github.com/kc-workspace/kcs/commit/28ebae47a65e32cc182e1a0231ae0f02d26b04b2))
+* **script:** auto resolve latest version on setup script ([99b08c4](https://github.com/kc-workspace/kcs/commit/99b08c4651e7d1651dd165dbe75715d4b3634d50))
+* **script:** auto snap output if no snapshot found ([9f6db1a](https://github.com/kc-workspace/kcs/commit/9f6db1a6847030abfce193a24d096a67cdb7d70a))
+
+
+### Bugfixes
+
+* **lib:** add missing local variable defined on options ([84622bf](https://github.com/kc-workspace/kcs/commit/84622bff2d58eed56adbcbb2b7890ee6cd76ed5a))
+* **script:** setup script didn't get latest version correctly ([116bcf7](https://github.com/kc-workspace/kcs/commit/116bcf7c8ee169f9840fcd3718807d8c43421b66))
+* **test:** update test snapshots for logs namespace changed ([a7cf737](https://github.com/kc-workspace/kcs/commit/a7cf737cb0df69ad248c8da7a2650faa4cf2fb8a))
+* **test:** update tests from last changes ([95002b7](https://github.com/kc-workspace/kcs/commit/95002b739452bf49ac6879808a8fc39e55172e0e))
+
+
+### Miscellaneous
+
+* release v1.1.0 ([6cc2160](https://github.com/kc-workspace/kcs/commit/6cc2160b1c5d1d46ae425ec5ae8a9916fa736797))
+* **test:** add test of template library ([74991af](https://github.com/kc-workspace/kcs/commit/74991af3cb30a92a5b0c4f37837257e37ee47919))
+
 ## [1.0.0](https://github.com/kc-workspace/kcs/compare/v1.0.0-beta.6...v1.0.0) (2023-10-14)
 
 
