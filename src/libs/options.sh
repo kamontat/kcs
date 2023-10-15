@@ -30,6 +30,9 @@ export _KCS_OPTIONS_ATYPE_STR_REQ='RS'
 ## Optional string argument
 export _KCS_OPTIONS_ATYPE_STR_OPT='OS'
 
+## List of exported option name (uppercase option name)
+_KCS_OPTIONS_EXPORT_LIST=()
+
 _kcs_options_is_arg() {
   ! [[ "$1" =~ ^- ]]
 }
@@ -127,6 +130,7 @@ _kcs_options_export() {
 
   if test -n "$arg"; then
     kcs_log_debug "$ns" "export '%s'='%s'" "$var" "$arg"
+    _KCS_OPTIONS_EXPORT_LIST+=("$name")
     export "$var"="$arg"
   else
     kcs_log_debug "$ns" "skipping export variable '%s%s' because no argument" \
@@ -396,8 +400,26 @@ __kcs_options_hook_load_internal() {
       continue
     fi
 
-    kcs_log_warn "$ns" "unknown argument syntax (%s)" "$raw"
+    kcs_log_error "$ns" "unknown argument syntax (%s)" "$raw"
   done
+
+  ## Searching for requires options
+  local opt name atype full_text
+  full_text="${_KCS_OPTIONS_EXPORT_LIST[*]}"
+  full_text=":${full_text// /:}:"
+
+  if [ "$code" -lt 1 ]; then
+    for definition in ${definitions//;/ }; do
+      name="$(_kcs_options_def_name "$definition")"
+      atype="$(_kcs_options_def_atype "$definition")"
+
+      ## Require option, but didn't exported
+      [[ "${atype:0:1}" == "R" ]] && ! [[ "$full_text" =~ :$name: ]] &&
+        opt="$(_kcs_options_def_options "$definition")" &&
+        kcs_log_error "$ns" "option $opt is required" &&
+        ((code++))
+    done
+  fi
 
   export _KCS_CMD_ARGS
   _KCS_CMD_ARGS=("${output[@]}")
@@ -420,7 +442,7 @@ __kcs_options_hook_main() {
 __kcs_options_hook_clean() {
   unset _KCS_OPTIONS_ATYPE_NO_VALUE
   unset _KCS_OPTIONS_ATYPE_STR_OPT _KCS_OPTIONS_ATYPE_STR_REQ
-  unset __KCS_OPTIONS_DEFAULT_LIST
+  unset __KCS_OPTIONS_DEFAULT_LIST _KCS_OPTIONS_EXPORT_LIST
 }
 
 __KCS_OPTIONS_DEFAULT_LIST=()
