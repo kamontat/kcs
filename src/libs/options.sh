@@ -344,6 +344,9 @@ __kcs_options_hook_load_internal() {
   local raw next inputs=("$@") output=()
   local def opt option arg
   for ((i = 0; i < ${#inputs[@]}; i++)); do
+    ## Reset variables
+    def='' opt='' option='' arg=''
+
     raw="${inputs[$i]}"
     if _kcs_options_is_arg "$raw"; then
       kcs_log_debug "$ns" "move '%s' to final list as args" "$raw"
