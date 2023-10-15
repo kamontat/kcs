@@ -46,5 +46,6 @@ Use `curl -sSL https://github.com/kc-workspace/kcs/raw/main/scripts/setup.sh | b
     - **100** = 1 hour
     - **1** = 1 minute
 12. `KCS_TMPBFR=<str>` - Force clean temporary directory before start
-13. `KCS_TEST=true` - Customize script for testing only
+13. `KCS_TRUST=true` - Trusted the script and execute without security warning
+14. `KCS_TEST=true` - This should use for testing only
     - This enabled automatically on **test script**
