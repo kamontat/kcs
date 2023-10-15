@@ -8,7 +8,15 @@
 ## Call libraries file
 ## usage: `kcs_ld_lib <name> <args...>`
 kcs_ld_lib() {
-  _kcs_ld_do source lifecycle throw throw libs "$@"
+  _kcs_ld_do_v2 \
+    --key libs \
+    --suffix .sh \
+    --action source \
+    --on-success lifecycle \
+    --on-missing throw \
+    --on-error throw \
+    --deduplicated \
+    -- "$@"
 }
 
 ## Check is input lib is loaded
@@ -20,35 +28,15 @@ kcs_ld_lib_is_loaded() {
 ## Call utilities file
 ## usage: `kcs_ld_utils <name> <args...>`
 kcs_ld_utils() {
-  _kcs_ld_do source lifecycle throw throw utils "$@"
-}
-
-## Load env file (this env has priority lower than external environment)
-## This will skipped if environment is declared
-## usage: `kcs_ld_env_default <name...>`
-kcs_ld_env_default() {
-  local name
-  for name in "$@"; do
-    _kcs_ld_do env_default nothing warn throw env "$name"
-  done
-}
-
-## Load env file
-## usage: `kcs_ld_env <name...>`
-kcs_ld_env() {
-  local name
-  for name in "$@"; do
-    _kcs_ld_do env nothing error throw env "$name"
-  done
-}
-
-## Unload env file
-## usage: `kcs_ld_unenv <name...>`
-kcs_ld_unenv() {
-  local name
-  for name in "$@"; do
-    _kcs_ld_do unenv nothing mute throw env "$name"
-  done
+  _kcs_ld_do_v2 \
+    --key utils \
+    --suffix .sh \
+    --action source \
+    --on-success lifecycle \
+    --on-missing throw \
+    --on-error throw \
+    --deduplicated \
+    -- "$@"
 }
 
 ## Check is input utils is loaded
@@ -179,6 +167,125 @@ _kcs_ld_do() {
   fi
 }
 
+_kcs_ld_do_v2() {
+  local ns="private.loader.do"
+  local raw=("$@")
+  local i arg is_arg=false args=()
+  local key prefix suffix module
+  local loader=filesystem deduplicated=false
+  local action_cb success_cb error_cb miss_cb
+  for ((i = 0; i < ${#raw[@]}; i++)); do
+    arg="${raw[$i]}"
+
+    ## Too many logs
+    # kcs_log_debug "$ns" "parsing: '%s' (arg=%s)" "$arg" "$is_arg"
+    if $is_arg; then
+      args+=("$arg")
+      continue
+    fi
+    if [[ "$arg" == "--" ]]; then
+      is_arg=true
+      continue
+    fi
+
+    case "$arg" in
+    --module) module="${raw[$((i + 1))]}" && ((i++)) ;;
+    --key) key="${raw[$((i + 1))]}" && ((i++)) ;;
+    --prefix) prefix="${raw[$((i + 1))]}" && ((i++)) ;;
+    --suffix) suffix="${raw[$((i + 1))]}" && ((i++)) ;;
+    --filesystem) loader='filesystem' ;;
+    --function) loader='function' ;;
+    --deduplicated) deduplicated=true ;;
+    --action) action_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    --on-success) success_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    --on-error) error_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    --on-missing) miss_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    --*) kcs_log_error "$ns" "unknown loading options (%s)" "$arg" ;;
+    esac
+  done
+
+  local name="${args[0]}"
+  local data=("${args[@]:1}")
+
+  test -z "$key" &&
+    kcs_log_error "$ns" "option --key is required" && return 1
+  test -z "$name" &&
+    kcs_log_error "$ns" "first argument is required" && return 1
+  test -n "$module" && module="__kcs_$module" || module="__kcs"
+  success_cb="__kcs_ld_scb_${success_cb:-nothing}"
+  miss_cb="__kcs_ld_mcb_${miss_cb:-warn}"
+  error_cb="__kcs_ld_ecb_${error_cb:-error}"
+  if test -n "$action_cb"; then
+    action_cb="${module}_ld_acb_$action_cb"
+  else
+    kcs_log_error "$ns" "option --action-cb is required" && return 1
+  fi
+
+  ## Skip duplicated modules
+  if "$deduplicated" && _kcs_ld_is_loaded "$key" "$name"; then
+    ## This can handle when lib try to load its dependencies
+    kcs_log_debug "$ns" "skipping '%s:%s' because it has been loaded" \
+      "$key" "$name"
+    return 0
+  fi
+
+  ## Load script to filesystem
+  if [[ "$loader" == "filesystem" ]]; then
+    local basepaths=() paths=()
+    test -n "$KCS_PATH" && basepaths+=("$KCS_PATH")
+    basepaths+=("$_KCS_PATH_ROOT" "$_KCS_PATH_SRC")
+
+    local index_str=('1st' '2nd' '3rd' '4th' '5th')
+    local basepath filepath
+    for ((i = 0; i < ${#basepaths[@]}; i++)); do
+      basepath="${basepaths[$i]}"
+      filepath="$(
+        _kcs_ld_path_builder "$basepath" "$key" "$prefix" "$name" "$suffix"
+      )"
+      paths+=("$filepath")
+      kcs_log_debug "$ns" "[%s] trying '%s'" "${index_str[$i]}" "$filepath"
+      if test -f "$filepath"; then
+        if ! "$action_cb" "$key" "$name" "$filepath" "${data[@]}"; then
+          "$error_cb" "$key" "$name" "$filepath" "${data[@]}"
+          return $?
+        fi
+        "$deduplicated" && _kcs_ld_save "$key" "$name"
+        "$success_cb" "$key" "$name" "${data[@]}"
+        return $?
+      fi
+    done
+
+    "$miss_cb" "$key" "$name" "${paths[*]}" "${data[@]}"
+    return $?
+  fi
+
+  if [[ "$loader" == "function" ]]; then
+    local fn="${data[0]}"
+    data=("${data[@]}:1")
+
+    kcs_log_debug "$ns" "checking function '%s' (%s)" "$name" "$fn"
+    if test -z "$fn"; then
+      kcs_log_error "$ns" "function '%s' is not defined callback (%s)" \
+        "$name" "$fn"
+      "$error_cb" "$key" "$name" "$fn" "${data[@]}"
+      return $?
+    fi
+
+    if command -v "$fn" >/dev/null; then
+      if ! "$action_cb" "$key" "$name" "$fn" "${data[@]}"; then
+        "$error_cb" "$key" "$name" "$fn" "${data[@]}"
+        return $?
+      fi
+      "$success_cb" "$key" "$name" "${data[@]}"
+      return $?
+    fi
+    "$miss_cb" "$key" "$name" "$fn" "$@"
+    return $?
+  fi
+
+  kcs_log_error "$ns" "unknown loader type '%s'" "$loader" && return 1
+}
+
 __kcs_ld_acb_source() {
   local ns="private.loader.source"
   local key="$1" name="$2" filepath="$3"
@@ -212,55 +319,6 @@ __kcs_ld_acb_function() {
   kcs_log_debug "$ns" \
     "run '%s' function with %d args [%s]" "$fn" "$#" "$*"
   "$fn" "$@"
-}
-__kcs_ld_acb_env_default() {
-  local ns="private.loader.env.default"
-  local key="$1" name="$2" filepath="$3"
-  shift 3
-  local line key value keys=()
-  while read -r line; do
-    [[ "$line" =~ ^# ]] || [[ "$line" =~ ^// ]] || test -z "$line" &&
-      continue
-    key="${line%%=*}"
-    value="${line#*=}"
-    keys+=("$key")
-    if ! declare -p "$key" >/dev/null 2>&1; then
-      export "$key"="$value"
-    else
-      kcs_log_debug "$ns" "variable '%s' was created, skipped" "$key"
-    fi
-  done <"$filepath"
-  kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
-}
-__kcs_ld_acb_env() {
-  local ns="private.loader.env"
-  local key="$1" name="$2" filepath="$3"
-  shift 3
-  local line key value keys=()
-  while read -r line; do
-    [[ "$line" =~ ^# ]] || [[ "$line" =~ ^// ]] || test -z "$line" &&
-      continue
-    key="${line%%=*}"
-    value="${line#*=}"
-    keys+=("$key")
-    export "$key"="$value"
-  done <"$filepath"
-  kcs_log_debug "$ns" "export '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
-}
-__kcs_ld_acb_unenv() {
-  local ns="private.loader.unenv"
-  local key="$1" name="$2" filepath="$3"
-  shift 3
-  local line key value keys=()
-  while read -r line; do
-    [[ "$line" =~ ^# ]] || [[ "$line" =~ ^// ]] || test -z "$line" &&
-      continue
-    key="${line%%=*}"
-    value="${line#*=}"
-    keys+=("$key")
-    unset "$key"
-  done <"$filepath"
-  kcs_log_debug "$ns" "unset '%d' variables [%s]" "${#keys[@]}" "${keys[*]}"
 }
 
 __kcs_ld_scb_nothing() {
