@@ -162,7 +162,7 @@ _kct_run_verify() {
 
   local dirpath="$KCT_PATH_SNAPDIR/$name"
   ! test -d "$dirpath" &&
-    _kct_result_save "$name" "$KCT_STATUS_FAILED" "missing snapshot" &&
+    _kct_run_snapshot "$name" "" "$@" &&
     return 0
 
   local tmpdir
@@ -279,6 +279,7 @@ kct_summary() {
   echo
 
   local filepath="$KCT_PATH_REPORTDIR/status.csv"
+  local index name status message
   while IFS="," read -r index _ name status message; do
     if [[ "$status" == "$KCT_STATUS_FAILED" ]] ||
       [[ "$status" == "$KCT_STATUS_INVALID" ]]; then
