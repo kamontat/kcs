@@ -143,30 +143,35 @@ _kcs_options_def_find() {
 ## get definition possible options
 ## usage: `_kcs_options_def_options '|h|help|:HELP:NV'`
 _kcs_options_def_options() {
+  local opt
   IFS=: read -r opt _ _ _ _ <<<"$1"
   _kcs_options_unescape "$opt"
 }
 ## get definition variable name
 ## usage: `_kcs_options_def_name '|h|help|:HELP:NV'`
 _kcs_options_def_name() {
+  local name
   IFS=: read -r _ name _ _ _ <<<"$1"
   _kcs_options_unescape "$name"
 }
 ## get definition value type
 ## usage: `_kcs_options_def_atype '|h|help|:HELP:NV'`
 _kcs_options_def_atype() {
+  local atype
   IFS=: read -r _ _ atype _ _ <<<"$1"
   _kcs_options_unescape "$atype"
 }
 ## get definition default value
 ## usage: `_kcs_options_def_default '|h|help|:HELP:NV:null'`
 _kcs_options_def_default() {
+  local default
   IFS=: read -r _ _ _ default _ <<<"$1"
   _kcs_options_unescape "$default"
 }
 ## get definition description
 ## usage: `_kcs_options_def_desc '|h|help|:HELP:NV:null:show message'`
 _kcs_options_def_desc() {
+  local desc
   IFS=: read -r _ _ _ _ desc <<<"$1"
   _kcs_options_unescape "$desc"
 }
