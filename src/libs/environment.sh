@@ -16,7 +16,7 @@ kcs_env_get() {
 }
 
 kcs_env_load_insert() {
-  _kcs_ld_do_v2 \
+  _kcs_ld_do \
     --module environment \
     --key envs \
     --prefix . \
@@ -27,7 +27,7 @@ kcs_env_load_insert() {
 }
 
 kcs_env_load_upsert() {
-  _kcs_ld_do_v2 \
+  _kcs_ld_do \
     --module environment \
     --key envs \
     --prefix . \
@@ -38,7 +38,7 @@ kcs_env_load_upsert() {
 }
 
 kcs_env_unload() {
-  _kcs_ld_do_v2 \
+  _kcs_ld_do \
     --module environment \
     --key envs \
     --prefix . \

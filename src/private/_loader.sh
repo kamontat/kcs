@@ -8,7 +8,7 @@
 ## Call libraries file
 ## usage: `kcs_ld_lib <name> <args...>`
 kcs_ld_lib() {
-  _kcs_ld_do_v2 \
+  _kcs_ld_do \
     --key libs \
     --suffix .sh \
     --action source \
@@ -28,7 +28,7 @@ kcs_ld_lib_is_loaded() {
 ## Call utilities file
 ## usage: `kcs_ld_utils <name> <args...>`
 kcs_ld_utils() {
-  _kcs_ld_do_v2 \
+  _kcs_ld_do \
     --key utils \
     --suffix .sh \
     --action source \
@@ -45,129 +45,28 @@ kcs_ld_utils_is_loaded() {
   _kcs_ld_is_loaded utils "$1"
 }
 
-## Call command file
-## usage: `kcs_ld_cmd <name> <args...>`
-kcs_ld_cmd() {
-  _kcs_ld_do shell nothing silent throw cmd "$@"
-}
-
 ## Call private libraries file
 ## usage: `kcs_ld_priv <name> <args...>`
 _kcs_ld_priv() {
-  _kcs_ld_do source lifecycle throw throw private "$@"
+  _kcs_ld_do \
+    --key private \
+    --prefix _ \
+    --suffix .sh \
+    --action source \
+    --on-success lifecycle \
+    --on-missing throw \
+    --on-error throw \
+    --deduplicated \
+    -- "$@"
 }
 
+## Check is input private is loaded
+## usage: `_kcs_ld_priv_is_loaded 'example' && echo 'loaded'`
 _kcs_ld_priv_is_loaded() {
   _kcs_ld_is_loaded private "$1"
 }
 
 _kcs_ld_do() {
-  local ns="private.loader.do"
-  local action_cb="__kcs_ld_acb_${1:?}"
-  local success_cb="__kcs_ld_scb_${2:?}"
-  local miss_cb="__kcs_ld_mcb_${3:?}"
-  local error_cb="__kcs_ld_ecb_${4:?}"
-  local _key="${5:?}" name="${6:?}"
-  shift 6
-
-  local fs=true saved=true
-  local key prefix suffix
-  case "$_key" in
-  private | priv | p)
-    key="private"
-    prefix="_"
-    suffix=".sh"
-    ;;
-  libraries | libs | lib | l)
-    key="libs"
-    prefix=""
-    suffix=".sh"
-    ;;
-  utilities | utils | util | u)
-    key="utils"
-    prefix=""
-    suffix=".sh"
-    ;;
-  commands | cmds | cmd | c)
-    saved=false
-    key="commands"
-    prefix=""
-    suffix=".sh"
-    ;;
-  environment | env | e)
-    saved=false
-    key='envs'
-    prefix="."
-    suffix=''
-    ;;
-  functions | func | fn | f)
-    key="func"
-    saved=false
-    fs=false
-    ;;
-  *)
-    kcs_log_debug "$ns" "invalid loading key (%s)" "$key"
-    "$miss_cb" "$key" "$name" "" "$@"
-    return $?
-    ;;
-  esac
-
-  if "$saved" && _kcs_ld_is_loaded "$key" "$name"; then
-    ## This can handle when lib try to load its dependencies
-    kcs_log_debug "$ns" \
-      "skipping '%s:%s' because it has been loaded" "$key" "$name"
-    return 0
-  fi
-
-  if "$fs"; then
-    local basepaths=() paths=()
-    test -n "$KCS_PATH" && basepaths+=("$KCS_PATH")
-    basepaths+=("$_KCS_PATH_ROOT" "$_KCS_PATH_SRC")
-
-    local index=0 index_str=('1st' '2nd' '3rd')
-    local basepath filepath
-    for basepath in "${basepaths[@]}"; do
-      filepath="$(_kcs_ld_path_builder \
-        "$basepath" "$key" "$prefix" "$name" "$suffix")"
-      paths+=("$filepath")
-      kcs_log_debug "$ns" "[%s] trying '%s'" "${index_str[$index]}" "$filepath"
-      ((index++))
-      if test -f "$filepath"; then
-        if ! "$action_cb" "$key" "$name" "$filepath" "$@"; then
-          "$error_cb" "$key" "$name" "$filepath" "$@"
-          return $?
-        fi
-        "$saved" && _kcs_ld_save "$key" "$name"
-        "$success_cb" "$key" "$name" "$@"
-        return $?
-      fi
-    done
-    "$miss_cb" "$key" "$name" "${paths[*]}" "$@"
-  else
-    local fn="$1"
-    shift
-
-    kcs_log_debug "$ns" "checking function '%s' (%s)" "$name" "$fn"
-    if test -z "$fn"; then
-      kcs_log_error "$ns" \
-        "function '%s' is not defined callback (%s)" "$name" "$fn"
-      "$error_cb" "$key" "$name" "$fn" "$@"
-      return $?
-    fi
-
-    if command -v "$fn" >/dev/null; then
-      if ! "$action_cb" "$key" "$name" "$fn" "$@"; then
-        "$error_cb" "$key" "$name" "$fn" "$@"
-        return $?
-      fi
-      "$success_cb" "$key" "$name" "$@"
-      return $?
-    fi
-    "$miss_cb" "$key" "$name" "$fn" "$@"
-  fi
-}
-
-_kcs_ld_do_v2() {
   local ns="private.loader.do"
   local raw=("$@")
   local i arg is_arg=false args=()
@@ -261,22 +160,22 @@ _kcs_ld_do_v2() {
 
   if [[ "$loader" == "function" ]]; then
     local fn="${data[0]}"
-    data=("${data[@]}:1")
+    local params=("${data[@]:1}")
 
     kcs_log_debug "$ns" "checking function '%s' (%s)" "$name" "$fn"
     if test -z "$fn"; then
       kcs_log_error "$ns" "function '%s' is not defined callback (%s)" \
         "$name" "$fn"
-      "$error_cb" "$key" "$name" "$fn" "${data[@]}"
+      "$error_cb" "$key" "$name" "$fn" "${params[@]}"
       return $?
     fi
 
     if command -v "$fn" >/dev/null; then
-      if ! "$action_cb" "$key" "$name" "$fn" "${data[@]}"; then
-        "$error_cb" "$key" "$name" "$fn" "${data[@]}"
+      if ! "$action_cb" "$key" "$name" "$fn" "${params[@]}"; then
+        "$error_cb" "$key" "$name" "$fn" "${params[@]}"
         return $?
       fi
-      "$success_cb" "$key" "$name" "${data[@]}"
+      "$success_cb" "$key" "$name" "${params[@]}"
       return $?
     fi
     "$miss_cb" "$key" "$name" "$fn" "$@"
@@ -296,29 +195,6 @@ __kcs_ld_acb_source() {
 
   # shellcheck source=/dev/null
   source "$filepath" "$@"
-}
-__kcs_ld_acb_shell() {
-  local ns="private.loader.shell"
-  local key="$1" name="$2" filepath="$3"
-  shift 3
-
-  local runner
-  ## Prefer bash first, if no use default shell instead
-  runner="$(command -v bash)"
-  test -z "$runner" && runner="$SHELL"
-
-  kcs_log_debug "$ns" "run '%s' using '%s' with %d args [%s]" \
-    "$filepath" "$(basename "$runner")" "$#" "$*"
-  "$runner" "$filepath" "$@"
-}
-__kcs_ld_acb_function() {
-  local ns="private.loader.func"
-  local key="$1" name="$2" fn="$3"
-  shift 3
-
-  kcs_log_debug "$ns" \
-    "run '%s' function with %d args [%s]" "$fn" "$#" "$*"
-  "$fn" "$@"
 }
 
 __kcs_ld_scb_nothing() {
