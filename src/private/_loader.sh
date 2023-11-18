@@ -66,6 +66,18 @@ _kcs_ld_priv_is_loaded() {
   _kcs_ld_is_loaded private "$1"
 }
 
+## Loading module based on input
+## usage: _kcs_ld_do --key "<key>" <options>...
+## options:
+##   --key        : use as a key for logging and deduplication
+##   --module     : a loader module name (default to kcs)
+##   --action     : a action to perform after resolving file/function name
+##   --on-*       : a event listener callback function (success, error, missing)
+##   --filesystem : a default loader for loading file from fs
+##   --regex      : [fs] resolve file name using regex mode
+##   --action-*   : [fs] special action for file name
+##                : e.g. file 'abc.hello.sh' will use action from --action-hello
+##   --function   : a function loader for loading shell function
 _kcs_ld_do() {
   local ns="private.loader.do"
   local raw=("$@")
@@ -124,6 +136,12 @@ _kcs_ld_do() {
   success_cb="__kcs_ld_scb_${success_cb:-nothing}"
   miss_cb="__kcs_ld_mcb_${miss_cb:-warn}"
   error_cb="__kcs_ld_ecb_${error_cb:-error}"
+  ## Convert action callback to correct format
+  if test -n "$action_cb"; then
+    action_cb="${module}_ld_acb_$action_cb"
+  else
+    kcs_log_error "$ns" "option --action is required" && return 1
+  fi
 
   ## Skip duplicated modules
   if "$deduplicated" && _kcs_ld_is_loaded "$key" "$name"; then
@@ -168,17 +186,12 @@ _kcs_ld_do() {
         raw_ext="${raw_ext%.*}"
         ext="${raw_ext##*.}"
         if [[ "$raw_ext" != "$ext" ]]; then
-          eval "action_cb=\"\$action_${ext//-/_}_cb\""
+          local action_name
+          action_name="$(eval "printf '%s' \"\$action_${ext//-/_}_cb\"")"
+          test -n "$action_name" && action_cb="${module}_ld_acb_${action_name}"
         fi
 
-        ## Convert action callback to correct format
-        if test -n "$action_cb"; then
-          action_cb="${module}_ld_acb_$action_cb"
-        else
-          kcs_log_error "$ns" "option --action-cb is required" && return 1
-        fi
-
-        kcs_log_debug "$ns" "execute '%s' as action callback" "$action_cb"
+        kcs_log_debug "$ns" "execute action '%s' callback" "$action_cb"
         if ! "$action_cb" "$key" "$name" "$fp" "${data[@]}"; then
           "$error_cb" "$key" "$name" "$fp" "${data[@]}"
           return $?
@@ -194,13 +207,6 @@ _kcs_ld_do() {
   elif [[ "$loader" == "function" ]]; then
     local fn="${data[0]}"
     local params=("${data[@]:1}")
-
-    ## Convert action callback to correct format
-    if test -n "$action_cb"; then
-      action_cb="${module}_ld_acb_$action_cb"
-    else
-      kcs_log_error "$ns" "option --action-cb is required" && return 1
-    fi
 
     kcs_log_debug "$ns" "checking function '%s' (%s)" "$name" "$fn"
     if test -z "$fn"; then
