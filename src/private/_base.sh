@@ -63,7 +63,7 @@ kcs_argument() {
   fi
 }
 
-## Save exit result for grateful exit
+## Save exit result for grateful exit (this will use input code as return)
 ## usage: `kcs_exit <code> [<reason...>]`
 kcs_exit() {
   local ns="private.base.exit"
@@ -71,11 +71,14 @@ kcs_exit() {
   shift
 
   if [ "$#" -gt 0 ]; then
+    kcs_log_debug "$ns" "start grateful exit %d with logs" "$code"
     if [ "$code" -gt 0 ]; then
       kcs_log_error "$ns" "$@"
     else
       kcs_log_info "$ns" "$@"
     fi
+  else
+    kcs_log_debug "$ns" "start grateful exit %d without logs" "$code"
   fi
 
   if ! kcs_ld_lib_is_loaded 'hooks'; then
@@ -86,6 +89,7 @@ kcs_exit() {
   kcs_hooks_disable pre_main
   kcs_hooks_disable main
   kcs_hooks_add finish exit "@varargs=$code"
+  return "$code"
 }
 __kcs_exit_hook_finish() {
   exit "${1:-1}"
