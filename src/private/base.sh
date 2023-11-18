@@ -23,3 +23,13 @@ source "$_KCS_PATH_PRIV/_tmp.sh" || exit 1
 
 _kcs_color_init
 _kcs_log_init
+
+if test -n "$KCS_DEV" && test -z "$__KCS_DEV_INIT"; then
+  kcs_log_info "private.base.settings" "development mode has been enabled"
+  export __KCS_DEV_INIT=true
+fi
+
+if test -n "$KCS_TEST" && test -z "$__KCS_TEST_INIT"; then
+  kcs_log_info "private.base.settings" "testing mode has been enabled"
+  export __KCS_TEST_INIT=true
+fi
