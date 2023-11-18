@@ -29,8 +29,8 @@ kcs_conf_load() {
   local value name fn
   eval "value=\"\${${_KCS_CONFIGS_DB_ALL}_${key}}\""
 
-  kcs_log_debug "$ns" "reading config value: %s" \
-    "\${${_KCS_CONFIGS_DB_ALL}_${key}}"
+  kcs_log_debug "$ns" \
+    "reading config value: %s" "\${${_KCS_CONFIGS_DB_ALL}_${key}}"
   if test -n "$value"; then
     name="${key}_use_conf"
     fn="__kcs_${key}_conf_use_${value}"
