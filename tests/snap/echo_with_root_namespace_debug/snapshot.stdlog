@@ -1,3 +1,4 @@
+00:10:45 [INF] private.base.settings : testing mode has been enabled
 00:10:45 [DBG] libs.commands.load : current argument is 'echo'
 00:10:45 [DBG] libs.commands.load : current filepath is 'echo'
 00:10:45 [DBG] libs.commands.loader.shell : run '$KCT_PATH_TESTDIR/commands/echo.sh' using 'bash' with 0 args []

@@ -1,7 +1,9 @@
 00:10:45 [DBG] init.logger : initiated logger settings
+00:10:45 [INF] private.base.settings : testing mode has been enabled
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/commands.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/commands.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/commands.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/commands.sh'
 00:10:45 [DBG] private.loader.source : run '$KCS_PATH_SRC/libs/commands.sh' with 0 args []
 00:10:45 [DBG] private.loader.save : saving 'libs:commands' as loaded module
 00:10:45 [DBG] private.loader.cb.success : skipping config loading (commands)
@@ -33,6 +35,7 @@
 00:10:45 [DBG] libs.commands.load : current argument is 'empty'
 00:10:45 [DBG] libs.commands.load : current filepath is 'empty'
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/commands/empty.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCT_PATH_TESTDIR/commands/empty.sh'
 00:10:45 [DBG] libs.commands.loader.shell : run '$KCT_PATH_TESTDIR/commands/empty.sh' using 'bash' with 4 args [hello --help --example -t]
 00:10:45 [DBG] init.logger : initiated logger settings
 00:10:45 [DBG] private.command.start : set command path to '$KCT_PATH_TESTDIR/commands/empty.sh'
@@ -40,6 +43,7 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/private/_lifecycle.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.source : run '$KCS_PATH_SRC/private/_lifecycle.sh' with 5 args [empty hello --help --example -t]
 00:10:45 [DBG] private.loader.save : saving 'private:lifecycle' as loaded module
 00:10:45 [DBG] private.loader.cb.success : skipping config loading (lifecycle)
@@ -47,6 +51,7 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/hooks.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/hooks.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/hooks.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/hooks.sh'
 00:10:45 [DBG] private.loader.source : run '$KCS_PATH_SRC/libs/hooks.sh' with 0 args []
 00:10:45 [DBG] private.loader.save : saving 'libs:hooks' as loaded module
 00:10:45 [DBG] private.loader.cb.success : skipping config loading (hooks)
@@ -54,12 +59,14 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/functions.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/functions.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/functions.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/functions.sh'
 00:10:45 [DBG] private.loader.source : run '$KCS_PATH_SRC/libs/functions.sh' with 0 args []
 00:10:45 [DBG] private.loader.save : saving 'libs:functions' as loaded module
 00:10:45 [DBG] private.loader.cb.success : skipping config loading (functions)
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/environment.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/environment.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/environment.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/environment.sh'
 00:10:45 [DBG] private.loader.source : run '$KCS_PATH_SRC/libs/environment.sh' with 0 args []
 00:10:45 [DBG] private.loader.save : saving 'libs:environment' as loaded module
 00:10:45 [DBG] private.loader.cb.success : skipping config loading (environment)
@@ -67,11 +74,13 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/envs/.default'
 00:10:45 [DBG] libs.env.loader.insert : export '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_environment_hook_clean' to hook name 'clean'
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/configs.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/configs.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/configs.sh'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/configs.sh'
 00:10:45 [DBG] private.loader.source : run '$KCS_PATH_SRC/libs/configs.sh' with 0 args []
 00:10:45 [DBG] private.loader.save : saving 'libs:configs' as loaded module
 00:10:45 [DBG] libs.configs.load : reading config value: ${__kcs_configs_db_configs}
@@ -117,6 +126,7 @@
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
+00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/envs/.default'
 00:10:45 [DBG] libs.env.loader.delete : unset '1' variables [KCS_CMD_VERSION]
 00:10:45 [DBG] libs.hooks.run : using 'kcs_func_must' for '__kcs_configs_hook_clean' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_configs_hook_clean' (__kcs_configs_hook_clean)

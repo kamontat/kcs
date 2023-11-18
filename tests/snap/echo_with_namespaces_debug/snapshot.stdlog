@@ -1,3 +1,4 @@
+00:10:45 [INF] private.base.settings : testing mode has been enabled
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_environment_hook_clean' to hook name 'clean'
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_configs_hook_clean' to hook name 'clean'
 00:10:45 [DBG] libs.hooks.add : adding '__kcs_tmp_hook_setup' to hook name 'setup'

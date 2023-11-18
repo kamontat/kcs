@@ -1,3 +1,4 @@
-00:10:45 [INF] libs.templates.loader.parse : Add KCS_TRUST=true to disable below prompt
-00:10:45 [INF] libs.templates.loader.parse : Parse '$KCT_PATH_TESTDIR/templates/test.tmpl' using 'eval', it might be dangerous [Enter]
+00:10:45 [INF] private.base.settings : testing mode has been enabled
+00:10:45 [INF] libs.templates.loader.parser.default : Add KCS_TRUST=true to disable below prompt
+00:10:45 [INF] libs.templates.loader.parser.default : Parse '$KCT_PATH_TESTDIR/templates/test.tmpl' using 'eval', it might be dangerous [Enter]
 00:10:45 [PRT] cmd.use_template : test template is "hello world"
