@@ -99,5 +99,6 @@ __kcs_exit_hook_finish() {
 if test -n "$KCS_DEV"; then
   test -z "$DEBUG" && export DEBUG=kcs
   test -z "$KCS_TMPBFR" && export KCS_TMPBFR=true
+  test -z "$KCS_TRUST" && export KCS_TRUST=true
   test -z "$KCS_TMPDIR" && export KCS_TMPDIR=/tmp/kcs
 fi

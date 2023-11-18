@@ -11,6 +11,7 @@ Use `curl -sSL https://github.com/kc-workspace/kcs/raw/main/scripts/setup.sh | b
 1. `KCS_DEV=true` - Enabled dev mode.
     - set `DEBUG=kcs` - enabled debug mode
     - set `KCS_TMPBFR=true` - enabled always clean tmp
+    - set `KCS_TRUST=true` - always trust inputs
     - force `KCS_TMPDIR` to **/tmp**
 2. `DEBUG=<name:ns>` - Enable debug logs on specific namespace
     - To print only test namespace, use `DEBUG=kcs:test`
