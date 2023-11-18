@@ -10,15 +10,12 @@
 ## syntax:
 ##   - variables: <key>=<value> (e.g. name=hello)
 kcs_tmpl_load() {
-  local args=(
-    --key templates
-    --module templates
-    --on-missing warn
-    --on-error error
-    --regex
-  )
-
-  _kcs_ld_do "${args[@]}" \
+  _kcs_ld_do \
+    --key templates \
+    --module templates \
+    --on-missing warn \
+    --on-error error \
+    --regex \
     --suffix .tmpl \
     --action parser_default \
     --action-sh parser_eval \
@@ -27,19 +24,23 @@ kcs_tmpl_load() {
 
 ## use default kcs_template function provided from _base.sh
 __kcs_templates_ld_acb_parser_default() {
-  local ns="libs.templates.default.parser" filepath="$3"
+  local engine=default
+  local ns="libs.templates.parser.$engine" filepath="$3"
   shift 3
 
+  kcs_log_debug "$ns" "using '%s' for '%s'" "$engine" "$filepath"
   kcs_template "$(cat "$filepath")" "$@"
 }
 
 ## eval parser
 ## disclaim: This can be dangerous on unknown template
 __kcs_templates_ld_acb_parser_eval() {
-  local ns="libs.templates.eval.parser" filepath="$3"
+  local engine=eval
+  local ns="libs.templates.parser.$engine" filepath="$3"
   shift 3
 
-  __kcs_templates_prompt_warning eval "$filepath"
+  kcs_log_debug "$ns" "using '%s' for '%s'" "$engine" "$filepath"
+  __kcs_templates_prompt_warning $engine "$filepath"
 
   local input
   for input in "$@"; do
@@ -53,7 +54,7 @@ __kcs_templates_ld_acb_parser_eval() {
 
 __kcs_templates_prompt_warning() {
   local engine="$1" filepath="$2"
-  local ns="libs.templates.$engine.prompt"
+  local ns="libs.templates.prompt.$engine"
   ## Prompt if user not trust and not on testing
   if test -z "$KCS_TRUST" && test -z "$KCS_TEST"; then
     kcs_log_info "$ns" \
