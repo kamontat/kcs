@@ -35,12 +35,16 @@ __kcs_templates_ld_acb_parser_default() {
 
   local engine="eval"
 
-  ## Bypass prompt on test mode
+  ## Prompt only if not trust and not test mode
   if test -z "$KCS_TRUST" && test -z "$KCS_TEST"; then
     kcs_log_info "$ns" \
       "Dangerously parse '%s' using '%s' [Enter] or add 'KCS_TRUST=true'" \
       "$filepath" "$engine"
     read -r
+    ## If user trust, we will just print info message
+  elif test -n "$KCS_TRUST"; then
+    kcs_log_info "$ns" "Dangerously parse '%s' using '%s'" \
+      "$filepath" "$engine"
   fi
 
   local input
