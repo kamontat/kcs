@@ -5,30 +5,42 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## Load templates file
+## usage: `content="$(kcs_tmpl_load <filename> [<variables>]...)"`
+## syntax:
+##   - variables: <key>=<value> (e.g. name=hello)
 kcs_tmpl_load() {
-  _kcs_ld_do \
-    --module templates \
-    --key templates \
+  local args=(
+    --key templates
+    --module templates
+    --on-missing warn
+    --on-error error
+    --regex
+  )
+
+  _kcs_ld_do "${args[@]}" \
     --suffix .tmpl \
-    --action parse \
-    --on-missing warn \
-    --on-error error \
+    --action parser_default \
+    --action-sh parser_default \
+    --action-example-sh parser_default \
     -- "$@"
 }
 
-__kcs_templates_ld_acb_parse() {
-  local ns="libs.templates.loader.parse"
+## Default parser (using `eval`)
+## disclaim: This can be dangerous on unknown template
+__kcs_templates_ld_acb_parser_default() {
+  local ns="libs.templates.loader.parser.default"
   local filepath="$3"
   shift 3
 
   local engine="eval"
 
-  if test -z "$KCS_TRUST"; then
-    kcs_log_info "$ns" "Add KCS_TRUST=true to disable below prompt"
-    kcs_log_info "$ns" "Parse '%s' using '%s', it might be dangerous [Enter]" \
+  ## Bypass prompt on test mode
+  if test -z "$KCS_TRUST" && test -z "$KCS_TEST"; then
+    kcs_log_info "$ns" \
+      "Dangerously parse '%s' using '%s' [Enter] or add 'KCS_TRUST=true'" \
       "$filepath" "$engine"
-    ## Disable prompt on test mode
-    test -z "$KCS_TEST" && read -r
+    read -r
   fi
 
   local input
