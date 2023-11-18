@@ -468,3 +468,8 @@ __kcs_options_conf_use_default() {
     '-V|--full-version; FULL_VERSION show full version'
   )
 }
+__kcs_options_conf_use_minimal() {
+  __KCS_OPTIONS_DEFAULT_LIST=(
+    '-h|--help; HELP show help message'
+  )
+}
