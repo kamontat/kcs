@@ -1,2 +1,2 @@
 00:10:45 [INF] private.base.settings : testing mode has been enabled
-00:10:45 [PRT] cmd.use_template : test template is "hello world"
+00:10:45 [PRT] cmd.tmpl_default : test template is "hello world"
