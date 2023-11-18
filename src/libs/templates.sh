@@ -21,21 +21,40 @@ kcs_tmpl_load() {
   _kcs_ld_do "${args[@]}" \
     --suffix .tmpl \
     --action parser_default \
-    --action-sh parser_default \
-    --action-example-sh parser_default \
+    --action-sh parser_eval \
     -- "$@"
 }
 
-## Default parser (using `eval`)
-## disclaim: This can be dangerous on unknown template
+## use default kcs_template function provided from _base.sh
 __kcs_templates_ld_acb_parser_default() {
-  local ns="libs.templates.loader.parser.default"
-  local filepath="$3"
+  local ns="libs.templates.default.parser" filepath="$3"
   shift 3
 
-  local engine="eval"
+  kcs_template "$(cat "$filepath")" "$@"
+}
 
-  ## Prompt only if not trust and not test mode
+## eval parser
+## disclaim: This can be dangerous on unknown template
+__kcs_templates_ld_acb_parser_eval() {
+  local ns="libs.templates.eval.parser" filepath="$3"
+  shift 3
+
+  __kcs_templates_prompt_warning eval "$filepath"
+
+  local input
+  for input in "$@"; do
+    local "$input"
+  done
+
+  local content
+  content="$(cat "$filepath")"
+  eval "printf '%s' \"$content\""
+}
+
+__kcs_templates_prompt_warning() {
+  local engine="$1" filepath="$2"
+  local ns="libs.templates.$engine.prompt"
+  ## Prompt if user not trust and not on testing
   if test -z "$KCS_TRUST" && test -z "$KCS_TEST"; then
     kcs_log_info "$ns" \
       "Dangerously parse '%s' using '%s' [Enter] or add 'KCS_TRUST=true'" \
@@ -46,13 +65,4 @@ __kcs_templates_ld_acb_parser_default() {
     kcs_log_info "$ns" "Dangerously parse '%s' using '%s'" \
       "$filepath" "$engine"
   fi
-
-  local input
-  for input in "$@"; do
-    local "$input"
-  done
-
-  local content
-  content="$(cat "$filepath")"
-  eval "printf '%s' \"$content\""
 }

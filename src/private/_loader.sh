@@ -71,7 +71,7 @@ _kcs_ld_do() {
   local raw=("$@")
   local i arg is_arg=false args=()
   local key prefix suffix module
-  local loader=filesystem deduplicated=false
+  local loader=filesystem deduplicated=false use_regex=false
   local action_cb success_cb error_cb miss_cb
   for ((i = 0; i < ${#raw[@]}; i++)); do
     arg="${raw[$i]}"
@@ -88,17 +88,27 @@ _kcs_ld_do() {
     fi
 
     case "$arg" in
-    --module) module="${raw[$((i + 1))]}" && ((i++)) ;;
+    ## Can use on all loader
     --key) key="${raw[$((i + 1))]}" && ((i++)) ;;
-    --prefix) prefix="${raw[$((i + 1))]}" && ((i++)) ;;
-    --suffix) suffix="${raw[$((i + 1))]}" && ((i++)) ;;
-    --filesystem) loader='filesystem' ;;
-    --function) loader='function' ;;
-    --deduplicated) deduplicated=true ;;
-    --action) action_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    --module) module="${raw[$((i + 1))]}" && ((i++)) ;;
     --on-success) success_cb="${raw[$((i + 1))]}" && ((i++)) ;;
     --on-error) error_cb="${raw[$((i + 1))]}" && ((i++)) ;;
     --on-missing) miss_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    ## Only filesystem loader
+    --filesystem) loader='filesystem' ;;
+    --prefix) prefix="${raw[$((i + 1))]}" && ((i++)) ;;
+    --suffix) suffix="${raw[$((i + 1))]}" && ((i++)) ;;
+    --regex) use_regex=true ;;
+    --deduplicated) deduplicated=true ;;
+    --action) action_cb="${raw[$((i + 1))]}" && ((i++)) ;;
+    --action-*)
+      local act_name
+      act_name="$(printf '%s' "$arg" | sed 's/--action-//' | sed 's/-/_/')"
+      local "action_${act_name}_cb"="${raw[$((i + 1))]}" && ((i++))
+      ;;
+      ## Only function loader
+    --function) loader='function' ;;
+
     --*) kcs_log_error "$ns" "unknown loading options (%s)" "$arg" ;;
     esac
   done
@@ -114,11 +124,6 @@ _kcs_ld_do() {
   success_cb="__kcs_ld_scb_${success_cb:-nothing}"
   miss_cb="__kcs_ld_mcb_${miss_cb:-warn}"
   error_cb="__kcs_ld_ecb_${error_cb:-error}"
-  if test -n "$action_cb"; then
-    action_cb="${module}_ld_acb_$action_cb"
-  else
-    kcs_log_error "$ns" "option --action-cb is required" && return 1
-  fi
 
   ## Skip duplicated modules
   if "$deduplicated" && _kcs_ld_is_loaded "$key" "$name"; then
@@ -134,18 +139,48 @@ _kcs_ld_do() {
     test -n "$KCS_PATH" && basepaths+=("$KCS_PATH")
     basepaths+=("$_KCS_PATH_ROOT" "$_KCS_PATH_SRC")
 
-    local index_str=('1st' '2nd' '3rd' '4th' '5th')
-    local basepath filepath
+    local index_str=('1st' '2nd' '3rd' '4th' '5th' '6th' '7th' '8th' '9th')
+    local basepath filepath filename
     for ((i = 0; i < ${#basepaths[@]}; i++)); do
+
+      ## Use regex will add * as prefix and suffix of name
+      "$use_regex" && filename="*$name*" || filename="$name"
       basepath="${basepaths[$i]}"
       filepath="$(
-        _kcs_ld_path_builder "$basepath" "$key" "$prefix" "$name" "$suffix"
+        _kcs_ld_path_builder "$basepath" "$key" "$prefix" "$filename" "$suffix"
       )"
       paths+=("$filepath")
       kcs_log_debug "$ns" "[%s] trying '%s'" "${index_str[$i]}" "$filepath"
-      if test -f "$filepath"; then
-        if ! "$action_cb" "$key" "$name" "$filepath" "${data[@]}"; then
-          "$error_cb" "$key" "$name" "$filepath" "${data[@]}"
+
+      local raw_ext ext fp fps=()
+      for fp in $filepath; do
+        fps+=("$fp")
+      done
+
+      if [ ${#fps[@]} -gt 1 ]; then
+        kcs_log_error "$ns" "found '%s' more than 1 files (%s)" \
+          "$filepath" "${fps[*]}"
+        return 1
+      elif test -f "${fp}"; then
+        kcs_log_debug "$ns" "found file at '%s'" "$fp"
+
+        raw_ext="$(basename "$fp")"
+        raw_ext="${raw_ext%.*}"
+        ext="${raw_ext##*.}"
+        if [[ "$raw_ext" != "$ext" ]]; then
+          eval "action_cb=\"\$action_${ext//-/_}_cb\""
+        fi
+
+        ## Convert action callback to correct format
+        if test -n "$action_cb"; then
+          action_cb="${module}_ld_acb_$action_cb"
+        else
+          kcs_log_error "$ns" "option --action-cb is required" && return 1
+        fi
+
+        kcs_log_debug "$ns" "execute '%s' as action callback" "$action_cb"
+        if ! "$action_cb" "$key" "$name" "$fp" "${data[@]}"; then
+          "$error_cb" "$key" "$name" "$fp" "${data[@]}"
           return $?
         fi
         "$deduplicated" && _kcs_ld_save "$key" "$name"
@@ -156,11 +191,16 @@ _kcs_ld_do() {
 
     "$miss_cb" "$key" "$name" "${paths[*]}" "${data[@]}"
     return $?
-  fi
-
-  if [[ "$loader" == "function" ]]; then
+  elif [[ "$loader" == "function" ]]; then
     local fn="${data[0]}"
     local params=("${data[@]:1}")
+
+    ## Convert action callback to correct format
+    if test -n "$action_cb"; then
+      action_cb="${module}_ld_acb_$action_cb"
+    else
+      kcs_log_error "$ns" "option --action-cb is required" && return 1
+    fi
 
     kcs_log_debug "$ns" "checking function '%s' (%s)" "$name" "$fn"
     if test -z "$fn"; then
