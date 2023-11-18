@@ -19,7 +19,7 @@ kcs_func_must() {
     -- "$@"
 }
 
-## Should call function (or ignore if not exist)
+## call function only if exist
 ## usage: `kcs_func_optional <name> <func> <args...>`
 kcs_func_optional() {
   _kcs_ld_do \
@@ -27,7 +27,7 @@ kcs_func_optional() {
     --key func \
     --suffix .sh \
     --action run \
-    --on-missing mute \
+    --on-missing silent \
     --on-error throw \
     --function \
     -- "$@"

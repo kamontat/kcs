@@ -187,6 +187,7 @@ kcs_hooks_run() {
     kcs_log_debug "$ns" "using '%s' for '%s' callback" "$executor" "$callback"
     "$executor" "$callback" "$callback" "${args[@]}"
   done
+  return 0
 }
 
 ## Run all callback on all hooks based on life cycle
