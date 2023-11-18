@@ -5,13 +5,13 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_CMD_NAME="tmpl_default"
+export KCS_CMD_NAME="tmpl_dup"
 
-__kcs_tmpl_default_hook_load() {
+__kcs_tmpl_dup_hook_load() {
   kcs_ld_lib templates
 }
 
-__kcs_tmpl_default_hook_main() {
+__kcs_tmpl_dup_hook_main() {
   kcs_tmpl_load dup message=world
 }
 

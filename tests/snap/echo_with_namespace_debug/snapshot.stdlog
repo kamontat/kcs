@@ -3,32 +3,40 @@
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/commands.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/commands.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/commands.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_ld_acb_source' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/commands/echo.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCT_PATH_TESTDIR/commands/echo.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_commands_ld_acb_shell' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/private/_lifecycle.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/private/_lifecycle.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_ld_acb_source' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/hooks.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/hooks.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/hooks.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/hooks.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_ld_acb_source' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/functions.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/functions.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/functions.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/functions.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_ld_acb_source' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/environment.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/environment.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/environment.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/environment.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_ld_acb_source' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/envs/.default'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/envs/.default'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_environment_ld_acb_insert' callback
 00:10:45 [DBG] private.loader.do : [1st] trying '$KCT_PATH_TESTDIR/libs/configs.sh'
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/libs/configs.sh'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/libs/configs.sh'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/libs/configs.sh'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_ld_acb_source' callback
 00:10:45 [DBG] private.loader.do : skipping 'libs:functions' because it has been loaded
 00:10:45 [DBG] private.loader.do : checking function '__kcs_tmp_hook_setup' (__kcs_tmp_hook_setup)
 00:10:45 [DBG] private.loader.do : checking function '__kcs_echo_hook_setup' (__kcs_echo_hook_setup)
@@ -40,6 +48,7 @@
 00:10:45 [DBG] private.loader.do : [2nd] trying '$KCS_PATH_ROOT/envs/.default'
 00:10:45 [DBG] private.loader.do : [3rd] trying '$KCS_PATH_SRC/envs/.default'
 00:10:45 [DBG] private.loader.do : found file at '$KCS_PATH_SRC/envs/.default'
+00:10:45 [DBG] private.loader.do : execute action '__kcs_environment_ld_acb_delete' callback
 00:10:45 [DBG] private.loader.do : checking function '__kcs_configs_hook_clean' (__kcs_configs_hook_clean)
 00:10:45 [DBG] private.loader.do : checking function '__kcs_tmp_hook_clean' (__kcs_tmp_hook_clean)
 00:10:45 [DBG] private.loader.do : checking function '__kcs_log_hook_clean' (__kcs_log_hook_clean)

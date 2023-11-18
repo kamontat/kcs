@@ -1,0 +1,2 @@
+00:10:45 [INF] private.base.settings : testing mode has been enabled
+00:10:45 [DBG] libs.templates.parser.default : using 'default' for '$KCT_PATH_TESTDIR/templates/unknown.type.tmpl'

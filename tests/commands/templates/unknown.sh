@@ -5,20 +5,16 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_CMD_NAME="tmpl_default"
+export KCS_CMD_NAME="tmpl_unknown"
 export DEBUG=kcs:libs.templates.parser
 
-__kcs_tmpl_default_hook_load() {
+__kcs_tmpl_unknown_hook_load() {
   kcs_ld_lib templates
 }
 
-__kcs_tmpl_default_hook_main() {
-  local ns="$1"
-  shift
-
-  local data
-  data="$(kcs_tmpl_load test message=world)"
-  kcs_log_printf "$ns" 'test template is "%s"' "$data"
+## Unknown template type will fallback to use default parser
+__kcs_tmpl_unknown_hook_main() {
+  kcs_tmpl_load unknown message=world
 }
 
 #####################################################
