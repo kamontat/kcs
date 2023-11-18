@@ -5,7 +5,8 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-## Must call function
+## Must call function or grateful exit (or force if cannot grateful)
+## On grateful exit, this function will return input code as well
 ## usage: `kcs_func_must <name> <func> <args...>`
 kcs_func_must() {
   _kcs_ld_do \
