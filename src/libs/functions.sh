@@ -24,13 +24,12 @@ kcs_func_must() {
 ## usage: `kcs_func_optional <name> <func> <args...>`
 kcs_func_optional() {
   _kcs_ld_do \
-    --module functions \
+    --function \
     --key func \
-    --suffix .sh \
+    --module functions \
     --action run \
     --on-missing silent \
     --on-error throw \
-    --function \
     -- "$@"
 }
 
@@ -38,13 +37,12 @@ kcs_func_optional() {
 ## usage: `kcs_func_silent <name> <func> <args...>`
 kcs_func_silent() {
   _kcs_ld_do \
-    --module functions \
+    --function \
     --key func \
-    --suffix .sh \
+    --module functions \
     --action run \
     --on-missing mute \
     --on-error silent \
-    --function \
     -- "$@"
 }
 
