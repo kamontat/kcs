@@ -91,6 +91,11 @@ main() {
   kct_case option_require_pass_on_help \
     _options without-desc --help
 
+  kct_case aliases_l_with_args \
+    aliases l a b c
+  kct_case aliases_long_with_args \
+    aliases looooooong a b c
+
   kct_summary
 }
 
@@ -139,7 +144,7 @@ __kct_autodiscovery() {
 
 _kct_run_snapshot() {
   local name="$1"
-  local dirpath="${2:-${KCT_PATH_SNAPDIR:?}/$name}"
+  local dirpath="${2:-${KCT_PATH_SNAPDIR:?}/$name}" code=0
   shift 2
 
   test -d "$dirpath" && rm -r "$dirpath"
@@ -158,6 +163,11 @@ _kct_run_snapshot() {
   test -f "$stdlog" || touch "$stdlog"
 
   KCS_LOGOUT="$stdlog" _kct_exec_kcs "$cmd" "$@" >"$stdout" 2>"$stderr"
+  code=$?
+
+  local extcod="$dirpath/$KCT_SNAPSHOT_EXTCOD"
+  echo "$code" >"$extcod"
+
   if [[ "$dirpath" =~ ^$KCT_PATH_SNAPDIR ]]; then
     _kct_result_save "$name" "$KCT_STATUS_COMPLETED" "updated snapshot"
   fi
@@ -176,7 +186,8 @@ _kct_run_verify() {
 
   _kct_run_snapshot "$name" "$tmpdir" "$@"
 
-  local is_match_err=false is_match_out=false is_match_log=false
+  local is_match_err=false is_match_out=false
+  local is_match_log=false is_match_cod=false
   _kct_diff_check \
     "$dirpath/$KCT_SNAPSHOT_STDERR" "$tmpdir/$KCT_SNAPSHOT_STDERR" &&
     is_match_err=true
@@ -186,8 +197,12 @@ _kct_run_verify() {
   _kct_diff_check \
     "$dirpath/$KCT_SNAPSHOT_STDLOG" "$tmpdir/$KCT_SNAPSHOT_STDLOG" &&
     is_match_log=true
+  _kct_diff_check \
+    "$dirpath/$KCT_SNAPSHOT_EXTCOD" "$tmpdir/$KCT_SNAPSHOT_EXTCOD" &&
+    is_match_cod=true
 
-  if "$is_match_err" && "$is_match_out" && "$is_match_log"; then
+  if "$is_match_err" && "$is_match_out" &&
+    "$is_match_log" && "$is_match_cod"; then
     _kct_result_save "$name" "$KCT_STATUS_PASSED"
     return 0
   fi
@@ -206,6 +221,10 @@ _kct_run_verify() {
   ! "$is_match_log" &&
     _kct_diff_create "$KCT_SNAPSHOT_STDLOG" "$dirpath" "$tmpdir" "$diff_dir" &&
     message_args+=(STDLOG)
+  ! "$is_match_cod" &&
+    _kct_diff_create "$KCT_SNAPSHOT_EXTCOD" "$dirpath" "$tmpdir" "$diff_dir" &&
+    message_args+=(EXITCODE)
+
   cp "$dirpath/$KCT_COMMAND_FILE" "$diff_dir/$KCT_COMMAND_FILE"
   local message="[${message_args[*]}] is not matched"
 
@@ -347,6 +366,7 @@ __internal() {
   export KCT_SNAPSHOT_STDOUT='snapshot.stdout'
   export KCT_SNAPSHOT_STDERR='snapshot.stderr'
   export KCT_SNAPSHOT_STDLOG='snapshot.stdlog'
+  export KCT_SNAPSHOT_EXTCOD='snapshot.exitcode'
 
   export KCS_TEST=1
 
