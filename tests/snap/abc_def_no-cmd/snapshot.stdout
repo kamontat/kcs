@@ -1,0 +1,6 @@
+00:10:45 [PRT] def_no_cmd.setup : key        : def_no_cmd
+00:10:45 [PRT] def_no_cmd.setup : name       : def_no_cmd
+00:10:45 [PRT] def_no_cmd.setup : args       : 0 ()
+00:10:45 [PRT] def_no_cmd.setup : cmd args   : 0 ()
+00:10:45 [PRT] def_no_cmd.setup : raw args   : <missing>
+00:10:45 [PRT] def_no_cmd.setup : extra args : <missing>
