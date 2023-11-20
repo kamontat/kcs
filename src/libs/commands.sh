@@ -5,6 +5,8 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
+## Throw errors either missing or failed
+## kcs_commands_load_required <command> <args...>
 kcs_commands_load_required() {
   _kcs_ld_do \
     --module commands \
@@ -16,6 +18,8 @@ kcs_commands_load_required() {
     -- "$@"
 }
 
+## Silent error message if missing or throw error if failed
+## kcs_commands_load_optional <command> <args...>
 kcs_commands_load_optional() {
   _kcs_ld_do \
     --module commands \
@@ -27,13 +31,46 @@ kcs_commands_load_optional() {
     -- "$@"
 }
 
-## Finding commands based on input argument and execute using command_load
+## Mute if command is missing or write error logs if its failed
+## kcs_commands_load_mute <command> <args...>
+kcs_commands_load_mute() {
+  _kcs_ld_do \
+    --module commands \
+    --key commands \
+    --suffix .sh \
+    --action shell \
+    --on-missing mute \
+    --on-error error \
+    -- "$@"
+}
+
+## Finding commands based on input argument and execute using cmd loader
 ## usage: `kcs_commands_find <arguments...>`
 ## variables:
 ##   - KCS_CMDSEP='/' override command separator
 ##   - KCS_CMDDEF='_default' override default command name
 kcs_commands_find() {
   kcs_argument __kcs_commands_find "$@"
+}
+
+## Alias current command to different command using cmd loader
+## This should be called from setup hook
+## usage: `kcs_commands_alias <commands...>`
+kcs_commands_alias() {
+  local ns="libs.commands.alias"
+
+  local args=("${_KCS_CMD_ARGS[@]}")
+  local raw="$_KCS_CMD_ARGS_RAW"
+  local extra="$_KCS_CMD_ARGS_EXTRA"
+
+  local sep="${KCS_CMDSEP:-/}"
+  local commands=("$@")
+
+  local filepath="${commands[*]}"
+  filepath="${filepath// /$sep}"
+
+  kcs_commands_load_required "$filepath" "${args[@]}"
+  kcs_exit "$?"
 }
 
 __kcs_commands_find() {
