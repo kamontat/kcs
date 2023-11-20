@@ -1,0 +1,2 @@
+00:10:45 [ERR] private.base.exit : loading 'func:__kcs_ghi_failed_hook_main' failed
+00:10:45 [ERR] private.base.exit : loading 'commands:abc/ghi/failure' failed ($KCT_PATH_TESTDIR/commands/abc/ghi/failure.sh)

@@ -1,0 +1,6 @@
+00:10:45 [PRT] cmd.ghi_failed : key        : ghi_failed
+00:10:45 [PRT] cmd.ghi_failed : name       : ghi_failed
+00:10:45 [PRT] cmd.ghi_failed : args       : 1 (cmd.ghi_failed)
+00:10:45 [PRT] cmd.ghi_failed : cmd args   : 0 ()
+00:10:45 [PRT] cmd.ghi_failed : raw args   : <missing>
+00:10:45 [PRT] cmd.ghi_failed : extra args : <missing>

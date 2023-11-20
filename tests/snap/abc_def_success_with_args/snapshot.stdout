@@ -1,0 +1,12 @@
+00:10:45 [PRT] def_success.setup : key        : def_success
+00:10:45 [PRT] def_success.setup : name       : def_success
+00:10:45 [PRT] def_success.setup : args       : 0 ()
+00:10:45 [PRT] def_success.setup : cmd args   : 2 (hello world)
+00:10:45 [PRT] def_success.setup : raw args   : <missing>
+00:10:45 [PRT] def_success.setup : extra args : <missing>
+00:10:45 [PRT] cmd.ghi_success : key        : ghi_success
+00:10:45 [PRT] cmd.ghi_success : name       : ghi_success
+00:10:45 [PRT] cmd.ghi_success : args       : 3 (cmd.ghi_success hello world)
+00:10:45 [PRT] cmd.ghi_success : cmd args   : 2 (hello world)
+00:10:45 [PRT] cmd.ghi_success : raw args   : <missing>
+00:10:45 [PRT] cmd.ghi_success : extra args : <missing>

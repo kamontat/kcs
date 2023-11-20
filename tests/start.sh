@@ -96,6 +96,18 @@ main() {
   kct_case aliases_long_with_args \
     aliases looooooong a b c
 
+  kct_case abc_def_success_with_args \
+    abc def success hello world
+  kct_case abc_def_failure_with_args \
+    abc def failure hello world
+
+  kct_case abc_def_failure_with_extra_args \
+    abc def failure arguments -- extra
+  kct_case abc_def_failure_with_raw_args \
+    abc def failure arguments '<>' raw args
+  kct_case abc_def_failure_with_raw_and_extra_args \
+    abc def failure arguments -- extra -x '<>' raw args
+
   kct_summary
 }
 
@@ -124,19 +136,17 @@ kct_autodiscovery() {
     return 0
   fi
 
-  local path
-  for path in "$dirpath/commands"/*.sh; do
-    __kct_autodiscovery "${path//$dirpath\/commands\//}"
-  done
-  for path in "$dirpath/commands"/**/*.sh; do
-    __kct_autodiscovery "${path//$dirpath\/commands\//}"
-  done
+  local file
+  while IFS= read -r -d '' file; do
+    __kct_autodiscovery "${file//$dirpath\/commands\//}"
+  done < <(find "$dirpath/commands" -type f -name '*.sh' -print0)
 }
 __kct_autodiscovery() {
   local name="${1//\.sh/}"
 
-  ## Skipped command with _ prefix
+  ## Skipped command with _ prefix on any level
   [[ "$name" =~ ^_ ]] && return 0
+  [[ "$name" =~ \/_ ]] && return 0
 
   ## Disabled DEBUG mode by default on test mode
   kct_case "${name//\//_}" "$name"

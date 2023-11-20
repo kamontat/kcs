@@ -1,0 +1,12 @@
+00:10:45 [PRT] def_failed.setup : key        : def_failed
+00:10:45 [PRT] def_failed.setup : name       : def_failed
+00:10:45 [PRT] def_failed.setup : args       : 0 ()
+00:10:45 [PRT] def_failed.setup : cmd args   : 1 (arguments)
+00:10:45 [PRT] def_failed.setup : raw args   : <missing>
+00:10:45 [PRT] def_failed.setup : extra args : extra
+00:10:45 [PRT] cmd.ghi_failed : key        : ghi_failed
+00:10:45 [PRT] cmd.ghi_failed : name       : ghi_failed
+00:10:45 [PRT] cmd.ghi_failed : args       : 2 (cmd.ghi_failed arguments)
+00:10:45 [PRT] cmd.ghi_failed : cmd args   : 1 (arguments)
+00:10:45 [PRT] cmd.ghi_failed : raw args   : <missing>
+00:10:45 [PRT] cmd.ghi_failed : extra args : extra

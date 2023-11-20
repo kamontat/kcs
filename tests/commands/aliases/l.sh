@@ -10,8 +10,7 @@ export DEBUG=kcs:libs.commands,libs.functions
 
 __kcs_l_hook_setup() {
   kcs_ld_lib commands
-  kcs_commands_find aliases looooooong "${_KCS_CMD_ARGS[@]}"
-  kcs_exit "$?"
+  kcs_commands_alias aliases looooooong
 }
 
 #####################################################

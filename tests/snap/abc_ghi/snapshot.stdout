@@ -1,0 +1,7 @@
+00:10:45 [PRT] cmd.ghi : key        : ghi
+00:10:45 [PRT] cmd.ghi : name       : ghi
+00:10:45 [PRT] cmd.ghi : args       : 1 (cmd.ghi)
+00:10:45 [PRT] cmd.ghi : cmd args   : 0 ()
+00:10:45 [PRT] cmd.ghi : raw args   : <missing>
+00:10:45 [PRT] cmd.ghi : extra args : <missing>
+This should not print on ghi command because it not calling this command

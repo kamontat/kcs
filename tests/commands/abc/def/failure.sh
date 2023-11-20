@@ -5,15 +5,21 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_CMD_NAME="nested"
+export KCS_CMD_NAME="def_failed"
 
-__kcs_nested_hook_main() {
-  kcs_ld_lib commands
-
+__kcs_def_failed_hook_setup() {
+  local ns=def_failed.setup
+  kcs_log_printf "$ns" "key        : %s" "$_KCS_CMD_KEY"
   # shellcheck disable=SC2153
-  echo "nested == $_KCS_CMD_NAME"
-  kcs_commands_alias _nested a
-  echo "nested == $_KCS_CMD_NAME"
+  kcs_log_printf "$ns" "name       : %s" "$_KCS_CMD_NAME"
+  kcs_log_printf "$ns" "args       : %d (%s)" "$#" "$*"
+  kcs_log_printf "$ns" "cmd args   : %d (%s)" \
+    "${#_KCS_CMD_ARGS[@]}" "${_KCS_CMD_ARGS[*]}"
+  kcs_log_printf "$ns" "raw args   : ${_KCS_CMD_ARGS_RAW:-<missing>}"
+  kcs_log_printf "$ns" "extra args : ${_KCS_CMD_ARGS_EXTRA:-<missing>}"
+
+  kcs_ld_lib commands
+  kcs_commands_alias abc ghi failure
 }
 
 #####################################################

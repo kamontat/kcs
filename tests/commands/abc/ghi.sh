@@ -5,15 +5,19 @@
 # set -n #EVALUATE - Check syntax of the script but don't execute.
 # set -e #ERROR    - Force exit if error occurred.
 
-export KCS_CMD_NAME="nested"
+export KCS_CMD_NAME="ghi"
 
-__kcs_nested_hook_main() {
-  kcs_ld_lib commands
-
+__kcs_ghi_hook_main() {
+  kcs_log_printf "$1" "key        : %s" "$_KCS_CMD_KEY"
   # shellcheck disable=SC2153
-  echo "nested == $_KCS_CMD_NAME"
-  kcs_commands_alias _nested a
-  echo "nested == $_KCS_CMD_NAME"
+  kcs_log_printf "$1" "name       : %s" "$_KCS_CMD_NAME"
+  kcs_log_printf "$1" "args       : %d (%s)" "$#" "$*"
+  kcs_log_printf "$1" "cmd args   : %d (%s)" \
+    "${#_KCS_CMD_ARGS[@]}" "${_KCS_CMD_ARGS[*]}"
+  kcs_log_printf "$1" "raw args   : ${_KCS_CMD_ARGS_RAW:-<missing>}"
+  kcs_log_printf "$1" "extra args : ${_KCS_CMD_ARGS_EXTRA:-<missing>}"
+
+  echo "This should not print on ghi command because it not calling this command"
 }
 
 #####################################################
