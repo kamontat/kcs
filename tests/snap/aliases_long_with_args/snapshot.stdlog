@@ -1,0 +1,7 @@
+00:10:45 [INF] private.base.settings : testing mode has been enabled
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_long_hook_main' function with 4 args [cmd.long a b c]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []

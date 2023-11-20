@@ -1,0 +1,16 @@
+00:10:45 [INF] private.base.settings : testing mode has been enabled
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_l_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.commands.load : current argument is 'looooooong'
+00:10:45 [DBG] libs.commands.load : current filepath is 'aliases/looooooong'
+00:10:45 [DBG] libs.commands.loader.shell : run '$KCT_PATH_TESTDIR/commands/aliases/looooooong.sh' using 'bash' with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_long_hook_main' function with 1 args [cmd.long]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []

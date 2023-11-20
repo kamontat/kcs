@@ -1,0 +1,5 @@
+00:10:45 [PRT] cmd.long : execute long command
+00:10:45 [PRT] cmd.long : key      : long
+00:10:45 [PRT] cmd.long : name     : long
+00:10:45 [PRT] cmd.long : args     : 4 (cmd.long a b c)
+00:10:45 [PRT] cmd.long : cmd args : 3 (a b c)

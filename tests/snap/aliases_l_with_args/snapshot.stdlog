@@ -1,0 +1,38 @@
+00:10:45 [INF] private.base.settings : testing mode has been enabled
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_l_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.commands.load : current argument is 'c'
+00:10:45 [DBG] libs.commands.load : current filepath is 'aliases/looooooong/a/b/c'
+00:10:45 [DBG] libs.commands.load : current argument is 'b'
+00:10:45 [DBG] libs.commands.load : current filepath is 'aliases/looooooong/a/b'
+00:10:45 [DBG] libs.commands.load : current argument is 'a'
+00:10:45 [DBG] libs.commands.load : current filepath is 'aliases/looooooong/a'
+00:10:45 [DBG] libs.commands.load : current argument is 'looooooong'
+00:10:45 [DBG] libs.commands.load : current filepath is 'aliases/looooooong'
+00:10:45 [DBG] libs.commands.loader.shell : run '$KCT_PATH_TESTDIR/commands/aliases/looooooong.sh' using 'bash' with 3 args [a b c]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_long_hook_main' function with 4 args [cmd.long a b c]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.commands.load : current argument is 'aliases'
+00:10:45 [DBG] libs.commands.load : current filepath is 'aliases'
+00:10:45 [DBG] libs.commands.load : cannot found command, fallback to _default command
+00:10:45 [DBG] libs.commands.loader.shell : run '$KCS_PATH_SRC/commands/_default.sh' using 'bash' with 5 args [aliases looooooong a b c]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_default_hook_setup' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_default_hook_load' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_options_conf_use_default' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_options_hook_load' function with 7 args [aliases looooooong a b c <> |-h|--help|:HELP:NV::show(=space=)help(=space=)message;|-v|--version|:VERSION:NV::show(=space=)compat(=space=)version;|-V|--full-version|:FULL_VERSION:NV::show(=space=)full(=space=)version;]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_options_hook_main' function with 2 args [<> |-h|--help|:HELP:NV::show(=space=)help(=space=)message;|-v|--version|:VERSION:NV::show(=space=)compat(=space=)version;|-V|--full-version|:FULL_VERSION:NV::show(=space=)full(=space=)version;]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_default_hook_main' function with 6 args [cmd.default aliases looooooong a b c]
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_information_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_environment_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_configs_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_tmp_hook_clean' function with 0 args []
+00:10:45 [DBG] libs.functions.loader.run : run '__kcs_log_hook_clean' function with 0 args []
