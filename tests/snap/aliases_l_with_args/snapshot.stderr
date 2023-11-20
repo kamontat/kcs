@@ -1,3 +1,4 @@
 00:10:45 [ERR] private.base.exit : loading 'func:__kcs_long_hook_main' failed
 00:10:45 [ERR] private.base.exit : loading 'commands:aliases/looooooong' failed ($KCT_PATH_TESTDIR/commands/aliases/looooooong.sh)
+00:10:45 [ERR] private.base.exit : loading 'func:__kcs_l_hook_setup' failed
 00:10:45 [ERR] private.base.exit : loading 'commands:aliases/l' failed ($KCT_PATH_TESTDIR/commands/aliases/l.sh)
