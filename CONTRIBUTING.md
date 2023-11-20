@@ -52,7 +52,7 @@ Both libraries and utilities contains several lifecycle callback for setup
 
 We export several paths variables for you to refer to.
 
-1. `$_KCS_PATH_ROOT` - the root directory of kcs (usually contains **kcs** or **index.sh** script)
+1. `$_KCS_PATH_ROOT` - the root directory of kcs (usually contains **kcs** or **index.sh** script). The script will always maintain this location as default `$PWD` path
 2. `$_KCS_PATH_SRC` - the src directory of kcs (usually a directory called **src** or **.kcs**)
 3. `$_KCS_PATH_ORIG` - the original directory where user executes kcs script
 4. `$_KCS_PATH_TMP` - the temporary directory for storing temporary files
@@ -95,3 +95,9 @@ To simulate tests on Linux:
 ```bash
 docker run --rm --interactive --tty --entrypoint /bin/bash --workdir "/work" -v "$PWD:/work" debian:stable-slim
 ```
+
+## Libraries
+
+On kcs, not all libraries had been loaded by default.
+The recommend is to always load libraries when you need it (and not sure whether it has been loaded).
+All libraries come with deduplicatation to not reload if it loaded.
