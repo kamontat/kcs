@@ -22,6 +22,9 @@ __kcs_example_hook_load() {
 
 ## For main entry point
 __kcs_example_hook_main() {
+  # local ns="$1"
+  # shift
+
   return 0
 }
 
