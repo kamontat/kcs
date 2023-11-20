@@ -20,6 +20,9 @@ __kcs_command_start() {
 
   test -n "$extra" && _KCS_CMD_ARGS_EXTRA="$extra"
   test -n "$raw" && _KCS_CMD_ARGS_RAW="$raw"
+  ## Export default $_KCS_CMD_ARGS as arguments from user
+  ## Later this will be override if user load options lib
+  _KCS_CMD_ARGS=("$@")
 
   _KCS_CMD_PATH="$0"
   kcs_log_debug "$ns" "set command path to '%s'" "$_KCS_CMD_PATH"
