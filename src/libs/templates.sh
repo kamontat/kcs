@@ -19,6 +19,7 @@ kcs_tmpl_load() {
     --suffix .tmpl \
     --action parser_default \
     --action-sh parser_eval \
+    --action-kc parser_kctpr \
     -- "$@"
 }
 
@@ -50,6 +51,26 @@ __kcs_templates_ld_acb_parser_eval() {
   local content
   content="$(cat "$filepath")"
   eval "printf '%s' \"$content\""
+}
+
+## kc-tpr parser (https://github.com/kamontat/tpr)
+## this requires user to install kc-tpr separately, otherwise this will failed
+__kcs_templates_ld_acb_parser_kctpr() {
+  local engine=kc-tpr
+  local ns="libs.templates.parser.$engine" template_path="$3"
+  shift 3
+
+  kcs_log_debug "$ns" "using '%s' for '%s'" "$engine" "$template_path"
+
+  local input data=()
+  for input in "$@"; do
+    data+=(--data "$input")
+  done
+
+  kcs_ld_lib functions
+  kcs_func_must kc-tpr kc-tpr \
+    --template-path "$template_path" \
+    "${data[@]}"
 }
 
 __kcs_templates_prompt_warning() {

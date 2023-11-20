@@ -12,7 +12,6 @@ kcs_func_must() {
   _kcs_ld_do \
     --module functions \
     --key func \
-    --suffix .sh \
     --action run \
     --on-missing throw \
     --on-error throw \
