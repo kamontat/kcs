@@ -48,6 +48,17 @@ Both libraries and utilities contains several lifecycle callback for setup
     - Use for loading dependencies (`kcs_ld_lib`)
     - Use for adding hooks (`kcs_hooks_add`)
 
+## Paths
+
+We export several paths variables for you to refer to.
+
+1. `$_KCS_PATH_ROOT` - the root directory of kcs (usually contains **kcs** or **index.sh** script)
+2. `$_KCS_PATH_SRC` - the src directory of kcs (usually a directory called **src** or **.kcs**)
+3. `$_KCS_PATH_ORIG` - the original directory where user executes kcs script
+4. `$_KCS_PATH_TMP` - the temporary directory for storing temporary files
+5. `$_KCS_PATH_PRIV` - the private libraries for kcs
+6. `$_KCS_PATH_LIB` - the public libraries for kcs
+
 ## Commands
 
 On commands script, we expose several variables to use
