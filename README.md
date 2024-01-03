@@ -34,7 +34,7 @@ Use `curl -sSL https://github.com/kc-workspace/kcs/raw/main/scripts/setup.sh | b
 5. `KCS_LOGOUT=/tmp/test.out` - Write logs (except **WARN** and **ERROR**) to file instead
     - By default all logs will write on **STDERR**
 6. `KCS_LOGDTL=true` - enabled logging detailed information without normalize
-7. `KCS_PATH=/home/kcs` - Customize resolving base directory
+7. `KCS_PATH=/home/kcs` - Additional path for resolving base directory
 8. `KCS_CMDSEP='/'` - Customize commands seperator in **commands** directory
     - By default it fallback to `/` if no string provided
 9. `KCS_CMDDEF='_default'` - Customize default command name (if command is missing)

@@ -45,6 +45,23 @@ kcs_func_silent() {
     -- "$@"
 }
 
+## Lookup and return first found function.
+## usage: `func="$(kcs_func_lookup cprintf printf echo)"`
+kcs_func_lookup() {
+  local ns="libs.functions.lookup"
+  local cmd="$1"
+
+  for cmd in "$@"; do
+    if command -v "$cmd" >/dev/null; then
+      printf '%s' "$(command -v "$cmd")"
+      return 0
+    fi
+  done
+
+  kcs_log_debug "$ns" "lookup all commands (%s), no luck" "$*"
+  return 1
+}
+
 __kcs_functions_ld_acb_run() {
   local ns="libs.functions.loader.run"
   local key="$1" name="$2" fn="$3"
