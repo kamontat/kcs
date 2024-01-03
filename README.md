@@ -6,6 +6,13 @@ A shell collection with highly customizable.
 
 Use `curl -sSL https://github.com/kc-workspace/kcs/raw/main/scripts/setup.sh | bash -s "$PWD"` for install kcs on current directory.
 
+## Resources
+
+- For kcs commandline creator or user - [here](./src/README.md)
+- For developer contributing to kcs itself - [here](./CONTRIBUTING.md)
+- For unit-testing kcs command - [here](./tests/README.md)
+
+<!--
 ## Variables
 
 1. `KCS_DEV=true` - Enabled dev mode.
@@ -50,3 +57,4 @@ Use `curl -sSL https://github.com/kc-workspace/kcs/raw/main/scripts/setup.sh | b
 13. `KCS_TRUST=true` - Trusted the script and execute without security warning
 14. `KCS_TEST=true` - This should use for testing only
     - This enabled automatically on **test script**
+-->
