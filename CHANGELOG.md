@@ -1,5 +1,59 @@
 # Changelog
 
+## [1.2.0](https://github.com/kc-workspace/kcs/compare/v1.1.2...v1.2.0) (2024-07-22)
+
+
+### Features
+
+* add test for aliases commands ([9da7a2b](https://github.com/kc-workspace/kcs/commit/9da7a2b96beaa9595ccc14c22433abc176d34c99))
+* **apis:** add new kcs_func_lookup for lookup functions list and execute first valid function ([2673b5c](https://github.com/kc-workspace/kcs/commit/2673b5c18b6ea783a71d89be527562477d61de2c))
+* **cmd:** add example code for main hook ([65f135c](https://github.com/kc-workspace/kcs/commit/65f135ceea69fa543fbd727f9f4e5549f88d1877))
+* **lib:** add options config "minimal" for enabled only --help options ([a5ab8ec](https://github.com/kc-workspace/kcs/commit/a5ab8ec5d8c53d7aee56c43c165bb0c8fda48493))
+* **loader:** add --regex and --action-* for custom action based on second extension ([1c59389](https://github.com/kc-workspace/kcs/commit/1c593894d479852370c3c5b787454652360e24a9))
+* **priv:** enabled trust mode on development mode ([08cac36](https://github.com/kc-workspace/kcs/commit/08cac36abd4f3da6053e3bbcaa405558132a0bb2))
+
+
+### Improvements
+
+* **lib:** add new kcs_commands_alias on commands for alias current command to another ([80685ad](https://github.com/kc-workspace/kcs/commit/80685add11ac5ffddb35c42200d5102dd2ff6a6a))
+* **lib:** support kc.tmpl template using kc-tpr parser ([10a4f3b](https://github.com/kc-workspace/kcs/commit/10a4f3b9b9e122542b89f9dba32a91c667cdd836))
+* **lib:** update template prompt for trust and test mode ([58f4023](https://github.com/kc-workspace/kcs/commit/58f4023cc25af3a2a72260b14014937ad25b0dea))
+* **log:** kcs_log_printf will log to console same as printf with nicer format ([e31cfbc](https://github.com/kc-workspace/kcs/commit/e31cfbce5206b44c61d84baff568f6bdf77d18e0))
+* **log:** move dev mode logs to use logger instead ([2fb4777](https://github.com/kc-workspace/kcs/commit/2fb47775d33c76eb99c1ef852118ee220d13765d))
+* **priv:** kcs_exit() will return input code as result on grateful exit ([dd1714b](https://github.com/kc-workspace/kcs/commit/dd1714b36b7cf81b7ee57378f0297a6599f97149))
+* **test:** add exitcode to compare on tests as well ([4603c12](https://github.com/kc-workspace/kcs/commit/4603c1244ee2b1f5bd84e18d3d669d0224a9e7b3))
+
+
+### Bugfixes
+
+* **core:** _KCS_CMD_ARGS is missing when user didn't load options lib ([6715e1e](https://github.com/kc-workspace/kcs/commit/6715e1e7e4bd6bf9d490116b0225c1349a7abab9))
+* **lib:** loading config should warn if config not found ([3a339e6](https://github.com/kc-workspace/kcs/commit/3a339e6eade437e4ccc318c6e36e7c2024243960))
+* **libs:** options throw error when argument is optional and no value were send ([afb18a5](https://github.com/kc-workspace/kcs/commit/afb18a55bee20bd4bb699ea5690d34a4193f3e92))
+* **loader:** on ext action (--action-*) if action is missing, fallback to --action ([c08d40c](https://github.com/kc-workspace/kcs/commit/c08d40cae8474eb8b73b96152343e853c51074a5))
+* **priv:** script failed if KCS_DEV is enabled with KCS_TMPDIR ([c7d70ec](https://github.com/kc-workspace/kcs/commit/c7d70ece08d80232b91cf84cce873f972e306419))
+
+
+### Miscellaneous
+
+* **doc:** add more docs ([b537c53](https://github.com/kc-workspace/kcs/commit/b537c53c55a95a04eb4b1ed7534be63bb5abd7ea))
+* **doc:** describe path variable available on script ([bd80b5f](https://github.com/kc-workspace/kcs/commit/bd80b5f52499d0e189d0b39671ac232b6968d6bc))
+* **doc:** improve code docs ([7ff5793](https://github.com/kc-workspace/kcs/commit/7ff57934fdaab733350e6c5d4908d11aad2fe61b))
+* **docs:** update documents for libs ([d422795](https://github.com/kc-workspace/kcs/commit/d4227953c88af4f7d7b4998b49200eb320423a74))
+* **lib:** add more debug log on template ([7b0658a](https://github.com/kc-workspace/kcs/commit/7b0658a41ff83e24519cd8b57394c64467bf203b))
+* **lib:** clean up unused options ([13aef47](https://github.com/kc-workspace/kcs/commit/13aef4793a32998d7c3198144febb2d8f3b0cc58))
+* move docs to correct readme ([20e0b30](https://github.com/kc-workspace/kcs/commit/20e0b30a3104a33ec252d02fc4be0bebc5834ad9))
+* **script:** update setup.sh to use date as version on local development ([f68d926](https://github.com/kc-workspace/kcs/commit/f68d9260338823a18c4ad43b4c3a536992e67a07))
+* **test:** add more tests on command alias didn't resolve command correctly ([1def019](https://github.com/kc-workspace/kcs/commit/1def0199aca9c05169ab33ce16eb5381ef288abe))
+* **test:** add more tests on templates and update snapshots ([c843092](https://github.com/kc-workspace/kcs/commit/c84309294327c95166a653b51eaa4627bcfb281c))
+* **test:** add template duplication cases ([6bc5450](https://github.com/kc-workspace/kcs/commit/6bc5450379044995871b55cdb3a4282fe2a9d07b))
+* **test:** add test on command alias to invalid command ([38afaef](https://github.com/kc-workspace/kcs/commit/38afaef1cdbac518b361ac5da08d0d2e472fb2e9))
+* **test:** move use-template snapshot to templates/default ([187e389](https://github.com/kc-workspace/kcs/commit/187e38971da61ccf89175fed5f2e988dd00a5b89))
+* **test:** the printf logs move from stdlog to stdout ([76386ef](https://github.com/kc-workspace/kcs/commit/76386efd5f5bdcdf26124c20e6e34edc257bfd4c))
+* **test:** update snapshots ([b36962d](https://github.com/kc-workspace/kcs/commit/b36962df924c45e6f97e61cc90a2e80f33346e62))
+* **test:** update snapshots ([4041b80](https://github.com/kc-workspace/kcs/commit/4041b80a62936f60f108fe31ca493b6fe90c226f))
+* **test:** update snapshots ([0a344fc](https://github.com/kc-workspace/kcs/commit/0a344fc72e6f2292be6248c54548f514c29cc873))
+* update some documents for end-users ([ff05e15](https://github.com/kc-workspace/kcs/commit/ff05e1519ca797a669e08f63cd5fef1e598c4fec))
+
 ## [1.1.2](https://github.com/kc-workspace/kcs/compare/v1.1.1...v1.1.2) (2023-10-15)
 
 
