@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/kc-workspace/kcs/compare/v1.2.0...v1.2.1) (2024-07-22)
+
+
+### Miscellaneous
+
+* **test:** update result snapshots ([2b21638](https://github.com/kc-workspace/kcs/commit/2b21638a817168a1e2228a6a7a363cb5456fb522))
+
 ## [1.2.0](https://github.com/kc-workspace/kcs/compare/v1.1.2...v1.2.0) (2024-07-22)
 
 
