@@ -1,3 +1,0 @@
-00:10:45 [ERR] libs.options.check : option '|--rock|' contained default argument and no custom argument provided
-00:10:45 [ERR] private.base.exit : loading 'func:__kcs_options_hook_load' failed
-00:10:45 [ERR] private.base.exit : loading 'commands:_options' failed ($KCT_PATH_TESTDIR/commands/_options.sh)
