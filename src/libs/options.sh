@@ -71,10 +71,11 @@ _kcs_options_check_error() {
     return 1
   ## Optional option must contains argument
   [[ "${atype:0:1}" == "O" ]] && test -z "$arg" &&
-    kcs_log_error "$ns" \
-      "option '%s' contained default argument and no custom argument provided" \
+    kcs_log_debug "$ns" \
+      "option '%s' no custom argument provided, use default argument instead" \
       "$(_kcs_options_def_options "$def")" &&
-    return 1
+    return 0
+
   ## Option must NOT contains argument
   # [[ "${atype:0:1}" == "N" ]] && test -n "$arg" &&
   #   kcs_log_error "$ns" "option '%s' requires NO argument" \
